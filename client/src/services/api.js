@@ -1,5 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
-export const TOKEN_STORAGE_KEY = 'awb_auth_token';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:10000";
+export const TOKEN_STORAGE_KEY = "awb_auth_token";
 
 export function getStoredToken() {
   return localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -17,16 +18,16 @@ export async function apiRequest(path, options = {}) {
   const { timeoutMs, signal: outerSignal, ...fetchOptions } = options;
 
   const isFormData =
-    typeof FormData !== 'undefined' && fetchOptions.body instanceof FormData;
+    typeof FormData !== "undefined" && fetchOptions.body instanceof FormData;
 
   const headers = {
-    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(fetchOptions.headers || {}),
   };
 
   // Let the browser set multipart boundary for FormData uploads.
-  if (isFormData && headers['Content-Type']) {
-    delete headers['Content-Type'];
+  if (isFormData && headers["Content-Type"]) {
+    delete headers["Content-Type"];
   }
 
   const token = getStoredToken();
@@ -42,13 +43,13 @@ export async function apiRequest(path, options = {}) {
     if (outerSignal.aborted) {
       controller.abort();
     } else {
-      outerSignal.addEventListener('abort', () => controller.abort(), {
+      outerSignal.addEventListener("abort", () => controller.abort(), {
         once: true,
       });
     }
   }
 
-  if (typeof timeoutMs === 'number' && timeoutMs > 0) {
+  if (typeof timeoutMs === "number" && timeoutMs > 0) {
     timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
   }
 
@@ -74,14 +75,14 @@ export async function apiRequest(path, options = {}) {
 
     return payload;
   } catch (error) {
-    if (error?.name === 'AbortError') {
+    if (error?.name === "AbortError") {
       // Only map to TIMEOUT when our timer fired — not intentional cancels.
       if (timeoutId != null && !outerSignal?.aborted) {
         const timeoutError = new Error(
-          'Request timed out. The AI may still be working — try again in a moment.',
+          "Request timed out. The AI may still be working — try again in a moment.",
         );
-        timeoutError.code = 'TIMEOUT';
-        timeoutError.name = 'TimeoutError';
+        timeoutError.code = "TIMEOUT";
+        timeoutError.name = "TimeoutError";
         throw timeoutError;
       }
       throw error;
