@@ -1,0 +1,257 @@
+/**
+ * WebStructura Design System — Design Tokens
+ * --------------------------------------
+ * All values use CSS custom properties so React can override them at runtime
+ * via applyTheme(json) / useTheme(json) by setting the same variable names
+ * on :root or any scoped element.
+ *
+ * Color channels are stored as HSL components (without hsl()) so alpha can
+ * be composed:  hsl(var(--color-primary) / 0.12)
+ */
+
+:root {
+  /* —— Color channels (HSL: H S% L%) —— */
+  --color-primary: 175 72% 26%;
+  --color-primary-foreground: 0 0% 100%;
+  --color-primary-hover: 174 68% 32%;
+  --color-primary-muted: 172 35% 92%;
+
+  --color-background: 0 0% 98%; /* #FAFAFA */
+  --color-surface: 0 0% 100%;
+  --color-surface-elevated: 150 20% 99%;
+  --color-border: 160 12% 84%;
+
+  --color-text: 222 47% 11%; /* ~brand-text #0F172A */
+  --color-text-muted: 215 16% 47%;
+  --color-text-inverse: 0 0% 100%;
+
+  /* Bespoke brand palette (mirrors tailwind.config.js) */
+  --brand-bg: #f8faf9;
+  --brand-text: #0f172a;
+  --brand-canvas: #fafafa;
+
+  --color-success: 152 75% 28%;
+  --color-warning: 38 90% 36%;
+  --color-danger: 4 75% 40%;
+  --color-info: 200 80% 40%;
+
+  /* Resolved color utilities */
+  --bg: hsl(var(--color-background));
+  --surface: hsl(var(--color-surface));
+  --surface-elevated: hsl(var(--color-surface-elevated));
+  --primary: hsl(var(--color-primary));
+  --primary-hover: hsl(var(--color-primary-hover));
+  --primary-foreground: hsl(var(--color-primary-foreground));
+  --primary-muted: hsl(var(--color-primary-muted));
+  --text: hsl(var(--color-text));
+  --text-muted: hsl(var(--color-text-muted));
+  --text-inverse: hsl(var(--color-text-inverse));
+  --border: hsl(var(--color-border));
+  --success: hsl(var(--color-success));
+  --warning: hsl(var(--color-warning));
+  --danger: hsl(var(--color-danger));
+  --info: hsl(var(--color-info));
+
+  /* —— Spacing scale (base-8) ——
+   * 1 unit = 8px = 0.5rem (assuming 16px root)
+   */
+  --space-0: 0;
+  --space-1: 0.5rem; /* 8px */
+  --space-2: 1rem; /* 16px */
+  --space-3: 1.5rem; /* 24px */
+  --space-4: 2rem; /* 32px */
+  --space-5: 2.5rem; /* 40px */
+  --space-6: 3rem; /* 48px */
+  --space-8: 4rem; /* 64px */
+  --space-10: 5rem; /* 80px */
+  --space-12: 6rem; /* 96px */
+  --space-16: 8rem; /* 128px */
+
+  /* Semantic spacing aliases */
+  --space-xs: var(--space-1);
+  --space-sm: var(--space-2);
+  --space-md: var(--space-3);
+  --space-lg: var(--space-4);
+  --space-xl: var(--space-6);
+  --space-2xl: var(--space-8);
+
+  /* —— Fluid typography —— */
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.84rem + 0.2vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.96rem + 0.25vw, 1.0625rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.12rem + 0.65vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.28rem + 1.1vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.8vw, 2.75rem);
+  --text-4xl: clamp(2.25rem, 1.7rem + 2.6vw, 3.5rem);
+  --text-5xl: clamp(2.75rem, 2rem + 3.5vw, 4.5rem);
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
+
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+
+  /* —— Radii, elevation, motion —— */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+  --radius: var(--radius-md);
+
+  --shadow-sm: 0 1px 2px hsl(var(--color-text) / 0.06);
+  --shadow-md: 0 8px 24px hsl(var(--color-primary) / 0.1);
+  --shadow-lg: 0 18px 50px hsl(var(--color-primary) / 0.14);
+  --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.05),
+    0 8px 16px -8px rgba(0, 0, 0, 0.04);
+
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+
+  /* —— Layout —— */
+  --header-height: 4rem;
+  --container-max: 68.75rem; /* 1100px */
+
+  /* —— Legacy aliases (keep existing index.css working) —— */
+  --ink: var(--text);
+  --ink-soft: var(--text-muted);
+  --mist: var(--bg);
+  --paper: var(--surface);
+  --teal: var(--primary);
+  --teal-deep: hsl(175 78% 18%);
+  --teal-bright: var(--primary-hover);
+  --sand: var(--primary-muted);
+  --line: var(--border);
+  --ok: var(--success);
+  --warn: var(--warning);
+  --shadow-soft: var(--shadow-lg);
+}
+
+/* Base reset against default browser chrome */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text);
+  background: var(--bg);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+}
+
+h4 {
+  font-size: var(--text-xl);
+}
+
+p {
+  margin: 0;
+  color: var(--text);
+}
+
+small {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--primary-hover);
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+/* Utility helpers that read tokens */
+.text-muted {
+  color: var(--text-muted);
+}
+
+.bg-surface {
+  background: var(--surface);
+}
+
+.bg-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.u-stack-sm > * + * {
+  margin-top: var(--space-sm);
+}
+
+.u-stack-md > * + * {
+  margin-top: var(--space-md);
+}
+
+.u-pad-md {
+  padding: var(--space-md);
+}
+
+.u-pad-lg {
+  padding: var(--space-lg);
+}
