@@ -31,13 +31,30 @@ function resolveMongoUri() {
   return required('MONGO_URI');
 }
 
+/** Always allow local Vite + production Netlify; CLIENT_ORIGIN may add more (comma-separated). */
+const DEFAULT_CLIENT_ORIGINS = [
+  'http://localhost:5173',
+  'https://webstructura.netlify.app',
+];
+
+function resolveClientOrigins() {
+  const fromEnv = optional('CLIENT_ORIGIN')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  return [...new Set([...DEFAULT_CLIENT_ORIGINS, ...fromEnv])];
+}
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT) || 5000,
   mongoUri: resolveMongoUri(),
   jwtSecret: required('JWT_SECRET'),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN?.trim() || '7d',
-  clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  /** @deprecated Prefer clientOrigins — kept for any single-origin callers */
+  clientOrigin: optional('CLIENT_ORIGIN', 'http://localhost:5173').split(',')[0].trim(),
+  clientOrigins: resolveClientOrigins(),
   isDev: (process.env.NODE_ENV || 'development') !== 'production',
   /** Local Ollama HTTP API — never expose these to the frontend */
   ollamaBaseUrl: optional('OLLAMA_BASE_URL', 'http://localhost:11434').replace(
