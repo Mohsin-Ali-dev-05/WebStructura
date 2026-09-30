@@ -1,7 +1,6 @@
 export default function TermsPage() {
   return (
     <div className="legal-page">
-      <p className="legal-kicker">Legal</p>
       <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
         Terms of Service
       </h1>

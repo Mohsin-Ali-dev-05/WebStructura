@@ -79,7 +79,6 @@ export default function PreviewPage() {
     <section className="preview-page form-page">
       <div className="page-header">
         <div>
-          <p className="page-kicker">Preview</p>
           <h1>{project.name}</h1>
           <p className="page-subtitle">Full-page preview of your saved website data.</p>
         </div>

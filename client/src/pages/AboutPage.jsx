@@ -22,7 +22,6 @@ export default function AboutPage() {
   return (
     <div className="about-page">
       <section className="about-hero pt-12 pb-16 lg:pt-16 lg:pb-24">
-        <p className="about-kicker md:text-2xl">About WebStructura</p>
         <h1 className="text-4xl md:text-5xl font-extrabold text-brand-text tracking-normal">
           We help teams turn structured content into finished websites
         </h1>

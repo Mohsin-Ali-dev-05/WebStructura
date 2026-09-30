@@ -100,7 +100,6 @@ export default function DashboardPage() {
     <section className="dashboard-page">
       <div className="page-header flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
         <div className="min-w-0">
-          <p className="page-kicker">Workspace</p>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-normal">
             Your projects
           </h1>

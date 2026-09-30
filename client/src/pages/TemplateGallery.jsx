@@ -48,7 +48,6 @@ export default function TemplateGallery() {
     <section className="template-gallery-page">
       <div className="page-header">
         <div>
-          <p className="page-kicker">Starters</p>
           <h1 className="tracking-tight">Template Gallery</h1>
           <p className="page-subtitle leading-relaxed">
             Start from a polished layout instead of an empty project. Pick a

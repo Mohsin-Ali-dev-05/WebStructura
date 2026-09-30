@@ -66,7 +66,6 @@ export default function ContactPage() {
   return (
     <div className="contact-page pt-12 pb-16 lg:pt-16 lg:pb-24">
       <header className="contact-header mb-8">
-        <p className="contact-kicker">Contact</p>
         <h1 className="text-3xl md:text-4xl font-extrabold text-brand-text tracking-normal">
           Talk with the WebStructura team
         </h1>
