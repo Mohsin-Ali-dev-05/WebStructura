@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import AboutPage from './pages/AboutPage.jsx';
@@ -15,7 +15,13 @@ import ProjectFormPage from './pages/ProjectFormPage.jsx';
 import PublicView from './pages/PublicView.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
-import SettingsPage from './pages/SettingsPage.jsx';
+import SettingsLayout from './layouts/SettingsLayout.jsx';
+import AccountSettingsPage from './pages/settings/AccountSettingsPage.jsx';
+import AppearanceSettingsPage from './pages/settings/AppearanceSettingsPage.jsx';
+import BillingSettingsPage from './pages/settings/BillingSettingsPage.jsx';
+import NotificationsSettingsPage from './pages/settings/NotificationsSettingsPage.jsx';
+import ProfileSettingsPage from './pages/settings/ProfileSettingsPage.jsx';
+import SecuritySettingsPage from './pages/settings/SecuritySettingsPage.jsx';
 import TemplateGallery from './pages/TemplateGallery.jsx';
 import TermsPage from './pages/TermsPage.jsx';
 
@@ -57,9 +63,18 @@ export const router = createBrowserRouter([
         path: 'settings',
         element: (
           <Protected>
-            <SettingsPage />
+            <SettingsLayout />
           </Protected>
         ),
+        children: [
+          { index: true, element: <Navigate to="profile" replace /> },
+          { path: 'profile', element: <ProfileSettingsPage /> },
+          { path: 'account', element: <AccountSettingsPage /> },
+          { path: 'security', element: <SecuritySettingsPage /> },
+          { path: 'appearance', element: <AppearanceSettingsPage /> },
+          { path: 'notifications', element: <NotificationsSettingsPage /> },
+          { path: 'billing', element: <BillingSettingsPage /> },
+        ],
       },
       {
         path: 'templates',
