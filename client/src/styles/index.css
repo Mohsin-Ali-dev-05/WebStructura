@@ -688,6 +688,16 @@ p {
   padding-top: 1.25rem;
 }
 
+.site-main.pb-24 {
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 768px) {
+  .site-main.md\:pb-0 {
+    padding-bottom: 0;
+  }
+}
+
 .app-shell--home .site-main.pt-24,
 .app-shell--home .site-main.pt-8 {
   /* Home hero handles its own rhythm; keep clearance modest under sticky nav */
@@ -705,6 +715,16 @@ p {
 .site-footer.py-8 {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
+}
+
+.site-footer.pb-32 {
+  padding-bottom: 8rem;
+}
+
+@media (min-width: 768px) {
+  .site-footer.md\:pb-8 {
+    padding-bottom: 2rem;
+  }
 }
 
 .site-footer.bg-gray-50 {
@@ -4867,8 +4887,8 @@ html:has(.app-shell--builder) body {
 .builder-exit-preview {
   position: absolute;
   left: 50%;
-  bottom: 1.5rem;
-  z-index: 40;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  z-index: 55;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
@@ -5853,19 +5873,103 @@ html:has(.app-shell--builder) body {
 }
 
 .preview-device-toggle--segmented {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
+  position: relative;
+  top: auto;
+  left: auto;
   z-index: 10;
-  transform: translateX(-50%);
+  transform: none;
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.15rem;
   padding: 0.25rem;
   border-radius: 9999px;
   background: #fff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+}
+
+@media (min-width: 768px) {
+  .preview-controls.md\:absolute {
+    position: absolute;
+  }
+
+  .preview-controls.md\:inset-x-0 {
+    left: 0;
+    right: 0;
+  }
+
+  .preview-controls.md\:top-0 {
+    top: 0;
+  }
+
+  .preview-controls.md\:border-0 {
+    border: none;
+  }
+
+  .preview-controls.md\:bg-transparent {
+    background: transparent;
+  }
+
+  .preview-controls.md\:py-0 {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .preview-controls.md\:pointer-events-none {
+    pointer-events: none;
+  }
+
+  .preview-device-toggle--segmented.md\:absolute,
+  .preview-controls .preview-device-toggle--segmented.md\:absolute {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .preview-controls .md\:pointer-events-auto {
+    pointer-events: auto;
+  }
+
+  .preview-sample-chip.md\:absolute {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+.preview-controls {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.preview-controls .preview-device-toggle--segmented {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+.preview-controls .preview-sample-chip {
+  position: relative;
+  top: auto;
+  right: auto;
+}
+
+.preview-device-seg-btn.text-xs {
+  font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .preview-device-seg-btn.sm\:text-sm {
+    font-size: 0.875rem;
+  }
 }
 
 .preview-device-seg-btn {
@@ -5971,12 +6075,20 @@ html:has(.app-shell--builder) body {
   align-items: center;
 }
 
+.preview-viewport-stage--canvas.items-start {
+  align-items: flex-start;
+}
+
 .preview-viewport-stage--canvas.justify-center {
   justify-content: center;
 }
 
 .preview-viewport-stage--canvas.p-4 {
   padding: 1rem;
+}
+
+.preview-viewport-stage--canvas.pt-3 {
+  padding-top: 0.75rem;
 }
 
 .preview-viewport-stage--canvas.pt-14 {
@@ -5990,6 +6102,24 @@ html:has(.app-shell--builder) body {
 
 .preview-viewport-stage--canvas.pb-4 {
   padding-bottom: 1rem;
+}
+
+.preview-viewport-stage--canvas.pb-24 {
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 768px) {
+  .preview-viewport-stage--canvas.md\:items-center {
+    align-items: center;
+  }
+
+  .preview-viewport-stage--canvas.md\:pt-14 {
+    padding-top: 3.5rem;
+  }
+
+  .preview-viewport-stage--canvas.md\:pb-4 {
+    padding-bottom: 1rem;
+  }
 }
 
 .preview-viewport-stage--canvas.overflow-auto {
@@ -6655,9 +6785,33 @@ html:has(.app-shell--builder) body {
 
 .builder-list-item {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 0.4rem;
-  margin-bottom: 0.5rem;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.builder-list-item > button {
+  min-height: 2.5rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .builder-list-item {
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .builder-list-item > button {
+    width: auto;
+    min-height: 0;
+    padding: 0.15rem 0.35rem;
+    font-size: 0.75rem;
+    line-height: 1;
+  }
 }
 
 .builder-list-item.stacked {
@@ -6740,9 +6894,39 @@ html:has(.app-shell--builder) body {
     display: none;
   }
 
-  .preview-viewport-stage {
-    padding: 1rem;
+  .preview-viewport-stage--canvas {
+    padding-top: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 6rem;
+    align-items: flex-start;
   }
+
+  .builder-pane--preview-zen,
+  .builder-workspace--zen .builder-pane--preview {
+    padding-bottom: 5rem;
+  }
+
+  .site-main:not(.site-main--builder):not(.site-main--register) {
+    padding-bottom: 6rem;
+  }
+
+  .site-footer {
+    padding-bottom: 6rem;
+  }
+
+  .settings-page {
+    padding-bottom: 6rem;
+  }
+}
+
+/* Floating third-party badges (Netlify etc.) — clear footer / exit controls */
+a[href*="netlify.com"][style*="position: fixed"],
+a[href*="netlify.com"][style*="position:fixed"],
+[data-netlify-deploy-id],
+.netlify-badge {
+  bottom: max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 4.5rem)) !important;
+  z-index: 40 !important;
 }
 
 /* ===== Confirm dialog (Radix Alert Dialog) ===== */

@@ -7,7 +7,7 @@
   --ws-font: var(--font-body, Georgia, 'Times New Roman', serif);
   --ws-gap: var(--space-2, 1rem);
   --ws-gap-lg: var(--space-4, 2rem);
-  --ws-pad-inline: clamp(1rem, 4vw, 2rem);
+  --ws-pad-inline: clamp(1.25rem, 4vw, 2rem);
 
   background: var(--ws-bg);
   color: var(--ws-text);
@@ -18,9 +18,12 @@
   text-align: left;
   width: 100%;
   min-width: 0;
-  /* Layout follows the site's own width — critical for mobile preview shells */
+  padding-inline: 0;
   container-type: inline-size;
   container-name: website;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: none;
 }
 
 .ws-site *,
@@ -37,10 +40,16 @@
 .ws-site h1,
 .ws-site h2,
 .ws-site h3,
-.ws-site p {
+.ws-site p,
+.ws-site li,
+.ws-site span {
   font-family: inherit;
   color: inherit;
   margin: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: none;
+  max-width: 100%;
 }
 
 .ws-component-stack {
@@ -53,7 +62,26 @@
   width: 100%;
   max-width: 80rem;
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: 1.25rem;
+}
+
+.preview-isolation {
+  min-width: 0;
+}
+
+.preview-isolation.px-4 {
+  padding-inline: 1.25rem;
+}
+
+.preview-site-shell .ws-site,
+.preview-phone-bezel .ws-site {
+  --ws-pad-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .preview-isolation.md\:px-0 {
+    padding-inline: 0;
+  }
 }
 
 /* —— Navbar —— */
@@ -858,7 +886,17 @@
 }
 
 .px-4 {
-  padding-inline: 1rem;
+  padding-inline: 1.25rem;
+}
+
+.px-5 {
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .sm\:px-6 {
+    padding-inline: 1.5rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1543,7 +1581,7 @@ a.inline-flex.justify-center.items-center.px-6 {
 .ws-site p {
   overflow-wrap: anywhere;
   word-break: normal;
-  hyphens: auto;
+  hyphens: none;
   max-width: 100%;
 }
 

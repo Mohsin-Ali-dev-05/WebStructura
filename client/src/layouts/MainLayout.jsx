@@ -369,7 +369,7 @@ export default function MainLayout() {
               ? "site-main site-main--builder"
               : isAuth
                 ? "site-main site-main--register"
-                : "site-main pt-8"
+                : "site-main pt-8 pb-24 md:pb-0"
           }
         >
           <Outlet />
@@ -377,7 +377,7 @@ export default function MainLayout() {
       )}
 
       {!isBuilder && !isAuth && !isProjectForm && (
-        <footer className="site-footer py-8 border-t border-gray-200 bg-gray-50">
+        <footer className="site-footer py-8 pb-32 md:pb-8 border-t border-gray-200 bg-gray-50">
           <div className="site-footer-inner flex flex-col items-center gap-3">
             <p className="text-sm text-gray-500 text-center m-0">
               &copy; {new Date().getFullYear()} WebStructura. All rights

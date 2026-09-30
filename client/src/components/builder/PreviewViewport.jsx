@@ -7,7 +7,9 @@ import {
 import BuilderStateMessage from './BuilderStateMessage.jsx';
 
 /**
- * Figma-style design canvas with floating device pill + optional phone bezel.
+ * Figma-style design canvas with device controls.
+ * Mobile: in-flow flex-wrap bar (no overlap).
+ * Desktop (md+): absolute pills preserved via md: prefixes.
  */
 export default function PreviewViewport({
   websiteData,
@@ -31,7 +33,7 @@ export default function PreviewViewport({
     zenMode ? 'preview-canvas-frame--zen' : 'preview-canvas-frame',
     zenMode
       ? 'w-full h-full border-none shadow-none rounded-none mx-auto my-0 overflow-y-auto overflow-x-hidden bg-white'
-      : 'bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto overflow-x-hidden mx-auto my-8 h-[calc(100vh-160px)]',
+      : 'bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto overflow-x-hidden mx-auto my-4 md:my-8 h-[calc(100vh-220px)] md:h-[calc(100vh-160px)]',
     zenMode ? 'w-full' : device.widthClass,
     isMobile && !zenMode ? 'preview-site-shell--in-bezel' : '',
   ]
@@ -50,48 +52,50 @@ export default function PreviewViewport({
         .trim()}
     >
       {!zenMode ? (
-        <div
-          className="preview-device-toggle preview-device-toggle--segmented absolute top-4 left-1/2 -translate-x-1/2 z-10 bg-white shadow-sm border border-gray-200 rounded-full p-1 flex items-center"
-          role="group"
-          aria-label="Preview device"
-        >
-          {PREVIEW_DEVICES.map((option) => {
-            const active = previewMode === option.id;
-            return (
-              <button
-                key={option.id}
-                type="button"
-                className={
-                  active
-                    ? 'preview-device-seg-btn bg-gray-100 text-slate-900 rounded-full'
-                    : 'preview-device-seg-btn text-gray-500 rounded-full'
-                }
-                onClick={() => setPreviewMode(option.id)}
-                aria-pressed={active}
-              >
-                {option.label}
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
+        <div className="preview-controls relative z-20 flex flex-wrap items-center justify-center gap-2 px-3 py-2.5 shrink-0 border-b border-gray-200/80 bg-gray-100/95 md:absolute md:inset-x-0 md:top-0 md:z-10 md:border-0 md:bg-transparent md:py-0 md:pointer-events-none">
+          <div
+            className="preview-device-toggle preview-device-toggle--segmented relative top-auto left-auto translate-x-0 z-10 bg-white shadow-sm border border-gray-200 rounded-full p-1 flex flex-wrap items-center justify-center md:absolute md:top-4 md:left-1/2 md:-translate-x-1/2 md:pointer-events-auto"
+            role="group"
+            aria-label="Preview device"
+          >
+            {PREVIEW_DEVICES.map((option) => {
+              const active = previewMode === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={
+                    active
+                      ? 'preview-device-seg-btn bg-gray-100 text-slate-900 rounded-full text-xs sm:text-sm'
+                      : 'preview-device-seg-btn text-gray-500 rounded-full text-xs sm:text-sm'
+                  }
+                  onClick={() => setPreviewMode(option.id)}
+                  aria-pressed={active}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
 
-      {!zenMode && onLoadSample ? (
-        <button
-          type="button"
-          className="preview-sample-chip absolute top-4 right-4 z-10"
-          onClick={onLoadSample}
-          title="Load manual sample data to test the preview"
-        >
-          Load sample
-        </button>
+          {onLoadSample ? (
+            <button
+              type="button"
+              className="preview-sample-chip relative top-auto right-auto z-10 text-xs sm:text-sm md:absolute md:top-4 md:right-4 md:pointer-events-auto"
+              onClick={onLoadSample}
+              title="Load manual sample data to test the preview"
+            >
+              Load sample
+            </button>
+          ) : null}
+        </div>
       ) : null}
 
       <div
         className={
           zenMode
             ? 'preview-viewport-stage preview-viewport-stage--zen flex-1 min-h-0 h-full overflow-hidden bg-white'
-            : 'preview-viewport-stage preview-viewport-stage--canvas flex-1 min-h-0 flex items-center justify-center pt-14 px-4 pb-4 bg-gray-100'
+            : 'preview-viewport-stage preview-viewport-stage--canvas flex-1 min-h-0 flex items-start justify-center pt-3 px-4 pb-24 md:items-center md:pt-14 md:pb-4 bg-gray-100'
         }
       >
         {!hasComponents && showEmptyState ? (
@@ -99,7 +103,7 @@ export default function PreviewViewport({
             className={
               zenMode
                 ? 'preview-site-shell preview-site-shell--empty w-full h-full border-none shadow-none rounded-none mx-auto my-0 overflow-y-auto overflow-x-hidden bg-white'
-                : 'preview-site-shell preview-site-shell--empty preview-canvas-frame bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto overflow-x-hidden mx-auto my-8 h-[calc(100vh-160px)]'
+                : 'preview-site-shell preview-site-shell--empty preview-canvas-frame bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto overflow-x-hidden mx-auto my-4 md:my-8 h-[calc(100vh-220px)] md:h-[calc(100vh-160px)]'
             }
           >
             <BuilderStateMessage variant="empty" title="Nothing to preview yet">
@@ -119,10 +123,13 @@ export default function PreviewViewport({
             </BuilderStateMessage>
           </div>
         ) : isMobile && !zenMode ? (
-          <div className="preview-phone-bezel mx-auto my-8" data-device="mobile">
+          <div
+            className="preview-phone-bezel mx-auto my-4 md:my-8"
+            data-device="mobile"
+          >
             <div className="preview-phone-notch" aria-hidden="true" />
             <div className={siteShellClass} data-device={previewMode}>
-              <div className="preview-isolation" data-preview-root="true">
+              <div className="preview-isolation px-4 md:px-0" data-preview-root="true">
                 <WebsiteRenderer
                   websiteData={websiteData}
                   interactive={!zenMode}
@@ -137,7 +144,10 @@ export default function PreviewViewport({
             className={siteShellClass}
             data-device={zenMode ? 'desktop' : previewMode}
           >
-            <div className="preview-isolation" data-preview-root="true">
+            <div
+              className="preview-isolation px-4 md:px-0"
+              data-preview-root="true"
+            >
               <WebsiteRenderer
                 websiteData={websiteData}
                 interactive={!zenMode}
