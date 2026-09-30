@@ -7,8 +7,32 @@ export default function HomePage() {
 
   return (
     <div className="landing bg-brand-canvas">
-      <section className="landing-hero pt-8 pb-12 lg:pt-12 lg:pb-16">
-        <div className="landing-hero-copy">
+      <section className="landing-hero flex flex-col-reverse md:flex-row items-center gap-6 md:gap-8 pt-8 pb-12 px-4 md:px-6 lg:pt-12 lg:pb-16 lg:px-8">
+        <div className="landing-hero-visual animate-float w-full max-w-full min-w-0 px-4 md:px-0 box-border flex justify-center md:order-2" aria-hidden="true">
+          <div className="hero-browser shadow-soft w-full max-w-full box-border">
+            <div className="hero-browser-bar">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="hero-browser-body">
+              <div className="hero-site-nav">Northside Studio</div>
+              <div className="hero-site-title">Design that feels finished</div>
+              <div className="hero-site-lines">
+                <i />
+                <i />
+                <i />
+              </div>
+              <div className="hero-site-blocks">
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="landing-hero-copy w-full min-w-0 px-4 md:px-0 box-border md:order-1">
           <p className="brand-lockup animate-fade-up text-5xl md:text-7xl font-bold tracking-tight">
             WebStructura
           </p>
@@ -34,30 +58,6 @@ export default function HomePage() {
                 </Link>
               </>
             )}
-          </div>
-        </div>
-
-        <div className="landing-hero-visual animate-float" aria-hidden="true">
-          <div className="hero-browser shadow-soft">
-            <div className="hero-browser-bar">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="hero-browser-body">
-              <div className="hero-site-nav">Northside Studio</div>
-              <div className="hero-site-title">Design that feels finished</div>
-              <div className="hero-site-lines">
-                <i />
-                <i />
-                <i />
-              </div>
-              <div className="hero-site-blocks">
-                <div />
-                <div />
-                <div />
-              </div>
-            </div>
           </div>
         </div>
       </section>
