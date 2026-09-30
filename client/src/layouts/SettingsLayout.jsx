@@ -45,7 +45,7 @@ export default function SettingsLayout() {
           ))}
         </nav>
 
-        <section className="settings-panel flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+        <section className="settings-panel flex-1 max-w-2xl mx-auto w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
           <Outlet />
         </section>
       </div>

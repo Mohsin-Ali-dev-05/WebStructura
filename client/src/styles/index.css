@@ -7061,6 +7061,8 @@ html:has(.app-shell--builder) body {
 .settings-page .mb-8 { margin-bottom: 2rem; }
 .settings-page .m-0 { margin: 0; }
 .settings-page .max-w-lg { max-width: 32rem; }
+.settings-page .max-w-2xl { max-width: 42rem; }
+.settings-page .mx-auto { margin-left: auto; margin-right: auto; }
 .settings-page .flex { display: flex; }
 .settings-page .flex-col { flex-direction: column; }
 .settings-page .flex-1 { flex: 1 1 0%; min-width: 0; }
