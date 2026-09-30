@@ -51,7 +51,7 @@ export default function Gallery({
       className="ws-section ws-gallery"
       aria-label="Gallery"
     >
-      <header className="mb-10 md:mb-12">
+      <header className="mb-6 md:mb-8">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>

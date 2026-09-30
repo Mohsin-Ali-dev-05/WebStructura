@@ -15,7 +15,7 @@ export default function Testimonials({
       className="ws-section"
       aria-label="Testimonials"
     >
-      <header className="mb-10 md:mb-12">
+      <header className="mb-6 md:mb-8">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>
@@ -27,7 +27,7 @@ export default function Testimonials({
           {safeItems.map((item, index) => (
             <blockquote
               key={listItemKey(item, index, 'testimonial')}
-              className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col gap-4 min-w-0 w-full"
+              className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 flex flex-col gap-4 min-w-0 w-full"
             >
               <p className="text-gray-700 text-lg leading-normal italic">
                 “{item.quote}”

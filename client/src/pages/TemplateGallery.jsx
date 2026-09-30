@@ -67,7 +67,7 @@ export default function TemplateGallery() {
       <img
         src={templateVisual}
         alt="WebStructura template gallery preview"
-        className="template-gallery-hero w-full max-w-md mx-auto max-h-48 h-auto rounded-xl shadow-sm border border-gray-200 object-contain mb-8"
+        className="template-gallery-hero w-full max-w-md mx-auto max-h-48 h-auto rounded-xl shadow-sm border border-gray-200 object-contain mb-5"
       />
 
       <div className="template-grid">

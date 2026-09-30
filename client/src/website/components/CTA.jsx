@@ -15,7 +15,7 @@ export default function CTA({
 }) {
   return (
     <SectionWrapper id="cta" className="ws-cta" aria-label="Call to action">
-      <div className="rounded-2xl bg-gray-900 px-6 py-12 md:px-12 md:py-16 text-center md:text-left flex flex-col md:flex-row md:items-center md:justify-between gap-8 md:gap-12 lg:gap-16">
+      <div className="rounded-2xl bg-gray-900 px-5 py-8 md:px-8 md:py-10 text-center md:text-left flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-8 lg:gap-10">
         <div className="max-w-2xl min-w-0 w-full">
           <h2 className="font-extrabold tracking-tight text-white text-3xl md:text-4xl">
             {heading}

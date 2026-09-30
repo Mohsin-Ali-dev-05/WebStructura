@@ -83,7 +83,7 @@ export default function ResetPassword() {
 
   return (
     <div className="forgot-password-page reset-password-page min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
         <p className="text-center text-2xl font-extrabold text-emerald-900 mb-2">
           WebStructura
         </p>

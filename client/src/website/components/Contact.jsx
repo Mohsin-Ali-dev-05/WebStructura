@@ -14,7 +14,7 @@ export default function Contact({
       className="ws-section"
       aria-label="Contact"
     >
-      <header className="mb-10 md:mb-12">
+      <header className="mb-6 md:mb-8">
         <h2 className={WS_H2}>{heading}</h2>
         {message ? <p className={WS_SUB}>{message}</p> : null}
       </header>

@@ -21,7 +21,7 @@ export default function Pricing({
       className="ws-section ws-pricing"
       aria-label="Pricing"
     >
-      <header className="mb-10 md:mb-12 text-center md:text-left">
+      <header className="mb-6 md:mb-8 text-center md:text-left">
         <h2 className={`${WS_H2} mx-auto md:mx-0`}>{heading}</h2>
         {subheading ? (
           <p className={`${WS_SUB} mx-auto md:mx-0`}>{subheading}</p>
@@ -43,7 +43,7 @@ export default function Pricing({
               <article
                 key={listItemKey(tier, index, 'tier')}
                 className={[
-                  'relative flex flex-col gap-4 rounded-2xl border p-6 md:p-8 bg-white shadow-sm min-w-0 w-full',
+                  'relative flex flex-col gap-4 rounded-2xl border p-5 md:p-6 bg-white shadow-sm min-w-0 w-full',
                   isFeatured
                     ? 'border-emerald-600 shadow-lg ring-1 ring-emerald-600'
                     : 'border-gray-100',

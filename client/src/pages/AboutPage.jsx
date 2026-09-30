@@ -46,7 +46,7 @@ export default function AboutPage() {
           Principles that shape every product decision we ship.
         </p>
 
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-5 list-none m-0 p-0">
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-8 list-none m-0 p-0">
           {VALUES.map((value) => (
             <li
               key={value.title}

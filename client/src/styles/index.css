@@ -163,8 +163,8 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 0.95rem clamp(1rem, 4vw, 2.5rem);
+  gap: 0.75rem;
+  padding: 0.7rem clamp(1rem, 4vw, 2rem);
   background: rgb(10, 69, 65);
   color: #fff;
   position: sticky;
@@ -621,16 +621,16 @@ p {
 .site-main {
   flex: 1;
   width: min(1100px, calc(100% - 2rem));
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.25rem;
   padding-top: 0;
 }
 
 .site-main.pt-24 {
-  padding-top: 6rem;
+  padding-top: 2rem;
 }
 
 .site-main.pt-8 {
-  padding-top: 2rem;
+  padding-top: 1.25rem;
 }
 
 .app-shell--home .site-main.pt-24 {
@@ -640,15 +640,15 @@ p {
 
 .site-footer {
   margin-top: auto;
-  padding: 2rem clamp(1rem, 4vw, 2.5rem);
+  padding: 1.25rem clamp(1rem, 4vw, 2rem);
   background: #f9fafb;
   border-top: 1px solid #e5e7eb;
   color: #6b7280;
 }
 
 .site-footer.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 }
 
 .site-footer.bg-gray-50 {
@@ -983,10 +983,10 @@ p {
   min-height: auto;
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
   align-items: center;
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
   padding-left: clamp(1.25rem, 5vw, 3.5rem);
   padding-right: clamp(1.25rem, 5vw, 3.5rem);
   background:
@@ -996,21 +996,25 @@ p {
   overflow: hidden;
 }
 
-.landing-hero.pt-12 {
-  padding-top: 3rem;
+.landing-hero.pt-12,
+.landing-hero.pt-8 {
+  padding-top: 2rem;
 }
 
-.landing-hero.pb-16 {
-  padding-bottom: 4rem;
+.landing-hero.pb-16,
+.landing-hero.pb-12 {
+  padding-bottom: 3rem;
 }
 
 @media (min-width: 1024px) {
-  .landing-hero.lg\:pt-16 {
-    padding-top: 4rem;
+  .landing-hero.lg\:pt-16,
+  .landing-hero.lg\:pt-12 {
+    padding-top: 3rem;
   }
 
-  .landing-hero.lg\:pb-24 {
-    padding-bottom: 6rem;
+  .landing-hero.lg\:pb-24,
+  .landing-hero.lg\:pb-16 {
+    padding-bottom: 4rem;
   }
 }
 
@@ -1174,25 +1178,29 @@ p {
 .landing-section {
   width: min(1100px, calc(100% - 2rem));
   margin: 0 auto;
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
 }
 
-.landing-section.pt-12 {
-  padding-top: 3rem;
+.landing-section.pt-12,
+.landing-section.pt-10 {
+  padding-top: 2.5rem;
 }
 
-.landing-section.pb-16 {
-  padding-bottom: 4rem;
+.landing-section.pb-16,
+.landing-section.pb-12 {
+  padding-bottom: 3rem;
 }
 
 @media (min-width: 1024px) {
-  .landing-section.lg\:pt-16 {
-    padding-top: 4rem;
+  .landing-section.lg\:pt-16,
+  .landing-section.lg\:pt-12 {
+    padding-top: 3rem;
   }
 
-  .landing-section.lg\:pb-24 {
-    padding-bottom: 6rem;
+  .landing-section.lg\:pb-24,
+  .landing-section.lg\:pb-16 {
+    padding-bottom: 4rem;
   }
 }
 
@@ -1240,25 +1248,29 @@ p {
 }
 
 .how-it-works .py-16 {
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
 }
 
-.how-it-works.pt-12 {
-  padding-top: 3rem;
+.how-it-works.pt-12,
+.how-it-works.pt-10 {
+  padding-top: 2.5rem;
 }
 
-.how-it-works.pb-16 {
-  padding-bottom: 4rem;
+.how-it-works.pb-16,
+.how-it-works.pb-12 {
+  padding-bottom: 3rem;
 }
 
 @media (min-width: 1024px) {
-  .how-it-works.lg\:pt-16 {
-    padding-top: 4rem;
+  .how-it-works.lg\:pt-16,
+  .how-it-works.lg\:pt-12 {
+    padding-top: 3rem;
   }
 
-  .how-it-works.lg\:pb-24 {
-    padding-bottom: 6rem;
+  .how-it-works.lg\:pb-24,
+  .how-it-works.lg\:pb-16 {
+    padding-bottom: 4rem;
   }
 }
 
@@ -1266,8 +1278,8 @@ p {
   .how-it-works.md\:py-24,
   .how-it-works .md\:py-24,
   .landing-section.py-16.md\:py-24 {
-    padding-top: 4rem;
-    padding-bottom: 6rem;
+    padding-top: 3rem;
+    padding-bottom: 4rem;
   }
 }
 
@@ -1291,6 +1303,14 @@ p {
 
 .how-it-works .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.how-it-works .gap-5 {
+  gap: 1.25rem;
+}
+
+.how-it-works .gap-6 {
+  gap: 1.5rem;
 }
 
 .how-it-works .gap-8 {
@@ -2452,7 +2472,7 @@ p {
 
 /* Dashboard & forms */
 .dashboard-page {
-  padding-bottom: 2rem;
+  padding-bottom: 1.25rem;
 }
 
 .dashboard-page .dashboard-workspace-visual,
@@ -2474,19 +2494,19 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2.5rem;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .dashboard-page .dashboard-empty-state {
   width: 100%;
   max-width: 28rem;
-  padding: 2.5rem;
+  padding: 1.5rem;
   text-align: center;
   background: #fff;
   border: 2px dashed #e5e7eb;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
 }
 
 .dashboard-page .dashboard-empty-state .empty-panel-actions {
@@ -2568,8 +2588,8 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.75rem;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .page-header-actions,
@@ -6746,13 +6766,13 @@ html:has(.app-shell--builder) body {
 .contact-page {
   width: min(1100px, 100%);
   margin: 0 auto;
-  padding: 0 0 3rem;
+  padding: 0 0 1.5rem;
 }
 
 .settings-page {
   width: min(1100px, 100%);
   margin: 0 auto;
-  padding: 0.5rem 0 3rem;
+  padding: 0.25rem 0 1.5rem;
 }
 
 .about-kicker,
@@ -6767,8 +6787,8 @@ html:has(.app-shell--builder) body {
 }
 
 .about-hero {
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;
   max-width: 46rem;
 }
 
@@ -6796,25 +6816,29 @@ html:has(.app-shell--builder) body {
 }
 
 .about-section {
-  padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;
 }
 
-.about-section.pt-12 {
-  padding-top: 3rem;
+.about-section.pt-12,
+.about-section.pt-6 {
+  padding-top: 1.5rem;
 }
 
-.about-section.pb-16 {
-  padding-bottom: 4rem;
+.about-section.pb-16,
+.about-section.pb-10 {
+  padding-bottom: 2.5rem;
 }
 
 @media (min-width: 1024px) {
-  .about-section.lg\:pt-16 {
-    padding-top: 4rem;
+  .about-section.lg\:pt-16,
+  .about-section.lg\:pt-8 {
+    padding-top: 2rem;
   }
 
-  .about-section.lg\:pb-24 {
-    padding-bottom: 6rem;
+  .about-section.lg\:pb-24,
+  .about-section.lg\:pb-12 {
+    padding-bottom: 3rem;
   }
 }
 
@@ -6859,6 +6883,8 @@ html:has(.app-shell--builder) body {
 .about-page .grid { display: grid; }
 .about-page .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .about-page .gap-8 { gap: 2rem; }
+.about-page .gap-6 { gap: 1.5rem; }
+.about-page .gap-5 { gap: 1.25rem; }
 .about-page .gap-3 { gap: 0.75rem; }
 .about-page .bg-white { background: #fff; }
 .about-page .bg-emerald-900 { background: #064e3b; }
@@ -6900,21 +6926,25 @@ html:has(.app-shell--builder) body {
   .about-page .md\:p-14 { padding: 3.5rem; }
 }
 
-.contact-page.pt-12 {
-  padding-top: 3rem;
+.contact-page.pt-12,
+.contact-page.pt-6 {
+  padding-top: 1.5rem;
 }
 
-.contact-page.pb-16 {
-  padding-bottom: 4rem;
+.contact-page.pb-16,
+.contact-page.pb-10 {
+  padding-bottom: 2.5rem;
 }
 
 @media (min-width: 1024px) {
-  .contact-page.lg\:pt-16 {
-    padding-top: 4rem;
+  .contact-page.lg\:pt-16,
+  .contact-page.lg\:pt-8 {
+    padding-top: 2rem;
   }
 
-  .contact-page.lg\:pb-24 {
-    padding-bottom: 6rem;
+  .contact-page.lg\:pb-24,
+  .contact-page.lg\:pb-12 {
+    padding-bottom: 3rem;
   }
 }
 
@@ -6955,6 +6985,7 @@ html:has(.app-shell--builder) body {
 .contact-page .flex-col { flex-direction: column; }
 .contact-page .flex-1 { flex: 1 1 0%; min-width: 0; }
 .contact-page .gap-8 { gap: 2rem; }
+.contact-page .gap-5 { gap: 1.25rem; }
 .contact-page .gap-10 { gap: 2.5rem; }
 .contact-page .gap-12 { gap: 3rem; }
 .contact-page .space-y-2 > * + * { margin-top: 0.5rem; }
@@ -6984,6 +7015,7 @@ html:has(.app-shell--builder) body {
 @media (min-width: 1024px) {
   .contact-page .lg\:pt-16 { padding-top: 4rem; }
   .contact-page .lg\:pb-24 { padding-bottom: 6rem; }
+  .contact-page .lg\:gap-8 { gap: 2rem; }
   .contact-page .lg\:gap-12 { gap: 3rem; }
   .contact-page .lg\:flex-row { flex-direction: row; }
   .contact-page .lg\:w-2\/5 { width: 40%; }

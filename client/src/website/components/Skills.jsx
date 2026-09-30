@@ -11,7 +11,7 @@ export default function Skills({
 
   return (
     <SectionWrapper id="skills" className="ws-section" aria-label="Skills">
-      <header className="mb-10 md:mb-12">
+      <header className="mb-6 md:mb-8">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>

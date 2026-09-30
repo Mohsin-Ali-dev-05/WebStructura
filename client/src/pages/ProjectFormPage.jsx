@@ -231,7 +231,7 @@ export default function ProjectFormPage() {
         ) : null}
 
         <form
-          className="bg-white rounded-xl border border-gray-200 shadow-lg p-8 space-y-4"
+          className="bg-white rounded-xl border border-gray-200 shadow-lg p-6 space-y-4"
           onSubmit={handleSubmit}
         >
           <div className="flex justify-between items-start mb-6">
