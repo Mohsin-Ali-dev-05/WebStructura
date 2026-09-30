@@ -12,7 +12,7 @@ const SETTINGS_NAV = [
 export default function SettingsLayout() {
   return (
     <div className="settings-page">
-      <header className="settings-header mb-8">
+      <header className="settings-header mb-6">
         <p className="settings-kicker">Account</p>
         <h1 className="text-3xl font-extrabold text-gray-900 m-0 tracking-normal">
           Settings

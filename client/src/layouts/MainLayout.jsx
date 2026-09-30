@@ -104,6 +104,7 @@ export default function MainLayout() {
   const isProjectForm =
     location.pathname === "/projects/new" ||
     /\/projects\/[^/]+\/edit\/?$/.test(location.pathname);
+  const isSettings = location.pathname.startsWith("/settings");
 
   const shellClass = isProjectForm
     ? "min-h-screen flex flex-col bg-gray-50"
@@ -363,7 +364,9 @@ export default function MainLayout() {
               ? "site-main site-main--builder"
               : isAuth
                 ? "site-main site-main--register"
-                : "site-main pt-24"
+                : isSettings
+                  ? "site-main pt-8"
+                  : "site-main pt-24"
           }
         >
           <Outlet />

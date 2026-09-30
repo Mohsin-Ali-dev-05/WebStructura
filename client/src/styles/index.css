@@ -629,6 +629,10 @@ p {
   padding-top: 6rem;
 }
 
+.site-main.pt-8 {
+  padding-top: 2rem;
+}
+
 .app-shell--home .site-main.pt-24 {
   /* Home hero handles its own rhythm; keep clearance modest under sticky nav */
   padding-top: 0;
@@ -6748,7 +6752,7 @@ html:has(.app-shell--builder) body {
 .settings-page {
   width: min(1100px, 100%);
   margin: 0 auto;
-  padding: 1.5rem 0 3rem;
+  padding: 0.5rem 0 3rem;
 }
 
 .about-kicker,
