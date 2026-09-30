@@ -46,7 +46,7 @@ export default function NotificationsSettingsPage() {
         now.
       </p>
 
-      <div className="space-y-4 mb-8 max-w-lg">
+      <div className="space-y-4 mb-5 max-w-lg">
         {NOTIFICATION_ITEMS.map((item) => {
           const enabled = Boolean(prefs[item.id]);
           return (

@@ -185,7 +185,7 @@ export default function ProfileSettingsPage() {
         </p>
       ) : null}
 
-      <div className="settings-photo-section flex items-center gap-5 mb-8">
+      <div className="settings-photo-section flex items-center gap-4 mb-5">
         <div
           className="settings-avatar w-24 h-24 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-4xl text-gray-400 overflow-hidden shrink-0"
           aria-hidden={avatarUrl ? undefined : true}

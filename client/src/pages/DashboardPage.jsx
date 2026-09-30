@@ -133,7 +133,7 @@ export default function DashboardPage() {
       {loading && <p className="page-message">Loading projects…</p>}
 
       {!loading && (!projects || projects.length === 0) && (
-        <div className="dashboard-empty-stack flex flex-col items-center justify-center gap-10 mt-8 mb-16">
+        <div className="dashboard-empty-stack flex flex-col items-center justify-center gap-6 mt-4 mb-8">
           <img
             src={workspaceVisual}
             alt="WebStructura AI Workspace"
@@ -141,13 +141,13 @@ export default function DashboardPage() {
           />
 
           <div
-            className="dashboard-empty-state border-2 border-dashed border-gray-200 rounded-3xl p-10 text-center max-w-md w-full bg-white"
+            className="dashboard-empty-state border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center max-w-md w-full bg-white"
             aria-live="polite"
           >
             <h2 className="empty-panel-title text-xl font-bold text-gray-900 m-0">
               No projects yet
             </h2>
-            <p className="empty-panel-description text-gray-500 mt-3 mb-8 leading-relaxed">
+            <p className="empty-panel-description text-gray-500 mt-2 mb-5 leading-relaxed">
               Start from a template or create a blank website project to open
               the builder.
             </p>

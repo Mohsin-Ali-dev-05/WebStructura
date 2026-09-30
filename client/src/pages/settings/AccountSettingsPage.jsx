@@ -11,7 +11,7 @@ export default function AccountSettingsPage() {
         Overview of your WebStructura account.
       </p>
 
-      <dl className="settings-account-meta space-y-4 m-0 mb-8">
+      <dl className="settings-account-meta space-y-4 m-0 mb-5">
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500 m-0">
             Signed in as

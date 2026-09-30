@@ -28,7 +28,7 @@ export default function SecuritySettingsPage() {
         authentication.
       </p>
 
-      <form className="space-y-4 max-w-lg mb-8" onSubmit={handleSubmit} noValidate>
+      <form className="space-y-4 max-w-lg mb-5" onSubmit={handleSubmit} noValidate>
         <label className="block space-y-2">
           <span className="text-sm font-semibold text-gray-900">
             Current password

@@ -12,18 +12,18 @@ const SETTINGS_NAV = [
 export default function SettingsLayout() {
   return (
     <div className="settings-page">
-      <header className="settings-header mb-6">
+      <header className="settings-header mb-4">
         <h1 className="text-3xl font-extrabold text-gray-900 m-0 tracking-normal">
           Settings
         </h1>
-        <p className="text-gray-600 mt-2 m-0 leading-relaxed">
+        <p className="text-gray-600 mt-1.5 m-0 leading-relaxed">
           Manage your profile, security, and workspace preferences.
         </p>
       </header>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-5">
         <nav
-          className="settings-nav flex md:flex-col gap-2 md:w-52 shrink-0 overflow-x-auto"
+          className="settings-nav flex md:flex-col gap-1.5 md:w-48 shrink-0 overflow-x-auto"
           aria-label="Settings sections"
         >
           {SETTINGS_NAV.map((item) => (
@@ -44,7 +44,7 @@ export default function SettingsLayout() {
           ))}
         </nav>
 
-        <section className="settings-panel flex-1 max-w-2xl mx-auto w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+        <section className="settings-panel flex-1 max-w-2xl mx-auto w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-5 md:p-6">
           <Outlet />
         </section>
       </div>

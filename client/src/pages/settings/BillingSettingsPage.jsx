@@ -14,7 +14,7 @@ export default function BillingSettingsPage() {
         payments are connected.
       </p>
 
-      <div className="rounded-xl border border-gray-100 bg-gray-50 p-5 mb-8 max-w-lg">
+      <div className="rounded-xl border border-gray-100 bg-gray-50 p-5 mb-5 max-w-lg">
         <div className="flex items-center justify-between gap-3 mb-3">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 m-0">
             Current plan
@@ -42,7 +42,7 @@ export default function BillingSettingsPage() {
         </ul>
       </div>
 
-      <dl className="settings-account-meta space-y-4 m-0 mb-8 max-w-lg">
+      <dl className="settings-account-meta space-y-4 m-0 mb-5 max-w-lg">
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500 m-0">
             Payment method

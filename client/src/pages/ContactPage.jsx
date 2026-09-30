@@ -64,20 +64,20 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="contact-page pt-12 pb-16 lg:pt-16 lg:pb-24">
-      <header className="contact-header mb-8">
+    <div className="contact-page pt-6 pb-10 lg:pt-8 lg:pb-12">
+      <header className="contact-header mb-5">
         <h1 className="text-3xl md:text-4xl font-extrabold text-brand-text tracking-normal">
           Talk with the WebStructura team
         </h1>
-        <p className="text-gray-600 mt-3 max-w-2xl leading-relaxed">
+        <p className="text-gray-600 mt-2 max-w-2xl leading-relaxed">
           Questions about your workspace, billing, or a project? Send a note —
           we typically reply within one business day.
         </p>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-        <aside className="contact-aside lg:w-2/5 space-y-6">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-6 md:p-8">
+      <div className="flex flex-col lg:flex-row gap-5 lg:gap-8">
+        <aside className="contact-aside lg:w-2/5 space-y-4">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-5 md:p-6">
             <h2 className="text-lg font-bold text-brand-text m-0 mb-2 tracking-normal">
               Support email
             </h2>
@@ -92,7 +92,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-6 md:p-8">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-5 md:p-6">
             <h2 className="text-lg font-bold text-brand-text m-0 mb-2 tracking-normal">
               Location
             </h2>
@@ -105,8 +105,8 @@ export default function ContactPage() {
           </div>
         </aside>
 
-        <section className="contact-form-panel flex-1 bg-white rounded-2xl border border-gray-100 shadow-soft p-6 md:p-8">
-          <h2 className="text-xl font-bold text-brand-text m-0 mb-6 tracking-normal">
+        <section className="contact-form-panel flex-1 bg-white rounded-2xl border border-gray-100 shadow-soft p-5 md:p-6">
+          <h2 className="text-xl font-bold text-brand-text m-0 mb-4 tracking-normal">
             Send a message
           </h2>
 

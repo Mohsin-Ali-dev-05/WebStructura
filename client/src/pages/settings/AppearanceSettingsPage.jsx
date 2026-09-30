@@ -24,7 +24,7 @@ export default function AppearanceSettingsPage() {
         only — preferences are not saved yet.
       </p>
 
-      <div className="space-y-4 max-w-lg mb-8">
+      <div className="space-y-4 max-w-lg mb-5">
         <p className="text-sm font-semibold text-gray-900 m-0">Theme</p>
         <div className="space-y-3">
           {THEME_OPTIONS.map((option) => {
@@ -54,7 +54,7 @@ export default function AppearanceSettingsPage() {
         </div>
       </div>
 
-      <div className="space-y-4 max-w-lg mb-8">
+      <div className="space-y-4 max-w-lg mb-5">
         <label className="block space-y-2">
           <span className="text-sm font-semibold text-gray-900">
             Interface density
