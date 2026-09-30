@@ -46,19 +46,19 @@ export default function TemplateGallery() {
 
   return (
     <section className="template-gallery-page">
-      <div className="page-header">
-        <div>
-          <h1 className="tracking-tight">Template Gallery</h1>
+      <div className="page-header flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="tracking-tight text-2xl md:text-3xl">Template Gallery</h1>
           <p className="page-subtitle leading-relaxed">
             Start from a polished layout instead of an empty project. Pick a
             template, name your site, and jump straight into the builder.
           </p>
         </div>
-        <div className="template-gallery-actions">
-          <Link className="btn btn-ghost-dark" to="/dashboard">
+        <div className="template-gallery-actions flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto shrink-0">
+          <Link className="btn btn-ghost-dark flex-1 md:flex-none justify-center" to="/dashboard">
             Back to dashboard
           </Link>
-          <Link className="btn btn-secondary" to="/projects/new">
+          <Link className="btn btn-secondary flex-1 md:flex-none justify-center" to="/projects/new">
             Blank project
           </Link>
         </div>

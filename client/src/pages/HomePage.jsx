@@ -63,29 +63,29 @@ export default function HomePage() {
       </section>
 
       <section className="landing-section how-it-works pt-10 pb-12 lg:pt-12 lg:pb-16">
-        <h2 className="tracking-normal text-4xl font-extrabold text-brand-text">
+        <h2 className="tracking-normal text-3xl md:text-4xl font-extrabold text-brand-text">
           How it works
         </h2>
         <p className="text-lg text-gray-600 mt-2 mb-6 leading-relaxed">
           Three clear steps from account to a live preview of your site.
         </p>
-        <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 list-none m-0 p-0">
-          <li className="bg-white rounded-2xl p-6 border border-gray-100 shadow-soft hover:shadow-md transition-shadow duration-300">
+        <ol className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 list-none m-0 p-0">
+          <li className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-soft hover:shadow-md transition-shadow duration-300">
             <span className="w-10 h-10 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold text-base mb-4">
               01
             </span>
-            <strong className="block text-xl font-bold text-brand-text mb-2 tracking-normal">
+            <strong className="block text-lg md:text-xl font-bold text-brand-text mb-2 tracking-normal">
               Create a project
             </strong>
             <p className="m-0 text-gray-600 leading-relaxed">
               Name your site and keep drafts organized in one dashboard.
             </p>
           </li>
-          <li className="bg-white rounded-2xl p-6 border border-gray-100 shadow-soft hover:shadow-md transition-shadow duration-300">
+          <li className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-soft hover:shadow-md transition-shadow duration-300">
             <span className="w-10 h-10 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold text-base mb-4">
               02
             </span>
-            <strong className="block text-xl font-bold text-brand-text mb-2 tracking-normal">
+            <strong className="block text-lg md:text-xl font-bold text-brand-text mb-2 tracking-normal">
               Compose sections
             </strong>
             <p className="m-0 text-gray-600 leading-relaxed">
@@ -93,11 +93,11 @@ export default function HomePage() {
               data.
             </p>
           </li>
-          <li className="bg-white rounded-2xl p-6 border border-gray-100 shadow-soft hover:shadow-md transition-shadow duration-300">
+          <li className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-soft hover:shadow-md transition-shadow duration-300">
             <span className="w-10 h-10 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-600 font-bold text-base mb-4">
               03
             </span>
-            <strong className="block text-xl font-bold text-brand-text mb-2 tracking-normal">
+            <strong className="block text-lg md:text-xl font-bold text-brand-text mb-2 tracking-normal">
               Preview live
             </strong>
             <p className="m-0 text-gray-600 leading-relaxed">

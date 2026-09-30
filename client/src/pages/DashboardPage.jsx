@@ -98,9 +98,9 @@ export default function DashboardPage() {
 
   return (
     <section className="dashboard-page">
-      <div className="page-header flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+      <div className="page-header flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-6">
         <div className="min-w-0">
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-normal">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-normal">
             Your projects
           </h1>
           <p className="page-subtitle text-gray-600 mt-2">
@@ -175,7 +175,7 @@ export default function DashboardPage() {
           {projects.map((project) => (
             <li
               key={project.id}
-              className="project-item bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-6 flex flex-col lg:flex-row justify-between gap-6"
+              className="project-item bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-4 md:p-6 flex flex-col lg:flex-row justify-between gap-4 lg:gap-6 min-w-0"
             >
               <div className="project-item-main max-w-3xl min-w-0">
                 <div className="project-item-top flex flex-wrap items-center gap-3">

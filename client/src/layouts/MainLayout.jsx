@@ -286,8 +286,8 @@ export default function MainLayout() {
             .filter(Boolean)
             .join(" ")}
         >
-          <div className="site-header-bar flex items-center justify-between w-full gap-4">
-            <Link to="/" className="brand">
+          <div className="site-header-bar flex items-center justify-between w-full gap-3 md:gap-4 min-w-0">
+            <Link to="/" className="brand shrink-0">
               <img
                 src={logo}
                 alt="WebStructura"
@@ -297,7 +297,7 @@ export default function MainLayout() {
 
             <button
               type="button"
-              className="site-nav-toggle md:hidden"
+              className="site-nav-toggle md:hidden ml-auto shrink-0"
               aria-expanded={menuOpen}
               aria-controls="primary-menu"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -307,22 +307,28 @@ export default function MainLayout() {
             </button>
 
             <nav
-              className="site-nav hidden md:flex items-center gap-8"
+              className="site-nav site-nav--desktop hidden md:flex items-center gap-6 lg:gap-8 flex-1 min-w-0 justify-end"
               aria-label="Primary"
             >
-              <div className="flex items-center gap-8">{publicLinks}</div>
+              <div className="flex items-center gap-4 lg:gap-8 min-w-0">
+                {publicLinks}
+              </div>
 
               {!loading && isAuthenticated ? (
                 <>
-                  <div className="flex items-center gap-8">{authLinks}</div>
-                  <div className="flex items-center border-l border-emerald-700/50 pl-6 ml-2">
+                  <div className="flex items-center gap-4 lg:gap-8">
+                    {authLinks}
+                  </div>
+                  <div className="flex items-center border-l border-emerald-700/50 pl-4 lg:pl-6 ml-1 lg:ml-2 shrink-0">
                     {accountDropdown}
                   </div>
                 </>
               ) : null}
 
               {!loading && !isAuthenticated ? (
-                <div className="flex items-center gap-8">{guestLinks}</div>
+                <div className="flex items-center gap-4 lg:gap-8 shrink-0">
+                  {guestLinks}
+                </div>
               ) : null}
             </nav>
           </div>
@@ -330,7 +336,7 @@ export default function MainLayout() {
           <nav
             id="primary-menu"
             className={[
-              "site-nav site-nav--mobile md:hidden flex-col gap-3 w-full",
+              "site-nav site-nav--mobile md:hidden flex-col gap-1 w-full",
               menuOpen ? "flex" : "hidden",
             ].join(" ")}
             aria-label="Primary"

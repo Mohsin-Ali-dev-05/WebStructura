@@ -75,9 +75,9 @@ export default function ContactPage() {
         </p>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-5 lg:gap-8">
-        <aside className="contact-aside lg:w-2/5 space-y-4">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-5 md:p-6">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 min-w-0">
+        <aside className="contact-aside w-full lg:w-2/5 space-y-4 shrink-0">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-4 md:p-6">
             <h2 className="text-lg font-bold text-brand-text m-0 mb-2 tracking-normal">
               Support email
             </h2>
@@ -92,7 +92,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-5 md:p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-4 md:p-6">
             <h2 className="text-lg font-bold text-brand-text m-0 mb-2 tracking-normal">
               Location
             </h2>
@@ -105,7 +105,7 @@ export default function ContactPage() {
           </div>
         </aside>
 
-        <section className="contact-form-panel flex-1 bg-white rounded-2xl border border-gray-100 shadow-soft p-5 md:p-6">
+        <section className="contact-form-panel flex-1 min-w-0 w-full bg-white rounded-2xl border border-gray-100 shadow-soft p-4 md:p-6">
           <h2 className="text-xl font-bold text-brand-text m-0 mb-4 tracking-normal">
             Send a message
           </h2>

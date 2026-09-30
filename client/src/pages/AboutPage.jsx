@@ -46,13 +46,13 @@ export default function AboutPage() {
           Principles that shape every product decision we ship.
         </p>
 
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-8 list-none m-0 p-0">
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 list-none m-0 p-0">
           {VALUES.map((value) => (
             <li
               key={value.title}
-              className="bg-white rounded-2xl p-6 border border-gray-100 shadow-soft"
+              className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-soft"
             >
-              <h3 className="text-xl font-bold text-brand-text mb-2 tracking-normal">
+              <h3 className="text-lg md:text-xl font-bold text-brand-text mb-2 tracking-normal">
                 {value.title}
               </h3>
               <p className="m-0 text-gray-600 leading-relaxed">{value.body}</p>
