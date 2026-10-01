@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   createProject,
   deleteProject,
+  exportProject,
   getProject,
   getPublicProject,
   listProjects,
@@ -22,6 +23,7 @@ router.use(protect);
 
 router.post('/', validateCreateProject, createProject);
 router.get('/', listProjects);
+router.get('/:id/export', exportProject);
 router.get('/:id', getProject);
 router.put('/:id', validateUpdateProject, updateProject);
 router.delete('/:id', deleteProject);

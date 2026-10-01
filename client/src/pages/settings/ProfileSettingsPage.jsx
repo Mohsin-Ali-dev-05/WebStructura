@@ -13,7 +13,7 @@ import {
 } from '../../utils/formValidation.js';
 
 const baseFieldClass =
-  'w-full py-3 px-4 rounded-xl border border-gray-300 bg-white text-gray-900 outline-none transition-shadow shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500';
+  'w-full py-2.5 px-4 rounded-xl border border-gray-300 bg-gray-50/50 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all shadow-sm';
 
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 const ALLOWED_AVATAR_TYPES = new Set([
@@ -164,15 +164,19 @@ export default function ProfileSettingsPage() {
   const avatarUrl = user?.avatarUrl || '';
 
   return (
-    <>
-      <h2 className="text-xl font-bold text-gray-900 m-0 mb-1">Profile</h2>
-      <p className="text-sm text-gray-500 mt-0 mb-6 leading-relaxed">
-        Update the name, email, and photo shown across WebStructura.
-      </p>
+    <div className="space-y-8 max-w-3xl">
+      <header>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight m-0">
+          Profile
+        </h2>
+        <p className="text-base text-gray-500 mt-2 mb-0 leading-relaxed">
+          Update the name, email, and photo shown across WebStructura.
+        </p>
+      </header>
 
       {success ? (
         <p
-          className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm p-4 rounded-xl mb-4"
+          className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm p-4 rounded-xl m-0"
           role="status"
         >
           {success}
@@ -180,14 +184,14 @@ export default function ProfileSettingsPage() {
       ) : null}
 
       {error ? (
-        <p className="error text-sm mb-4" role="alert">
+        <p className="error text-sm m-0" role="alert">
           {error}
         </p>
       ) : null}
 
-      <div className="settings-photo-section flex items-center gap-4 mb-5">
+      <div className="settings-photo-section bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col sm:flex-row sm:items-center gap-6">
         <div
-          className="settings-avatar w-24 h-24 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-4xl text-gray-400 overflow-hidden shrink-0"
+          className="settings-avatar w-24 h-24 rounded-full bg-emerald-50 border-4 border-white shadow-md flex items-center justify-center text-3xl font-bold text-emerald-700 overflow-hidden shrink-0 ring-1 ring-gray-100"
           aria-hidden={avatarUrl ? undefined : true}
         >
           {avatarUrl ? (
@@ -197,7 +201,7 @@ export default function ProfileSettingsPage() {
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="font-semibold tracking-normal">{initials}</span>
+            <span className="font-bold tracking-normal">{initials}</span>
           )}
         </div>
 
@@ -212,7 +216,7 @@ export default function ProfileSettingsPage() {
           />
           <button
             type="button"
-            className="btn btn-secondary settings-photo-change disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center py-2 px-4 rounded-xl border border-gray-300 bg-white text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             onClick={handlePhotoButtonClick}
             disabled={avatarBusy}
           >
@@ -230,14 +234,12 @@ export default function ProfileSettingsPage() {
       </div>
 
       <form
-        className="space-y-4 max-w-lg"
+        className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
         onSubmit={handleProfileSubmit}
         noValidate
       >
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-gray-900">
-            Display name
-          </span>
+          <span className="text-sm font-bold text-gray-700">Display name</span>
           <input
             className={fieldClass(baseFieldClass, Boolean(fieldErrors.name))}
             name="name"
@@ -252,7 +254,7 @@ export default function ProfileSettingsPage() {
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-gray-900">Email</span>
+          <span className="text-sm font-bold text-gray-700">Email</span>
           <input
             className={fieldClass(baseFieldClass, Boolean(fieldErrors.email))}
             name="email"
@@ -268,12 +270,12 @@ export default function ProfileSettingsPage() {
 
         <button
           type="submit"
-          className="inline-flex items-center justify-center py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-600/20 transition-all duration-200 hover:-translate-y-0.5 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
           disabled={submitting || avatarBusy}
         >
           {submitting ? 'Saving…' : 'Save changes'}
         </button>
       </form>
-    </>
+    </div>
   );
 }

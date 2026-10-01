@@ -1,6 +1,37 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:10000";
+/**
+ * API origin for fetch/Bearer JWT.
+ * In Vite DEV, prefer local Express so Google OAuth JWTs (issued on :5000)
+ * are verified by the same server — not a remote Render API.
+ */
+function resolveApiBaseUrl() {
+  const fromEnv = import.meta.env.VITE_API_BASE_URL?.trim();
+  if (import.meta.env.DEV) {
+    if (!fromEnv || /onrender\.com|localhost:10000/i.test(fromEnv)) {
+      return "http://localhost:5000";
+    }
+  }
+  return (fromEnv || "http://localhost:5000").replace(/\/$/, "");
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
 export const TOKEN_STORAGE_KEY = "awb_auth_token";
+
+/**
+ * Backend origin for Passport Google OAuth (full-page redirect).
+ * Prefer VITE_OAUTH_BASE_URL; in Vite DEV always use the same API origin.
+ */
+export function getOAuthBaseUrl() {
+  const fromEnv = import.meta.env.VITE_OAUTH_BASE_URL?.trim();
+  if (fromEnv) {
+    return fromEnv.replace(/\/$/, "");
+  }
+  return API_BASE_URL;
+}
+
+/** Full-page redirect into Passport Google OAuth (not fetch/axios). */
+export function startGoogleOAuth() {
+  window.location.href = `${getOAuthBaseUrl()}/auth/google`;
+}
 
 export function getStoredToken() {
   return localStorage.getItem(TOKEN_STORAGE_KEY);

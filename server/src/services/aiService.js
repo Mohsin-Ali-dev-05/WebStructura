@@ -21,27 +21,34 @@ export const AI_SECTION_TYPES = [
   'Footer',
 ];
 
-/** Prop shapes the React renderer expects for each building block. */
+/**
+ * Prop shapes the React renderer expects.
+ * imageKeyword is resolved server-side into a loremflickr.com URL.
+ */
 const COMPONENT_PROP_HINTS = {
-  Navbar: '{ "brand": string, "links": [{ "label": string, "href": string }] }',
-  Hero: '{ "title": string, "subtitle": string, "ctaLabel": string, "ctaHref": string }',
-  About: '{ "heading": string, "body": string }',
+  Navbar:
+    '{ "brand": string, "links": [{ "label": string, "href": string }] }',
+  Hero:
+    '{ "title": string, "subtitle": string, "ctaLabel": string, "ctaHref": string, "secondaryLabel": string, "secondaryHref": string, "imageKeyword": string, "imageAlt": string }',
+  About:
+    '{ "heading": string, "body": string, "imageKeyword": string, "imageAlt": string }',
   Skills: '{ "heading": string, "items": [{ "name": string, "level": string }] }',
   Services:
-    '{ "heading": string, "items": [{ "title": string, "description": string }] }',
+    '{ "heading": string, "subheading": string, "items": [{ "title": string, "description": string, "imageKeyword": string }] }',
   Projects:
-    '{ "heading": string, "items": [{ "title": string, "description": string, "link": string }] }',
+    '{ "heading": string, "items": [{ "title": string, "description": string, "link": string, "imageKeyword": string }] }',
   Testimonials:
     '{ "heading": string, "items": [{ "quote": string, "author": string, "role": string }] }',
   Pricing:
     '{ "heading": string, "subheading": string, "featuredTier": string, "tiers": [{ "name": string, "price": string, "period": string, "description": string, "features": string[], "ctaLabel": string, "ctaHref": string }] }',
   FAQ: '{ "heading": string, "items": [{ "question": string, "answer": string }] }',
   Gallery:
-    '{ "heading": string, "subheading": string, "images": [{ "url": string, "alt": string }] }',
+    '{ "heading": string, "subheading": string, "images": [{ "imageKeyword": string, "alt": string }] }',
   CTA: '{ "heading": string, "body": string, "ctaLabel": string, "ctaHref": string, "secondaryLabel": string, "secondaryHref": string }',
   Contact:
     '{ "heading": string, "email": string, "phone": string, "address": string, "message": string }',
-  Footer: '{ "text": string, "links": [{ "label": string, "href": string }] }',
+  Footer:
+    '{ "text": string, "columns": [{ "title": string, "links": [{ "label": string, "href": string }] }] }',
 };
 
 /**
@@ -69,7 +76,7 @@ export function buildSectionSystemPrompt(sectionType, topic) {
 
 /**
  * System prompt for full initial website JSON on project create.
- * Forces industry-aware layout variety — never a fixed generic section order.
+ * Requires industry-specific sales copy + imageKeyword fields for photos.
  */
 export function buildInitialWebsiteSystemPrompt(name, description) {
   const safeName = escapePromptValue(name, 'My Website');
@@ -80,81 +87,190 @@ export function buildInitialWebsiteSystemPrompt(name, description) {
   const availableComponents = buildAvailableComponentsCatalog();
 
   return (
-    `You are WebStructura's senior layout architect. You MUST avoid using the same generic layout. ` +
-    `Analyze the user's requested industry and dynamically select the most appropriate sequence of components ` +
-    `(e.g., a portfolio needs a gallery block first, a SaaS needs a pricing block). ` +
-    `Never use the exact same component order twice.\n\n` +
-    `The user is building a website named "${safeName}".\n` +
-    `Business description: "${safeDescription}".\n\n` +
-    `AVAILABLE REACT COMPONENTS (use ONLY these type names — they are the real building blocks in the product):\n` +
+    `You are WebStructura's senior conversion copywriter AND layout architect.\n` +
+    `Your job is to generate a COMPLETE, tailored website for ONE specific business — never a generic wireframe.\n\n` +
+    `SITE NAME: "${safeName}"\n` +
+    `BUSINESS / PRODUCT DESCRIPTION: "${safeDescription}"\n\n` +
+    `CRITICAL — INDUSTRY-SPECIFIC COPY:\n` +
+    `- Read the description carefully and write REAL sales copy for that niche.\n` +
+    `- Example: if the topic is "Cafeteria Management System", write about food inventory, POS checkout, meal plans, kitchen operations, and staff scheduling — NOT "Tell your story" or "Welcome to our website".\n` +
+    `- Ban ALL generic filler: "Tell your story", "Lorem ipsum", "Core offering", "Get started today" without context, "We help businesses grow", placeholder labels.\n` +
+    `- Every headline, subtitle, feature title, and feature description must mention concrete benefits for THIS industry.\n\n` +
+    `REQUIRED STRUCTURE (use exactly these types in this order unless the niche clearly needs Pricing or Gallery inserted before Footer):\n` +
+    `1) Navbar — brand = "${safeName}", 3–5 relevant anchor links (e.g. Features, Solutions, Pricing, Contact).\n` +
+    `2) Hero — compelling industry headline, benefit-driven subheadline, primary + secondary CTAs, and imageKeyword (1–3 lowercase photo tags, e.g. "cafeteria,food" or "restaurant,kitchen").\n` +
+    `3) Services — treat as FEATURES: heading like "Features" or "What you get", plus 3–4 items. Each item needs title, description (2–3 sentences of real product copy), and imageKeyword.\n` +
+    `4) Optional middle sections from the catalog (About, Testimonials, Pricing, FAQ, CTA, Contact) ONLY if they fit the niche — still industry-specific copy.\n` +
+    `5) Footer — copyright text plus a multi-column link grid: props.columns is an array of exactly 3 objects with titles "Product", "Visit", and "Company". Each has "links": [{ "label", "href" }] (2–4 niche-relevant links per column). Never include a "Home" link (navbar covers that). Do NOT use a flat links array.\n\n` +
+    `AVAILABLE REACT COMPONENTS (use ONLY these type names):\n` +
     `${availableComponents}\n\n` +
-    `LAYOUT RULES:\n` +
-    `- Choose 5–9 components that fit this specific industry/niche. Do NOT default to Hero → About → Services → Footer every time.\n` +
-    `- Start with Navbar (brand = "${safeName}") when navigation makes sense; end with Footer.\n` +
-    `- Reorder and swap middle sections based on the description (Gallery/Projects for creatives, Pricing/FAQ for SaaS, Skills/Projects for freelancers, Testimonials/CTA for agencies, etc.).\n` +
-    `- Write ALL copy from the description — no generic filler like "Welcome to our website" or "Lorem ipsum".\n` +
-    `- Every object MUST be { "type": "<ComponentName>", "props": { ... } } matching the prop shapes above.\n\n` +
-    `Reply with ONLY a minified JSON array of components. No markdown fences, no greetings, no explanations.`
+    `IMAGE KEYWORDS:\n` +
+    `- For Hero, About, each Services item, Projects items, and Gallery images, include "imageKeyword": a short lowercase tag string (comma-separated OK).\n` +
+    `- Keywords must match the business (food, cafeteria, inventory, saas, dashboard, etc.). Never leave them blank for Hero/Services.\n` +
+    `- Do NOT invent full image URLs — only imageKeyword strings. The server will turn them into photos.\n\n` +
+    `OUTPUT FORMAT:\n` +
+    `- Reply with ONLY a minified JSON array of { "type": "<ComponentName>", "props": { ... } }.\n` +
+    `- No markdown fences, no greetings, no explanations.\n` +
+    `- Prefer 6–9 components total. Always include Navbar, Hero, Services (features), and Footer.`
   );
 }
 
 function escapePromptValue(value, fallback) {
   const trimmed = String(value || '').trim();
   const base = trimmed || fallback;
-  // Prevent breaking out of quoted prompt segments
   return base.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
-/** Default Hero → About → Services → Footer when Ollama fails or returns invalid JSON. */
-export function getBlankWebsiteComponents(name = 'My Website') {
+/**
+ * Build a LoremFlickr URL from a keyword/tag string.
+ * @param {string} keyword
+ * @param {number} [width]
+ * @param {number} [height]
+ */
+export function buildLoremFlickrUrl(keyword, width = 800, height = 600) {
+  const cleaned = String(keyword || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9,\s-]/g, ' ')
+    .trim()
+    .replace(/[\s-]+/g, ',')
+    .replace(/,+/g, ',')
+    .replace(/^,|,$/g, '')
+    .slice(0, 80);
+
+  const tags = cleaned || 'business';
+  const w = Number.isFinite(width) ? Math.max(200, Math.min(1600, width)) : 800;
+  const h = Number.isFinite(height) ? Math.max(200, Math.min(1200, height)) : 600;
+  return `https://loremflickr.com/${w}/${h}/${tags}`;
+}
+
+function inferImageKeyword(name, description) {
+  const haystack = `${name} ${description}`.toLowerCase();
+  const pairs = [
+    [/cafeteria|canteen|food|meal|kitchen|restaurant|dining/, 'cafeteria,food'],
+    [/real.?estate|property|home|housing|apartment/, 'realestate,house'],
+    [/e-?commerce|shop|store|retail|product/, 'shopping,retail'],
+    [/saas|software|app|platform|dashboard|tech/, 'technology,office'],
+    [/portfolio|design|creative|agency|studio/, 'design,workspace'],
+    [/blog|news|media|content|writer/, 'writing,laptop'],
+    [/fitness|gym|health|wellness/, 'fitness,gym'],
+    [/education|school|course|learn|tutor/, 'education,classroom'],
+    [/finance|bank|fintech|accounting/, 'finance,business'],
+    [/hotel|travel|tourism/, 'travel,hotel'],
+  ];
+
+  for (const [pattern, keyword] of pairs) {
+    if (pattern.test(haystack)) {
+      return keyword;
+    }
+  }
+
+  const tokens = haystack
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length > 3)
+    .slice(0, 2);
+  return tokens.length > 0 ? tokens.join(',') : 'business';
+}
+
+/** Industry-aware fallback when Ollama fails or returns invalid JSON. */
+export function getBlankWebsiteComponents(name = 'My Website', description = '') {
   const brand = String(name || 'My Website').trim() || 'My Website';
+  const desc =
+    String(description || '').trim() ||
+    `Professional tools and services for ${brand}.`;
+  const keyword = inferImageKeyword(brand, desc);
+  const featureKeyword = keyword.split(',')[0] || 'business';
 
   return [
     {
-      type: 'Hero',
+      type: 'Navbar',
       props: {
-        title: brand,
-        subtitle:
-          'A clear, modern presence for your business. Update this copy in the builder anytime.',
-        ctaLabel: 'Get started',
-        ctaHref: '#contact',
+        brand,
+        links: [
+          { label: 'Features', href: '#services' },
+          { label: 'About', href: '#about' },
+          { label: 'Contact', href: '#contact' },
+        ],
       },
     },
     {
-      type: 'About',
+      type: 'Hero',
       props: {
-        heading: 'About',
-        body: 'Tell your story. Share what you do, who you serve, and why customers choose you.',
+        title: `${brand} — built for how you actually work`,
+        subtitle: desc,
+        ctaLabel: 'Request a demo',
+        ctaHref: '#contact',
+        secondaryLabel: 'See features',
+        secondaryHref: '#services',
+        imageKeyword: keyword,
+        imageAlt: `${brand} product preview`,
       },
     },
     {
       type: 'Services',
       props: {
-        heading: 'Services',
+        heading: 'Features that matter',
+        subheading: `Practical capabilities tailored to ${brand}.`,
         items: [
           {
-            title: 'Core offering',
-            description: 'Describe your primary service or product.',
+            title: 'Operations dashboard',
+            description: `Monitor the metrics that matter for ${brand} in one clear view so teams stay aligned.`,
+            imageKeyword: featureKeyword,
           },
           {
-            title: 'Support',
-            description: 'Highlight how you help clients succeed.',
+            title: 'Workflow automation',
+            description:
+              'Reduce manual busywork with guided flows that keep inventory, staff, and customers in sync.',
+            imageKeyword: `${featureKeyword},office`,
           },
           {
-            title: 'Delivery',
-            description: 'Explain how you ship results with confidence.',
+            title: 'Reporting & insights',
+            description:
+              'Export actionable reports and spot trends before they become expensive problems.',
+            imageKeyword: `${featureKeyword},analytics`,
           },
         ],
       },
     },
     {
-      type: 'Footer',
+      type: 'About',
       props: {
-        text: `© 2026 ${brand}. All rights reserved.`,
-        links: [{ label: 'Home', href: '#top' }],
+        heading: `Why teams choose ${brand}`,
+        body: desc,
+        imageKeyword: keyword,
+        imageAlt: brand,
       },
     },
-  ].map(normalizeGeneratedComponent);
+    {
+      type: 'Footer',
+      props: {
+        text: `© ${new Date().getFullYear()} ${brand}. All rights reserved.`,
+        columns: [
+          {
+            title: 'Product',
+            links: [
+              { label: 'Features', href: '#services' },
+              { label: 'Pricing', href: '#pricing' },
+            ],
+          },
+          {
+            title: 'Visit',
+            links: [
+              { label: 'About', href: '#about' },
+              { label: 'FAQ', href: '#faq' },
+            ],
+          },
+          {
+            title: 'Company',
+            links: [
+              { label: 'Contact', href: '#contact' },
+              { label: 'Support', href: '#contact' },
+            ],
+          },
+        ],
+      },
+    },
+  ].map((item) => normalizeGeneratedComponent(item));
 }
 
 /**
@@ -174,14 +290,15 @@ export async function generateInitialWebsiteComponents(name, description) {
       {
         model: env.ollamaModel,
         prompt:
-          `Design a UNIQUE layout for this industry and return ONLY the minified JSON component array. ` +
-          `Pick component types and order that fit this business — do not reuse a generic Hero/About/Services/Footer stack. ` +
+          `Generate a COMPLETE tailored website JSON array for this business. ` +
+          `Write industry-specific sales copy (no generic placeholders). ` +
+          `MUST include Navbar, Hero (with imageKeyword), Services/features (3–4 items each with imageKeyword), and Footer. ` +
           `Business description: ${safeDescription}`,
         system,
         stream: false,
         format: 'json',
         options: {
-          temperature: 0.7,
+          temperature: 0.55,
           top_p: 0.9,
         },
       },
@@ -198,7 +315,7 @@ export async function generateInitialWebsiteComponents(name, description) {
         : '';
 
     if (!raw) {
-      return getBlankWebsiteComponents(safeName);
+      return getBlankWebsiteComponents(safeName, safeDescription);
     }
 
     try {
@@ -206,24 +323,56 @@ export async function generateInitialWebsiteComponents(name, description) {
       const components = coerceComponentsArray(parsed);
 
       if (!components) {
-        return getBlankWebsiteComponents(safeName);
+        return getBlankWebsiteComponents(safeName, safeDescription);
       }
 
       const normalized = components
-        .map(normalizeGeneratedComponent)
+        .map((item) => normalizeGeneratedComponent(item))
         .filter(Boolean);
 
-      return normalized.length > 0
-        ? normalized
-        : getBlankWebsiteComponents(safeName);
+      const ensured = ensureRequiredSections(
+        normalized,
+        safeName,
+        safeDescription,
+      );
+
+      return ensured.length > 0
+        ? ensured
+        : getBlankWebsiteComponents(safeName, safeDescription);
     } catch {
-      // AI hallucinated / invalid JSON — do not crash project create
-      return getBlankWebsiteComponents(safeName);
+      return getBlankWebsiteComponents(safeName, safeDescription);
     }
   } catch {
-    // Ollama offline, timeout, or network error — safe fallback
-    return getBlankWebsiteComponents(safeName);
+    return getBlankWebsiteComponents(safeName, safeDescription);
   }
+}
+
+/** Guarantee Navbar / Hero / Services / Footer exist after AI output. */
+function ensureRequiredSections(components, name, description) {
+  const list = Array.isArray(components) ? [...components] : [];
+  const types = new Set(list.map((c) => c.type));
+  const fallback = getBlankWebsiteComponents(name, description);
+
+  function takeFallback(type) {
+    return fallback.find((c) => c.type === type);
+  }
+
+  if (!types.has('Navbar')) {
+    list.unshift(takeFallback('Navbar'));
+  }
+  if (!types.has('Hero')) {
+    const navIndex = list.findIndex((c) => c.type === 'Navbar');
+    list.splice(navIndex + 1, 0, takeFallback('Hero'));
+  }
+  if (!types.has('Services')) {
+    const heroIndex = list.findIndex((c) => c.type === 'Hero');
+    list.splice(heroIndex + 1, 0, takeFallback('Services'));
+  }
+  if (!types.has('Footer')) {
+    list.push(takeFallback('Footer'));
+  }
+
+  return list.filter(Boolean);
 }
 
 function stripJsonFences(value) {
@@ -244,6 +393,9 @@ function coerceComponentsArray(parsed) {
     if (Array.isArray(parsed.data) && parsed.data.length > 0) {
       return parsed.data;
     }
+    if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+      return parsed.sections;
+    }
   }
 
   return null;
@@ -256,10 +408,48 @@ function createComponentId() {
   return `cmp_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
+function applyImageFromKeyword(target, keyword, width, height, altFallback) {
+  if (!target || typeof target !== 'object') {
+    return;
+  }
+
+  const key =
+    typeof keyword === 'string' && keyword.trim()
+      ? keyword.trim()
+      : typeof target.imageKeyword === 'string'
+        ? target.imageKeyword.trim()
+        : '';
+
+  const existingImage = typeof target.image === 'string' ? target.image.trim() : '';
+  const looksLikePlaceholder =
+    !existingImage ||
+    /placehold|via\.placeholder|example\.com|gray|placeholder/i.test(
+      existingImage,
+    );
+
+  if (key) {
+    target.imageKeyword = key;
+    if (looksLikePlaceholder) {
+      target.image = buildLoremFlickrUrl(key, width, height);
+    }
+    if (!target.imageAlt && altFallback) {
+      target.imageAlt = altFallback;
+    }
+    return;
+  }
+
+  if (looksLikePlaceholder && altFallback) {
+    target.imageKeyword = inferImageKeyword(altFallback, '');
+    target.image = buildLoremFlickrUrl(target.imageKeyword, width, height);
+    if (!target.imageAlt) {
+      target.imageAlt = altFallback;
+    }
+  }
+}
+
 /**
- * Whitelist type, ensure props object, and map AI fields onto renderer schema.
- * - About.content → body
- * - Services.features (comma string) → items[{ title, description }]
+ * Whitelist type, ensure props object, map AI fields onto renderer schema,
+ * and resolve imageKeyword → loremflickr URLs.
  */
 function normalizeGeneratedComponent(item) {
   if (!item || typeof item !== 'object' || typeof item.type !== 'string') {
@@ -276,13 +466,38 @@ function normalizeGeneratedComponent(item) {
       ? { ...item.props }
       : {};
 
+  if (type === 'Navbar') {
+    if (!rawProps.brand) {
+      rawProps.brand = 'My Website';
+    }
+    if (!Array.isArray(rawProps.links) || rawProps.links.length === 0) {
+      rawProps.links = [
+        { label: 'Features', href: '#services' },
+        { label: 'Contact', href: '#contact' },
+      ];
+    }
+  }
+
   if (type === 'Hero') {
     if (!rawProps.ctaLabel) {
-      rawProps.ctaLabel = 'Get started';
+      rawProps.ctaLabel = 'Get a demo';
     }
     if (!rawProps.ctaHref) {
       rawProps.ctaHref = '#contact';
     }
+    if (!rawProps.secondaryLabel) {
+      rawProps.secondaryLabel = 'See features';
+    }
+    if (!rawProps.secondaryHref) {
+      rawProps.secondaryHref = '#services';
+    }
+    applyImageFromKeyword(
+      rawProps,
+      rawProps.imageKeyword,
+      800,
+      600,
+      rawProps.title || 'Hero',
+    );
   }
 
   if (type === 'About') {
@@ -293,11 +508,18 @@ function normalizeGeneratedComponent(item) {
       rawProps.heading = 'About';
     }
     delete rawProps.content;
+    applyImageFromKeyword(
+      rawProps,
+      rawProps.imageKeyword,
+      800,
+      600,
+      rawProps.heading,
+    );
   }
 
   if (type === 'Services') {
     if (!rawProps.heading) {
-      rawProps.heading = 'Services';
+      rawProps.heading = 'Features';
     }
 
     if (!Array.isArray(rawProps.items) || rawProps.items.length === 0) {
@@ -307,7 +529,127 @@ function normalizeGeneratedComponent(item) {
       }
     }
 
+    if (Array.isArray(rawProps.items)) {
+      rawProps.items = rawProps.items.slice(0, 4).map((entry) => {
+        const item =
+          entry && typeof entry === 'object'
+            ? { ...entry }
+            : { title: String(entry || 'Feature'), description: '' };
+        applyImageFromKeyword(
+          item,
+          item.imageKeyword,
+          800,
+          600,
+          item.title || 'Feature',
+        );
+        // Services cards read `image`
+        if (item.image && !item.url) {
+          /* keep image */
+        }
+        return item;
+      });
+    }
+
     delete rawProps.features;
+  }
+
+  if (type === 'Projects' && Array.isArray(rawProps.items)) {
+    rawProps.items = rawProps.items.map((entry) => {
+      const item =
+        entry && typeof entry === 'object'
+          ? { ...entry }
+          : { title: String(entry || 'Project'), description: '' };
+      applyImageFromKeyword(
+        item,
+        item.imageKeyword,
+        800,
+        600,
+        item.title || 'Project',
+      );
+      return item;
+    });
+  }
+
+  if (type === 'Gallery' && Array.isArray(rawProps.images)) {
+    rawProps.images = rawProps.images.map((entry) => {
+      const image =
+        entry && typeof entry === 'object'
+          ? { ...entry }
+          : { alt: 'Gallery image' };
+      const key = image.imageKeyword || image.keyword;
+      if (key && !image.url) {
+        image.url = buildLoremFlickrUrl(key, 1200, 800);
+        image.imageKeyword = key;
+      }
+      if (!image.alt) {
+        image.alt = key || 'Gallery image';
+      }
+      return image;
+    });
+  }
+
+  if (type === 'Footer') {
+    if (!rawProps.text) {
+      rawProps.text = `© ${new Date().getFullYear()} All rights reserved.`;
+    }
+
+    const hasColumns =
+      Array.isArray(rawProps.columns) && rawProps.columns.length > 0;
+
+    if (!hasColumns && Array.isArray(rawProps.links) && rawProps.links.length > 0) {
+      rawProps.columns = [
+        {
+          title: 'Links',
+          links: rawProps.links,
+        },
+      ];
+    }
+
+    if (!Array.isArray(rawProps.columns) || rawProps.columns.length === 0) {
+      rawProps.columns = [
+        {
+          title: 'Product',
+          links: [
+            { label: 'Features', href: '#services' },
+            { label: 'Pricing', href: '#pricing' },
+          ],
+        },
+        {
+          title: 'Visit',
+          links: [
+            { label: 'About', href: '#about' },
+            { label: 'FAQ', href: '#faq' },
+          ],
+        },
+        {
+          title: 'Company',
+          links: [
+            { label: 'Contact', href: '#contact' },
+            { label: 'Support', href: '#contact' },
+          ],
+        },
+      ];
+    }
+
+    rawProps.columns = rawProps.columns
+      .filter((column) => column && typeof column === 'object')
+      .map((column) => ({
+        title: String(column.title || 'Links').trim() || 'Links',
+        links: Array.isArray(column.links)
+          ? column.links
+              .filter((link) => link && typeof link === 'object')
+              .map((link) => ({
+                label: String(link.label || 'Link').trim() || 'Link',
+                href: String(link.href || '#').trim() || '#',
+              }))
+              .filter(
+                (link) =>
+                  link.label.toLowerCase() !== 'home' &&
+                  link.href !== '#top',
+              )
+          : [],
+      }))
+      .filter((column) => column.links.length > 0);
   }
 
   return {
@@ -343,19 +685,15 @@ function featuresToServiceItems(features) {
       .filter(Boolean);
   }
 
-  return labels.slice(0, 6).map((title) => ({
+  return labels.slice(0, 4).map((title) => ({
     title,
-    description: `Learn more about ${title}.`,
+    description: `Discover how ${title} helps your team deliver better results every day.`,
+    imageKeyword: title.toLowerCase().replace(/[^a-z0-9]+/g, ',').replace(/^,|,$/g, '') || 'business',
   }));
 }
 
 /**
  * Backend-only Ollama client (fetch) for section copy endpoints.
- * React never calls Ollama directly — all AI traffic goes through Express.
- * Responses are treated as plain text / data only — never executed as code.
- *
- * @param {string} prompt - User / topic prompt sent to /api/generate
- * @param {{ system?: string }} [options]
  */
 export async function generateText(prompt, options = {}) {
   const url = `${env.ollamaBaseUrl}/api/generate`;
@@ -417,7 +755,6 @@ export async function generateText(prompt, options = {}) {
       );
     }
 
-    // Plain text only — never eval / Function / dynamic import of model output
     return {
       text,
       model: typeof payload.model === 'string' ? payload.model : env.ollamaModel,
@@ -451,24 +788,209 @@ export async function generateText(prompt, options = {}) {
   }
 }
 
-/**
- * Production helper: section-aware copy via constrained system prompt.
- */
 export async function generateSectionCopy(prompt, sectionType) {
   const system = buildSectionSystemPrompt(sectionType, prompt);
   return generateText(prompt, { system });
 }
 
 /**
- * Strip common model extras (wrapping quotes, markdown fences) without executing anything.
+ * Parse accumulated Ollama JSON into normalized website components.
+ * Used after a streaming generate finishes (or as a fallback).
  */
+export function parseAndNormalizeWebsiteComponents(
+  rawText,
+  name = 'My Website',
+  description = '',
+) {
+  const safeName = String(name || 'My Website').trim() || 'My Website';
+  const safeDescription =
+    String(description || '').trim() || 'A professional website.';
+
+  try {
+    const parsed = JSON.parse(stripJsonFences(rawText));
+    const components = coerceComponentsArray(parsed);
+    if (!components) {
+      return getBlankWebsiteComponents(safeName, safeDescription);
+    }
+
+    const normalized = components
+      .map((item) => normalizeGeneratedComponent(item))
+      .filter(Boolean);
+
+    const ensured = ensureRequiredSections(
+      normalized,
+      safeName,
+      safeDescription,
+    );
+
+    return ensured.length > 0
+      ? ensured
+      : getBlankWebsiteComponents(safeName, safeDescription);
+  } catch {
+    return getBlankWebsiteComponents(safeName, safeDescription);
+  }
+}
+
+/**
+ * Stream a full website JSON array from Ollama (stream: true).
+ * Invokes onChunk(text) for each token; returns the concatenated response.
+ */
+export async function streamWebsiteGeneration(
+  { name, description, prompt } = {},
+  { onChunk, signal } = {},
+) {
+  const safeName = String(name || 'My Website').trim() || 'My Website';
+  const safeDescription =
+    String(description || prompt || '').trim() || 'A professional website.';
+  const system = buildInitialWebsiteSystemPrompt(safeName, safeDescription);
+  const url = `${env.ollamaBaseUrl}/api/generate`;
+
+  const userPrompt =
+    typeof prompt === 'string' && prompt.trim()
+      ? prompt.trim()
+      : `Generate a COMPLETE tailored website JSON array for this business. ` +
+        `Write industry-specific sales copy (no generic placeholders). ` +
+        `MUST include Navbar, Hero (with imageKeyword), Services/features (3–4 items each with imageKeyword), and Footer. ` +
+        `Business description: ${safeDescription}`;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), OLLAMA_TIMEOUT_MS * 2);
+
+  if (signal) {
+    if (signal.aborted) {
+      controller.abort();
+    } else {
+      signal.addEventListener('abort', () => controller.abort(), { once: true });
+    }
+  }
+
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: env.ollamaModel,
+        prompt: userPrompt,
+        system,
+        stream: true,
+        format: 'json',
+        options: {
+          temperature: 0.55,
+          top_p: 0.9,
+        },
+      }),
+      signal: controller.signal,
+    });
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new AppError('Ollama stream timed out or was cancelled.', 504);
+    }
+    if (error.cause?.code === 'ECONNREFUSED' || error.code === 'ECONNREFUSED') {
+      throw new AppError(
+        `Cannot reach Ollama at ${env.ollamaBaseUrl}. Start Ollama and confirm the model "${env.ollamaModel}" is available.`,
+        503,
+      );
+    }
+    throw new AppError(
+      error.message || 'Unexpected error while contacting the local AI service.',
+      503,
+    );
+  }
+
+  if (!response.ok) {
+    clearTimeout(timeoutId);
+    const detail = await safeReadBody(response);
+    throw new AppError(
+      `Ollama request failed (${response.status}). ${detail || 'Check that the model is pulled and Ollama is running.'}`,
+      502,
+    );
+  }
+
+  if (!response.body) {
+    clearTimeout(timeoutId);
+    throw new AppError('Ollama did not return a readable stream.', 502);
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let fullText = '';
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          continue;
+        }
+
+        let payload;
+        try {
+          payload = JSON.parse(trimmed);
+        } catch {
+          continue;
+        }
+
+        const chunk =
+          typeof payload?.response === 'string' ? payload.response : '';
+        if (chunk) {
+          fullText += chunk;
+          if (typeof onChunk === 'function') {
+            onChunk(chunk);
+          }
+        }
+      }
+    }
+
+    if (buffer.trim()) {
+      try {
+        const payload = JSON.parse(buffer.trim());
+        const chunk =
+          typeof payload?.response === 'string' ? payload.response : '';
+        if (chunk) {
+          fullText += chunk;
+          if (typeof onChunk === 'function') {
+            onChunk(chunk);
+          }
+        }
+      } catch {
+        // ignore trailing partial JSON
+      }
+    }
+  } finally {
+    clearTimeout(timeoutId);
+    try {
+      reader.releaseLock();
+    } catch {
+      // ignore
+    }
+  }
+
+  return {
+    text: fullText,
+    components: parseAndNormalizeWebsiteComponents(
+      fullText,
+      safeName,
+      safeDescription,
+    ),
+  };
+}
+
 function sanitizeModelText(value) {
   let text = String(value).trim();
-
-  // Drop markdown code fences if the model ignores instructions
   text = text.replace(/^```[\w]*\s*/i, '').replace(/\s*```$/i, '').trim();
 
-  // Unwrap a single pair of wrapping quotes
   if (
     (text.startsWith('"') && text.endsWith('"')) ||
     (text.startsWith("'") && text.endsWith("'"))

@@ -36,13 +36,13 @@ export function validateLoginFields({ email, password }) {
   const errors = {};
 
   if (!email?.trim()) {
-    errors.email = 'Email is required.';
+    errors.email = 'Work email required';
   } else if (!isValidEmail(email)) {
     errors.email = 'Enter a valid email address.';
   }
 
   if (!password) {
-    errors.password = 'Password is required.';
+    errors.password = 'Password required';
   }
 
   return errors;
@@ -51,18 +51,20 @@ export function validateLoginFields({ email, password }) {
 export function validateRegisterFields({ name, email, password, confirmPassword }) {
   const errors = {};
 
-  if (!name?.trim() || name.trim().length < 2) {
+  if (!name?.trim()) {
+    errors.name = 'Full name required';
+  } else if (name.trim().length < 2) {
     errors.name = 'Name must be at least 2 characters.';
   }
 
   if (!email?.trim()) {
-    errors.email = 'Email is required.';
+    errors.email = 'Work email required';
   } else if (!isValidEmail(email)) {
     errors.email = 'Enter a valid email address.';
   }
 
   if (!password) {
-    errors.password = 'Password is required.';
+    errors.password = 'Password required';
   } else if (password.length < MIN_PASSWORD_LENGTH) {
     errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
   }
@@ -146,5 +148,5 @@ export function fieldClass(base, hasError) {
   if (!hasError) {
     return base;
   }
-  return `${base} field-input--error border-red-500 focus:ring-red-500 focus:border-red-500`;
+  return `${base} field-input--error border-red-500 focus:ring-red-500 focus:border-red-500 focus-within:ring-red-500 focus-within:border-red-500`;
 }

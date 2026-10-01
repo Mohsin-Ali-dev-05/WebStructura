@@ -77,4 +77,13 @@ export const env = {
     'PUBLIC_API_URL',
     `http://localhost:${Number(process.env.PORT) || 5000}`,
   ),
+  /** express-session secret — falls back to JWT_SECRET for local/dev. */
+  sessionSecret: optional('SESSION_SECRET') || required('JWT_SECRET'),
+  /** Google OAuth (Passport). Empty until credentials are configured. */
+  googleClientId: optional('GOOGLE_CLIENT_ID'),
+  googleClientSecret: optional('GOOGLE_CLIENT_SECRET'),
+  googleCallbackUrl: optional(
+    'GOOGLE_CALLBACK_URL',
+    `http://localhost:${Number(process.env.PORT) || 5000}/auth/google/callback`,
+  ),
 };

@@ -142,8 +142,17 @@ export default function ProjectFormPage() {
       ? {
           ...payload,
           websiteData: resolveWebsiteData(payload.name),
+          templateType:
+            selectedTemplate.title ||
+            selectedTemplate.id ||
+            selectedTemplate.name ||
+            'Template',
+          thumbnailUrl: selectedTemplate.thumbnailUrl || '',
         }
-      : payload;
+      : {
+          ...payload,
+          templateType: 'Custom',
+        };
 
     let loadingToastId;
 

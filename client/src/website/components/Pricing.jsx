@@ -21,7 +21,7 @@ export default function Pricing({
       className="ws-section ws-pricing"
       aria-label="Pricing"
     >
-      <header className="mb-6 md:mb-8 text-center md:text-left">
+      <header className="mb-4 md:mb-6 text-center md:text-left max-w-2xl mx-auto md:mx-0">
         <h2 className={`${WS_H2} mx-auto md:mx-0`}>{heading}</h2>
         {subheading ? (
           <p className={`${WS_SUB} mx-auto md:mx-0`}>{subheading}</p>

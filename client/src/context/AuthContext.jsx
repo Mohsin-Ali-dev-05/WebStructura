@@ -8,9 +8,29 @@ import { fetchCurrentUser, loginUser, registerUser } from '../services/authServi
 
 const AuthContext = createContext(null);
 
+function consumeOAuthTokenFromUrl() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const oauthToken = params.get('token');
+  if (!oauthToken) {
+    return null;
+  }
+
+  setStoredToken(oauthToken);
+  params.delete('token');
+  const nextQuery = params.toString();
+  const nextUrl =
+    `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}${window.location.hash}`;
+  window.history.replaceState({}, document.title, nextUrl);
+  return oauthToken;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => getStoredToken());
+  const [token, setToken] = useState(() => consumeOAuthTokenFromUrl() || getStoredToken());
   const [loading, setLoading] = useState(true);
 
   const logout = useCallback(() => {

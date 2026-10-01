@@ -148,8 +148,8 @@ export default function DashboardPage() {
               No projects yet
             </h2>
             <p className="empty-panel-description text-gray-500 mt-2 mb-5 leading-relaxed">
-              Start from a template or create a blank website project to open
-              the builder.
+              Generate your first website with AI, or start from a polished
+              template — projects are saved to your account automatically.
             </p>
 
             <div className="empty-panel-actions flex flex-wrap items-center justify-center gap-3">
@@ -182,11 +182,14 @@ export default function DashboardPage() {
                   <h2 className="text-lg font-bold text-gray-900 m-0">
                     {project.name}
                   </h2>
-                  <span
-                    className={`status-badge status-${project.status}`}
-                  >
-                    {project.status}
+                  <span className={`status-badge status-${project.status}`}>
+                    {project.status === 'published' ? 'Published' : 'Draft'}
                   </span>
+                  {project.templateType ? (
+                    <span className="text-xs font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-md px-2 py-0.5">
+                      {project.templateType}
+                    </span>
+                  ) : null}
                 </div>
                 {project.description ? (
                   <p className="text-gray-500 text-sm line-clamp-2 mt-2 m-0">
@@ -205,7 +208,7 @@ export default function DashboardPage() {
                   className="inline-flex items-center bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded-lg font-medium transition-colors border border-transparent"
                   to={`/projects/${project.id}/builder`}
                 >
-                  Builder
+                  Open Builder
                 </Link>
                 <div className="flex items-center gap-2">
                   <Link

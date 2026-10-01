@@ -5,28 +5,37 @@ import {
   WS_H1,
   WS_BTN,
   WS_IMG,
-  WS_SUB,
 } from './designSystem.js';
-import { sanitizeHref } from '../safeUrl.js';
-import { sanitizeImageSrc } from '../safeUrl.js';
+import { resolveMediaSrc } from '../imageFromKeyword.js';
+import { sanitizeHref, sanitizeImageSrc } from '../safeUrl.js';
 
 /**
  * Mobile-first Hero — stacks on phones, splits on md+.
+ * Prefers AI imageKeyword → loremflickr when no direct image URL is set.
  */
 export default function Hero({
   title = 'Welcome',
   subtitle = '',
   ctaLabel = '',
   ctaHref = '#',
+  secondaryLabel = 'Learn more',
+  secondaryHref = '#contact',
   image = '',
+  imageKeyword = '',
   imageAlt = '',
   layout = 'split',
 }) {
   const reverse = layout === 'split-reverse';
-  const safeImage = sanitizeImageSrc(image);
+  const safeImage = sanitizeImageSrc(
+    resolveMediaSrc({ image, imageKeyword }),
+  );
 
   return (
-    <SectionWrapper id="top" className="ws-hero" aria-label="Hero">
+    <SectionWrapper
+      id="top"
+      className="ws-hero py-12 md:py-16"
+      aria-label="Hero"
+    >
       <div
         className={[
           WS_FLEX_STACK,
@@ -36,11 +45,15 @@ export default function Hero({
           .filter(Boolean)
           .join(' ')}
       >
-        <div className="flex w-full min-w-0 flex-col items-center gap-4 text-center md:w-1/2 md:items-start md:text-left">
+        <div className="flex w-full min-w-0 flex-col items-center gap-3 text-center md:w-1/2 md:items-start md:text-left px-1 md:px-0">
           <h1 className={WS_H1}>{title}</h1>
-          {subtitle ? <p className={WS_SUB}>{subtitle}</p> : null}
+          {subtitle ? (
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto md:mx-0 mt-4">
+              {subtitle}
+            </p>
+          ) : null}
           {ctaLabel ? (
-            <div className="ws-hero-actions flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:w-auto mt-4">
+            <div className="ws-hero-actions flex flex-col sm:flex-row items-center gap-4 mt-6 w-full sm:w-auto">
               <a
                 className={`${WS_BTN} w-full sm:w-auto inline-flex`}
                 href={sanitizeHref(ctaHref, '#')}
@@ -48,20 +61,22 @@ export default function Hero({
               >
                 {ctaLabel}
               </a>
-              <a
-                className={`${WS_BTN} w-full sm:w-auto inline-flex`}
-                href="#contact"
-                onClick={(event) => event.stopPropagation()}
-              >
-                Learn more
-              </a>
+              {secondaryLabel ? (
+                <a
+                  className="inline-flex justify-center items-center px-8 py-3.5 rounded-full font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50 w-full sm:w-auto"
+                  href={sanitizeHref(secondaryHref, '#contact')}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {secondaryLabel}
+                </a>
+              ) : null}
             </div>
           ) : null}
         </div>
 
-        <div className="flex w-full min-w-0 items-center justify-center md:w-1/2">
+        <div className="flex w-full min-w-0 items-center justify-center md:w-1/2 px-1 md:px-0">
           {safeImage ? (
-            <div className={WS_ASPECT_4_3}>
+            <div className={`${WS_ASPECT_4_3} rounded-2xl`}>
               <img
                 src={safeImage}
                 alt={imageAlt || title}

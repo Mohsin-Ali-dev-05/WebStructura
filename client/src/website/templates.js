@@ -12,6 +12,7 @@ export const PROJECT_TEMPLATES = [
     description:
       'A clean starter with Navbar, Hero, About, Contact, and Footer — ready for your content.',
     accent: 'blank',
+    image: 'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&w=800&q=80',
     suggestedName: 'My Website',
     suggestedDescription: 'Started from the Blank Canvas template.',
     tags: ['Minimal', 'Flexible'],

@@ -52,9 +52,10 @@ export default function PreviewViewport({
         .trim()}
     >
       {!zenMode ? (
-        <div className="preview-controls relative z-20 flex flex-wrap items-center justify-center gap-2 px-3 py-2.5 shrink-0 border-b border-gray-200/80 bg-gray-100/95 md:absolute md:inset-x-0 md:top-0 md:z-10 md:border-0 md:bg-transparent md:py-0 md:pointer-events-none">
+        <div className="preview-controls relative z-20 flex flex-wrap items-center justify-center gap-3 px-3 py-2.5 shrink-0 border-b border-gray-200/80 bg-gray-100/95 md:absolute md:inset-x-0 md:top-0 md:z-10 md:border-0 md:bg-transparent md:py-0 md:pt-4 md:px-4 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-4 md:pointer-events-none">
+          <div className="hidden md:block" aria-hidden="true" />
           <div
-            className="preview-device-toggle preview-device-toggle--segmented relative top-auto left-auto translate-x-0 z-10 bg-white shadow-sm border border-gray-200 rounded-full p-1 flex flex-wrap items-center justify-center md:absolute md:top-4 md:left-1/2 md:-translate-x-1/2 md:pointer-events-auto"
+            className="preview-device-toggle preview-device-toggle--segmented relative top-auto left-auto translate-x-0 z-10 bg-white shadow-md border border-gray-200 rounded-full p-1 flex flex-wrap items-center justify-center md:justify-self-center md:pointer-events-auto"
             role="group"
             aria-label="Preview device"
           >
@@ -66,8 +67,8 @@ export default function PreviewViewport({
                   type="button"
                   className={
                     active
-                      ? 'preview-device-seg-btn bg-gray-100 text-slate-900 rounded-full text-xs sm:text-sm'
-                      : 'preview-device-seg-btn text-gray-500 rounded-full text-xs sm:text-sm'
+                      ? 'preview-device-seg-btn bg-slate-900 text-white rounded-full text-xs sm:text-sm px-3 py-1.5'
+                      : 'preview-device-seg-btn bg-transparent text-gray-500 hover:text-gray-900 rounded-full text-xs sm:text-sm px-3 py-1.5'
                   }
                   onClick={() => setPreviewMode(option.id)}
                   aria-pressed={active}
@@ -81,13 +82,15 @@ export default function PreviewViewport({
           {onLoadSample ? (
             <button
               type="button"
-              className="preview-sample-chip relative top-auto right-auto z-10 text-xs sm:text-sm md:absolute md:top-4 md:right-4 md:pointer-events-auto"
+              className="preview-sample-chip relative top-auto right-auto z-10 text-xs sm:text-sm md:justify-self-end md:pointer-events-auto"
               onClick={onLoadSample}
               title="Load manual sample data to test the preview"
             >
               Load sample
             </button>
-          ) : null}
+          ) : (
+            <div className="hidden md:block" aria-hidden="true" />
+          )}
         </div>
       ) : null}
 

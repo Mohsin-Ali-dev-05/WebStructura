@@ -33,10 +33,19 @@ export const DEFAULT_PROPS = {
     subtitle: 'Build modern websites with a simple structured builder.',
     ctaLabel: 'Get started',
     ctaHref: '#contact',
+    secondaryLabel: 'Learn more',
+    secondaryHref: '#services',
+    image: '',
+    imageKeyword: '',
+    imageAlt: '',
   },
   About: {
     heading: 'About',
     body: 'Share a short introduction about yourself or your business.',
+    image: '',
+    imageKeyword: '',
+    imageAlt: '',
+    layout: 'split',
   },
   Skills: {
     heading: 'Skills',
@@ -47,15 +56,18 @@ export const DEFAULT_PROPS = {
     ],
   },
   Services: {
-    heading: 'Services',
+    heading: 'Features',
+    subheading: '',
     items: [
       {
         title: 'Web Design',
         description: 'Clean layouts focused on clarity and usability.',
+        imageKeyword: 'design',
       },
       {
         title: 'Frontend Development',
         description: 'Responsive interfaces built with modern tools.',
+        imageKeyword: 'coding',
       },
     ],
   },
@@ -182,7 +194,29 @@ export const DEFAULT_PROPS = {
   },
   Footer: {
     text: '© Your Name. All rights reserved.',
-    links: [{ label: 'Home', href: '#' }],
+    columns: [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Features', href: '#services' },
+          { label: 'Pricing', href: '#pricing' },
+        ],
+      },
+      {
+        title: 'Visit',
+        links: [
+          { label: 'About', href: '#about' },
+          { label: 'FAQ', href: '#faq' },
+        ],
+      },
+      {
+        title: 'Company',
+        links: [
+          { label: 'Contact', href: '#contact' },
+          { label: 'Support', href: '#contact' },
+        ],
+      },
+    ],
   },
 };
 
@@ -260,6 +294,19 @@ function normalizeComponentProps(type, props) {
 
   if (Array.isArray(next.links)) {
     next.links = stampListItemIds(next.links);
+  }
+  if (Array.isArray(next.columns)) {
+    next.columns = stampListItemIds(next.columns).map((column) => {
+      if (!column || typeof column !== 'object') {
+        return column;
+      }
+      return {
+        ...column,
+        links: Array.isArray(column.links)
+          ? stampListItemIds(column.links)
+          : [],
+      };
+    });
   }
   if (Array.isArray(next.items)) {
     next.items = stampListItemIds(next.items);

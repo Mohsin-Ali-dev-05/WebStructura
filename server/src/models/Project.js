@@ -34,6 +34,12 @@ const projectSchema = new mongoose.Schema(
       maxlength: [500, 'Description must be at most 500 characters'],
       default: '',
     },
+    templateType: {
+      type: String,
+      trim: true,
+      maxlength: [80, 'Template type must be at most 80 characters'],
+      default: 'Custom',
+    },
     status: {
       type: String,
       enum: {
@@ -44,7 +50,14 @@ const projectSchema = new mongoose.Schema(
     },
     websiteData: {
       type: mongoose.Schema.Types.Mixed,
+      required: [true, 'websiteData is required'],
       default: defaultWebsiteData,
+    },
+    thumbnailUrl: {
+      type: String,
+      trim: true,
+      maxlength: [2048, 'Thumbnail URL is too long'],
+      default: '',
     },
   },
   {
@@ -54,6 +67,7 @@ const projectSchema = new mongoose.Schema(
 );
 
 projectSchema.index({ userId: 1, createdAt: -1 });
+projectSchema.index({ userId: 1, updatedAt: -1 });
 
 export { PROJECT_STATUSES, defaultWebsiteData };
 export default mongoose.model('Project', projectSchema);

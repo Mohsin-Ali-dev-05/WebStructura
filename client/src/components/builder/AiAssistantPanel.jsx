@@ -91,6 +91,8 @@ export function applyCopyToComponentProps(type, props = {}, text) {
 export default function AiAssistantPanel({
   selectedComponent = null,
   onApplyGeneratedText,
+  onGenerateFullWebsite,
+  isStreamingWebsite = false,
   onClose,
 }) {
   const [prompt, setPrompt] = useState('');
@@ -98,6 +100,8 @@ export default function AiAssistantPanel({
   const [isLoading, setIsLoading] = useState(false);
   const [generatedText, setGeneratedText] = useState('');
   const [copyLabel, setCopyLabel] = useState('Copy text');
+
+  const busy = isLoading || isStreamingWebsite;
 
   useEffect(() => {
     if (
@@ -122,7 +126,7 @@ export default function AiAssistantPanel({
     event.preventDefault();
 
     const trimmedPrompt = prompt.trim();
-    if (!trimmedPrompt || isLoading) {
+    if (!trimmedPrompt || busy) {
       return;
     }
 
@@ -166,6 +170,18 @@ export default function AiAssistantPanel({
     }
   }
 
+  function handleGenerateFullWebsite() {
+    const trimmedPrompt = prompt.trim();
+    if (!trimmedPrompt || busy) {
+      return;
+    }
+    if (typeof onGenerateFullWebsite !== 'function') {
+      toast.error('Full website streaming is not available.');
+      return;
+    }
+    onGenerateFullWebsite(trimmedPrompt);
+  }
+
   async function handleCopy() {
     if (!generatedText.trim()) {
       return;
@@ -203,56 +219,72 @@ export default function AiAssistantPanel({
   }
 
   const selectClassName =
-    'w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all disabled:cursor-not-allowed disabled:opacity-70';
+    'w-full bg-gray-50 text-gray-800 font-medium border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all disabled:cursor-not-allowed disabled:opacity-70';
 
-  const targetHint = selectedComponent
-    ? `Selected: ${selectedComponent.type}`
-    : `Will match first ${sectionType} section`;
+  const contextLabel = selectedComponent
+    ? selectedComponent.type
+    : `First ${sectionType}`;
+  const contextMeta = selectedComponent
+    ? 'Selected section'
+    : 'Will match first matching section';
 
   return (
     <section
       className="ai-assistant-panel bg-white border-r border-gray-200 p-6 flex flex-col h-full min-h-full overflow-y-auto space-y-6"
       aria-label="AI copywriting assistant"
     >
-      <header className="space-y-2 pb-6 border-b border-gray-200">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-semibold text-gray-900 m-0">
-            Copywriting Copilot
-          </h2>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full font-medium">
+      <header className="space-y-4 pb-5 border-b border-gray-100">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 space-y-3">
+            <h2 className="text-xl font-bold tracking-tight text-gray-900 m-0">
+              Copywriting Copilot
+            </h2>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span
+                className="relative flex h-1.5 w-1.5"
+                aria-hidden="true"
+              >
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              </span>
               Local AI
             </span>
-            {typeof onClose === 'function' ? (
-              <button
-                type="button"
-                className="ai-panel-close inline-flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-1 rounded-md transition-colors"
-                onClick={onClose}
-                aria-label="Close AI Assistant"
-                title="Close AI panel"
-              >
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
-            ) : null}
           </div>
+          {typeof onClose === 'function' ? (
+            <button
+              type="button"
+              className="ai-panel-close shrink-0 text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors"
+              onClick={onClose}
+              aria-label="Close AI Assistant"
+              title="Close AI panel"
+            >
+              <svg
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          ) : null}
         </div>
-        <p className="text-xs text-gray-500 m-0">{targetHint}</p>
+
+        <div className="bg-gray-50 border border-gray-200/80 rounded-lg px-3 py-2 text-xs font-medium text-gray-600 flex items-center justify-between gap-2">
+          <span>{contextMeta}</span>
+          <span className="text-gray-900 font-semibold tracking-tight">
+            {contextLabel}
+          </span>
+        </div>
       </header>
 
       <form
-        className="flex flex-col space-y-6 flex-1 min-h-0"
+        className="flex flex-col space-y-5 flex-1 min-h-0"
         onSubmit={handleGenerate}
       >
-        <div className="space-y-6">
+        <div className="space-y-5">
           <div className="space-y-2">
             <label
               htmlFor="ai-section-type"
@@ -265,7 +297,7 @@ export default function AiAssistantPanel({
               className={selectClassName}
               value={sectionType}
               onChange={(event) => setSectionType(event.target.value)}
-              disabled={isLoading}
+              disabled={busy}
             >
               {SECTION_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -285,32 +317,45 @@ export default function AiAssistantPanel({
               </label>
               <button
                 type="button"
-                className="text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                className="text-xs font-medium text-gray-400 hover:text-gray-600 transition-colors"
                 onClick={handleClear}
-                disabled={isLoading || (!prompt && !generatedText)}
+                disabled={busy || (!prompt && !generatedText)}
               >
                 Clear
               </button>
             </div>
             <textarea
               id="ai-prompt"
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all resize-none h-28 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm text-gray-900 placeholder-gray-400 resize-none h-28 disabled:cursor-not-allowed disabled:opacity-70"
               value={prompt}
               onChange={(event) => setPrompt(event.target.value)}
               placeholder="Describe the tone and message you want…"
-              disabled={isLoading}
+              disabled={busy}
             />
           </div>
         </div>
 
         <button
           type="submit"
-          disabled={isLoading || !prompt.trim()}
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl shadow-sm transition-all flex justify-center items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={busy || !prompt.trim()}
+          className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <SparklesIcon className="w-4 h-4" />
-          {isLoading ? 'Generating…' : 'Generate'}
+          {isLoading ? 'Generating…' : 'Generate section copy'}
         </button>
+
+        {typeof onGenerateFullWebsite === 'function' ? (
+          <button
+            type="button"
+            onClick={handleGenerateFullWebsite}
+            disabled={busy || !prompt.trim()}
+            className="w-full py-2.5 px-4 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-xl transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isStreamingWebsite
+              ? 'Streaming website…'
+              : 'Generate full website (live)'}
+          </button>
+        ) : null}
 
         {generatedText ? (
           <div className="ai-copy-preview bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3 shadow-sm">

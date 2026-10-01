@@ -28,7 +28,7 @@ function usePersistRowIds(items, onChangeItems, scopeKey) {
   }, [scopeKey, items, onChangeItems]);
 }
 
-function LinkListEditor({ links = [], onChange, scopeKey }) {
+function LinkListEditor({ links = [], onChange, scopeKey, title = 'Links' }) {
   const safeLinks = Array.isArray(links) ? links : [];
   usePersistRowIds(safeLinks, onChange, scopeKey);
 
@@ -54,7 +54,7 @@ function LinkListEditor({ links = [], onChange, scopeKey }) {
   return (
     <div className="builder-list">
       <div className="builder-list-header">
-        <strong>Links</strong>
+        <strong>{title}</strong>
         <button type="button" onClick={addLink}>
           Add link
         </button>
@@ -87,6 +87,78 @@ function LinkListEditor({ links = [], onChange, scopeKey }) {
             onClick={() => link._editorId && removeLink(link._editorId)}
           >
             Remove
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FooterColumnsEditor({ columns = [], onChange, scopeKey }) {
+  const safeColumns = Array.isArray(columns) ? columns : [];
+  usePersistRowIds(safeColumns, onChange, scopeKey);
+
+  function updateColumn(rowId, field, value) {
+    onChange(
+      safeColumns.map((column) =>
+        column._editorId === rowId ? { ...column, [field]: value } : column,
+      ),
+    );
+  }
+
+  function addColumn() {
+    onChange([
+      ...safeColumns,
+      {
+        _editorId: createEditorRowId(),
+        title: 'New column',
+        links: [{ _editorId: createEditorRowId(), label: 'Link', href: '#' }],
+      },
+    ]);
+  }
+
+  function removeColumn(rowId) {
+    onChange(safeColumns.filter((column) => column._editorId !== rowId));
+  }
+
+  return (
+    <div className="builder-list">
+      <div className="builder-list-header">
+        <strong>Footer columns</strong>
+        <button type="button" onClick={addColumn}>
+          Add column
+        </button>
+      </div>
+      {safeColumns.map((column, index) => (
+        <div
+          key={column._editorId || `column-pending-${index}`}
+          className="builder-list-item stacked"
+        >
+          <DebouncedTextInput
+            label="Column title"
+            value={column.title || ''}
+            onChange={(value) =>
+              column._editorId
+                ? updateColumn(column._editorId, 'title', value)
+                : null
+            }
+            placeholder="Product"
+          />
+          <LinkListEditor
+            title="Column links"
+            scopeKey={`${scopeKey}-${column._editorId || index}-links`}
+            links={column.links}
+            onChange={(value) =>
+              column._editorId
+                ? updateColumn(column._editorId, 'links', value)
+                : null
+            }
+          />
+          <button
+            type="button"
+            onClick={() => column._editorId && removeColumn(column._editorId)}
+          >
+            Remove column
           </button>
         </div>
       ))}
@@ -219,6 +291,31 @@ export default function ComponentPropsEditor({ type, props, onChange, componentI
             value={props.ctaHref}
             onChange={(value) => setProp('ctaHref', value)}
           />
+          <DebouncedTextInput
+            label="Secondary CTA label"
+            value={props.secondaryLabel}
+            onChange={(value) => setProp('secondaryLabel', value)}
+          />
+          <DebouncedTextInput
+            label="Secondary CTA link"
+            value={props.secondaryHref}
+            onChange={(value) => setProp('secondaryHref', value)}
+          />
+          <DebouncedTextInput
+            label="Image keyword (e.g. cafeteria,food)"
+            value={props.imageKeyword}
+            onChange={(value) => setProp('imageKeyword', value)}
+          />
+          <DebouncedTextInput
+            label="Image URL (optional override)"
+            value={props.image}
+            onChange={(value) => setProp('image', value)}
+          />
+          <DebouncedTextInput
+            label="Image alt text"
+            value={props.imageAlt}
+            onChange={(value) => setProp('imageAlt', value)}
+          />
         </div>
       );
 
@@ -234,6 +331,16 @@ export default function ComponentPropsEditor({ type, props, onChange, componentI
             label="Body"
             value={props.body}
             onChange={(value) => setProp('body', value)}
+          />
+          <DebouncedTextInput
+            label="Image keyword"
+            value={props.imageKeyword}
+            onChange={(value) => setProp('imageKeyword', value)}
+          />
+          <DebouncedTextInput
+            label="Image URL (optional override)"
+            value={props.image}
+            onChange={(value) => setProp('image', value)}
           />
         </div>
       );
@@ -268,18 +375,26 @@ export default function ComponentPropsEditor({ type, props, onChange, componentI
             value={props.heading}
             onChange={(value) => setProp('heading', value)}
           />
+          <DebouncedTextInput
+            label="Subheading"
+            value={props.subheading}
+            onChange={(value) => setProp('subheading', value)}
+          />
           <ItemListEditor
             scopeKey={`${componentId}-services`}
-            addLabel="Services"
+            addLabel="Features"
             items={props.items}
             onChange={(value) => setProp('items', value)}
             createItem={() => ({
-              title: 'New service',
-              description: 'Describe this service.',
+              title: 'New feature',
+              description: 'Describe this feature.',
+              imageKeyword: 'business',
             })}
             fields={[
               { name: 'title', label: 'Title' },
               { name: 'description', label: 'Description', multiline: true },
+              { name: 'imageKeyword', label: 'Image keyword' },
+              { name: 'image', label: 'Image URL (optional)' },
             ]}
           />
         </div>
@@ -548,14 +663,14 @@ export default function ComponentPropsEditor({ type, props, onChange, componentI
       return (
         <div className="component-props-editor">
           <DebouncedTextInput
-            label="Footer text"
+            label="Copyright text"
             value={props.text}
             onChange={(value) => setProp('text', value)}
           />
-          <LinkListEditor
-            scopeKey={`${componentId}-footer-links`}
-            links={props.links}
-            onChange={(value) => setProp('links', value)}
+          <FooterColumnsEditor
+            scopeKey={`${componentId}-footer-columns`}
+            columns={props.columns}
+            onChange={(value) => setProp('columns', value)}
           />
         </div>
       );

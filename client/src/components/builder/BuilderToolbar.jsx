@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ExportModal from './ExportModal.jsx';
+import { exportProjectZip } from '../../services/projectService.js';
 
 function slugify(value) {
   return (
@@ -14,7 +15,10 @@ function slugify(value) {
 }
 
 function downloadBlob(filename, content, mimeType) {
-  const blob = new Blob([content], { type: mimeType });
+  const blob =
+    content instanceof Blob
+      ? content
+      : new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
@@ -64,18 +68,18 @@ export default function BuilderToolbar({
   onTogglePreview,
 }) {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const canSave = isDirty && Boolean(projectName.trim()) && !saving;
 
-  const saveButtonClass = isDirty
-    ? 'builder-save-btn builder-save-btn--dirty'
-    : 'builder-save-btn builder-save-btn--clean';
-
   const closeExportModal = useCallback(() => {
+    if (exporting) {
+      return;
+    }
     setIsExportModalOpen(false);
-  }, []);
+  }, [exporting]);
 
-  function handleExportOption(optionId) {
+  async function handleExportOption(optionId) {
     const base = slugify(projectName || websiteData?.title || 'website');
 
     if (optionId === 'raw-json') {
@@ -101,10 +105,34 @@ export default function BuilderToolbar({
     }
 
     if (optionId === 'react-zip') {
-      toast('React ZIP export is coming soon — try JSON or HTML for now.', {
-        icon: '📦',
-      });
-      closeExportModal();
+      if (!projectId) {
+        toast.error('Save the project before exporting a React ZIP.');
+        return;
+      }
+
+      setExporting(true);
+      const exportToast = toast.loading('Exporting React project…');
+
+      try {
+        if (isDirty && typeof onSave === 'function') {
+          await onSave();
+        }
+
+        const { blob, filename } = await exportProjectZip(projectId);
+        downloadBlob(filename || `${base}-export.zip`, blob, 'application/zip');
+        toast.success('React ZIP downloaded.', {
+          id: exportToast,
+          duration: 3000,
+        });
+        setIsExportModalOpen(false);
+      } catch (error) {
+        toast.error(error?.message || 'Export failed. Please try again.', {
+          id: exportToast,
+          duration: 4000,
+        });
+      } finally {
+        setExporting(false);
+      }
     }
   }
 
@@ -130,6 +158,7 @@ export default function BuilderToolbar({
             <span className="visually-hidden">Project name</span>
             <input
               type="text"
+              className="bg-transparent border-0 outline-none shadow-none rounded-md px-2 py-1.5 text-white font-semibold hover:bg-white/10 focus:bg-white/20 focus:outline-none transition-colors duration-200"
               value={projectName}
               onChange={(event) => onProjectNameChange(event.target.value)}
               placeholder="Untitled project"
@@ -150,7 +179,7 @@ export default function BuilderToolbar({
           {!isPreviewMode ? (
             <>
               <Link
-                className="builder-toolbar-link"
+                className="builder-toolbar-link text-white/75 hover:text-white transition-colors duration-200"
                 to={`/view/${projectId}`}
                 target="_blank"
                 rel="noreferrer"
@@ -159,7 +188,7 @@ export default function BuilderToolbar({
               </Link>
               <button
                 type="button"
-                className="builder-toolbar-link builder-toolbar-link--button"
+                className="builder-toolbar-link builder-toolbar-link--button text-white/75 hover:text-white transition-colors duration-200"
                 onClick={() => {
                   if (typeof onTogglePreview === 'function') {
                     onTogglePreview();
@@ -169,15 +198,17 @@ export default function BuilderToolbar({
                 Full preview
               </button>
               <Link
-                className="builder-toolbar-link"
+                className="builder-toolbar-link text-white/75 hover:text-white transition-colors duration-200"
                 to={`/projects/${projectId}/edit`}
               >
                 Settings
               </Link>
               <button
                 type="button"
-                className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 onClick={() => setIsExportModalOpen(true)}
+                disabled={exporting}
+                aria-busy={exporting}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -189,20 +220,33 @@ export default function BuilderToolbar({
                   <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
                   <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
                 </svg>
-                Export
+                {exporting ? 'Exporting…' : 'Export'}
               </button>
             </>
           ) : null}
 
-          <button
-            type="button"
-            className={saveButtonClass}
-            onClick={onSave}
-            disabled={!canSave}
-            aria-busy={saving}
-          >
-            {saving ? 'Saving…' : isDirty ? 'Save project' : 'Saved'}
-          </button>
+          {isDirty ? (
+            <button
+              type="button"
+              className="builder-save-btn builder-save-btn--dirty"
+              onClick={onSave}
+              disabled={!canSave}
+              aria-busy={saving}
+            >
+              {saving ? 'Saving…' : 'Save project'}
+            </button>
+          ) : (
+            <span
+              className="builder-save-status inline-flex items-center gap-2 bg-white/10 text-white/90 rounded-full px-3 py-1.5 text-sm font-medium"
+              aria-live="polite"
+            >
+              <span
+                className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"
+                aria-hidden="true"
+              />
+              {saving ? 'Saving…' : 'Saved'}
+            </span>
+          )}
         </div>
       </header>
 
@@ -210,6 +254,7 @@ export default function BuilderToolbar({
         open={isExportModalOpen}
         onClose={closeExportModal}
         onSelectOption={handleExportOption}
+        exporting={exporting}
       />
     </>
   );

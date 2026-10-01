@@ -1,20 +1,21 @@
-import { useState } from "react";
-import FieldError from "../components/FieldError.jsx";
-import { submitContact } from "../services/contactService.js";
+import { useState } from 'react';
+import { Clock, Mail, MapPin } from 'lucide-react';
+import FieldError from '../components/FieldError.jsx';
+import { submitContact } from '../services/contactService.js';
 import {
   fieldClass,
   getApiErrorMessage,
   validateContactFields,
-} from "../utils/formValidation.js";
+} from '../utils/formValidation.js';
 
 const baseFieldClass =
-  "w-full py-3 px-4 rounded-xl border border-gray-300 bg-white text-gray-900 outline-none transition-shadow shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500";
+  'w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm text-gray-900';
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   function handleChange(event) {
@@ -36,7 +37,7 @@ export default function ContactPage() {
       return;
     }
 
-    setError("");
+    setError('');
     setSuccess(false);
     const errors = validateContactFields(form);
     setFieldErrors(errors);
@@ -49,13 +50,13 @@ export default function ContactPage() {
     try {
       await submitContact(form);
       setSuccess(true);
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: '', email: '', message: '' });
       setFieldErrors({});
     } catch (err) {
       setError(
         getApiErrorMessage(
           err,
-          "Could not send your message. Please try again.",
+          'Could not send your message. Please try again.',
         ),
       );
     } finally {
@@ -64,49 +65,66 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="contact-page pt-6 pb-10 lg:pt-8 lg:pb-12">
-      <header className="contact-header mb-5">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-brand-text tracking-normal">
+    <div className="contact-page min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50/50 py-16 px-6 lg:px-12 max-w-7xl mx-auto">
+      <header className="contact-header mb-10 max-w-2xl">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 mb-6 shadow-sm">
+          💬 Get in Touch
+        </div>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
           Talk with the WebStructura team
         </h1>
-        <p className="text-gray-600 mt-2 max-w-2xl leading-relaxed">
+        <p className="text-lg text-gray-600 mt-3 leading-relaxed max-w-2xl">
           Questions about your workspace, billing, or a project? Send a note —
           we typically reply within one business day.
         </p>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 min-w-0">
-        <aside className="contact-aside w-full lg:w-2/5 space-y-4 shrink-0">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-4 md:p-6">
-            <h2 className="text-lg font-bold text-brand-text m-0 mb-2 tracking-normal">
-              Support email
-            </h2>
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-w-0 max-w-5xl">
+        <aside className="contact-aside w-full lg:w-72 shrink-0 space-y-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/50 p-6 space-y-3">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <Mail className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <h2 className="text-lg font-bold text-gray-900 m-0 tracking-tight">
+                Support email
+              </h2>
+            </div>
             <a
               className="text-emerald-700 font-medium hover:text-emerald-800 transition-colors"
               href="mailto:support@webstructura.app"
             >
               support@webstructura.app
             </a>
-            <p className="text-sm text-gray-500 mt-2 m-0 leading-relaxed">
+            <p className="text-sm text-gray-500 m-0 leading-relaxed">
               Product help, account access, and general inquiries.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-soft p-4 md:p-6">
-            <h2 className="text-lg font-bold text-brand-text m-0 mb-2 tracking-normal">
-              Location
-            </h2>
-            <p className="text-emerald-700 font-medium hover:text-emerald-800 m-0 leading-relaxed">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/50 p-6 space-y-3">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <MapPin className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <h2 className="text-lg font-bold text-gray-900 m-0 tracking-tight">
+                Location
+              </h2>
+            </div>
+            <p className="text-emerald-700 font-medium m-0 leading-relaxed">
               Remote-first · Serving teams worldwide
             </p>
-            <p className="text-sm text-gray-500 mt-2 m-0 leading-relaxed">
-              Hours: Mon–Fri, 9:00–17:00 UTC
-            </p>
+            <div className="flex items-start gap-2 text-sm text-gray-500 leading-relaxed">
+              <Clock
+                className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600"
+                aria-hidden="true"
+              />
+              <p className="m-0">Hours: Mon–Fri, 9:00–17:00 UTC</p>
+            </div>
           </div>
         </aside>
 
-        <section className="contact-form-panel flex-1 min-w-0 w-full bg-white rounded-2xl border border-gray-100 shadow-soft p-4 md:p-6">
-          <h2 className="text-xl font-bold text-brand-text m-0 mb-4 tracking-normal">
+        <section className="contact-form-panel flex-1 min-w-0 w-full max-w-xl bg-white/90 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-2xl shadow-gray-100/50 p-8 md:p-10">
+          <h2 className="text-xl font-bold text-gray-900 m-0 mb-6 tracking-tight">
             Send a message
           </h2>
 
@@ -182,10 +200,10 @@ export default function ContactPage() {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-600/20 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
               disabled={submitting}
             >
-              {submitting ? "Sending…" : "Send message"}
+              {submitting ? 'Sending…' : 'Send message'}
             </button>
           </form>
         </section>

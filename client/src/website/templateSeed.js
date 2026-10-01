@@ -20,6 +20,7 @@ const img = (photoId, w = 1200) =>
  * @property {string} title
  * @property {string} description
  * @property {string} accent
+ * @property {string} [image]
  * @property {string} suggestedName
  * @property {string} suggestedDescription
  * @property {string[]} tags
@@ -34,6 +35,7 @@ export const TEMPLATE_SEED = [
     "title": "SaaS Startup",
     "description": "Product-led landing page with pricing, feature grid, FAQ, and a strong trial CTA.",
     "accent": "startup",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
     "suggestedName": "NovaFlow",
     "suggestedDescription": "B2B SaaS that turns engineering work into polished release notes your customers actually read.",
     "tags": [
@@ -223,18 +225,27 @@ export const TEMPLATE_SEED = [
           "type": "Footer",
           "props": {
             "text": "© 2026 NovaFlow. Built with WebStructura.",
-            "links": [
+            "columns": [
               {
-                "label": "Product",
-                "href": "#about"
+                "title": "Product",
+                "links": [
+                  { "label": "Product", "href": "#about" },
+                  { "label": "Pricing", "href": "#pricing" }
+                ]
               },
               {
-                "label": "Pricing",
-                "href": "#pricing"
+                "title": "Company",
+                "links": [
+                  { "label": "Contact", "href": "#contact" },
+                  { "label": "About", "href": "#about" }
+                ]
               },
               {
-                "label": "Contact",
-                "href": "#contact"
+                "title": "Resources",
+                "links": [
+                  { "label": "FAQ", "href": "#faq" },
+                  { "label": "CTA", "href": "#cta" }
+                ]
               }
             ]
           }
@@ -247,6 +258,7 @@ export const TEMPLATE_SEED = [
     "title": "Creative Portfolio",
     "description": "Gallery-first portfolio for designers and photographers with projects, skills, and contact.",
     "accent": "portfolio",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
     "suggestedName": "Maya Chen Studio",
     "suggestedDescription": "Independent brand designer and photographer crafting editorial identity systems for cultural brands.",
     "tags": [
@@ -448,14 +460,26 @@ export const TEMPLATE_SEED = [
           "type": "Footer",
           "props": {
             "text": "© 2026 Maya Chen Studio. All rights reserved.",
-            "links": [
+            "columns": [
               {
-                "label": "Work",
-                "href": "#gallery"
+                "title": "Work",
+                "links": [
+                  { "label": "Gallery", "href": "#gallery" },
+                  { "label": "Projects", "href": "#projects" }
+                ]
               },
               {
-                "label": "Contact",
-                "href": "#contact"
+                "title": "Studio",
+                "links": [
+                  { "label": "About", "href": "#about" },
+                  { "label": "Skills", "href": "#skills" }
+                ]
+              },
+              {
+                "title": "Connect",
+                "links": [
+                  { "label": "Contact", "href": "#contact" }
+                ]
               }
             ]
           }
@@ -468,6 +492,7 @@ export const TEMPLATE_SEED = [
     "title": "Modern Cafeteria",
     "description": "Warm hospitality site with menu highlights, gallery, hours, and reservation-ready contact.",
     "accent": "cafeteria",
+    "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
     "suggestedName": "Cedar & Steam",
     "suggestedDescription": "Neighborhood cafeteria serving seasonal bowls, house bread, and specialty coffee from an open kitchen.",
     "tags": [
@@ -635,14 +660,27 @@ export const TEMPLATE_SEED = [
           "type": "Footer",
           "props": {
             "text": "© 2026 Cedar & Steam. Eat well, stay awhile.",
-            "links": [
+            "columns": [
               {
-                "label": "Menu",
-                "href": "#services"
+                "title": "Menu",
+                "links": [
+                  { "label": "Menu", "href": "#services" },
+                  { "label": "Gallery", "href": "#gallery" }
+                ]
               },
               {
-                "label": "Reserve",
-                "href": "#contact"
+                "title": "Visit",
+                "links": [
+                  { "label": "Reserve", "href": "#contact" },
+                  { "label": "About", "href": "#about" }
+                ]
+              },
+              {
+                "title": "Company",
+                "links": [
+                  { "label": "Contact", "href": "#contact" },
+                  { "label": "About", "href": "#about" }
+                ]
               }
             ]
           }
@@ -658,6 +696,7 @@ export const TEMPLATE_SEED = [
     description:
       'Product-forward shop layout with featured collections, testimonials, and clear purchase CTAs.',
     accent: 'commerce',
+    image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80',
     suggestedName: 'Trailform Supply',
     suggestedDescription:
       'Direct-to-consumer outdoor brand selling durable daypacks, layers, and trail accessories.',
@@ -854,10 +893,28 @@ export const TEMPLATE_SEED = [
           type: 'Footer',
           props: {
             text: '© 2026 Trailform Supply. Built for the long way around.',
-            links: [
-              { label: 'Shop', href: '#projects' },
-              { label: 'FAQ', href: '#faq' },
-              { label: 'Support', href: '#contact' },
+            columns: [
+              {
+                title: 'Shop',
+                links: [
+                  { label: 'Shop', href: '#projects' },
+                  { label: 'Features', href: '#services' },
+                ],
+              },
+              {
+                title: 'Support',
+                links: [
+                  { label: 'FAQ', href: '#faq' },
+                  { label: 'Support', href: '#contact' },
+                ],
+              },
+              {
+                title: 'Company',
+                links: [
+                  { label: 'About', href: '#about' },
+                  { label: 'Contact', href: '#contact' },
+                ],
+              },
             ],
           },
         },
@@ -872,6 +929,7 @@ export const TEMPLATE_SEED = [
     description:
       'Property showcase with featured listings, agent credibility, and inquiry-ready contact.',
     accent: 'estate',
+    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
     suggestedName: 'Harborline Realty',
     suggestedDescription:
       'Boutique residential brokerage specializing in waterfront and historic homes across the Mid-Atlantic.',
@@ -1050,9 +1108,28 @@ export const TEMPLATE_SEED = [
           type: 'Footer',
           props: {
             text: '© 2026 Harborline Realty. Equal housing opportunity.',
-            links: [
-              { label: 'Listings', href: '#projects' },
-              { label: 'Contact', href: '#contact' },
+            columns: [
+              {
+                title: 'Listings',
+                links: [
+                  { label: 'Listings', href: '#projects' },
+                  { label: 'Featured', href: '#services' },
+                ],
+              },
+              {
+                title: 'Company',
+                links: [
+                  { label: 'About', href: '#about' },
+                  { label: 'Contact', href: '#contact' },
+                ],
+              },
+              {
+                title: 'Resources',
+                links: [
+                  { label: 'FAQ', href: '#faq' },
+                  { label: 'Gallery', href: '#gallery' },
+                ],
+              },
             ],
           },
         },
@@ -1067,6 +1144,7 @@ export const TEMPLATE_SEED = [
     description:
       'Editorial layout for an engineering blog with featured posts, topics, about, and subscribe CTA.',
     accent: 'blog',
+    image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80',
     suggestedName: 'Signal Path',
     suggestedDescription:
       'Independent engineering blog covering distributed systems, developer experience, and pragmatic architecture.',
@@ -1264,10 +1342,28 @@ export const TEMPLATE_SEED = [
           type: 'Footer',
           props: {
             text: '© 2026 Signal Path. Independent engineering journalism.',
-            links: [
-              { label: 'Articles', href: '#projects' },
-              { label: 'Subscribe', href: '#cta' },
-              { label: 'Contact', href: '#contact' },
+            columns: [
+              {
+                title: 'Read',
+                links: [
+                  { label: 'Articles', href: '#projects' },
+                  { label: 'Topics', href: '#services' },
+                ],
+              },
+              {
+                title: 'Community',
+                links: [
+                  { label: 'Subscribe', href: '#cta' },
+                  { label: 'Contact', href: '#contact' },
+                ],
+              },
+              {
+                title: 'About',
+                links: [
+                  { label: 'About', href: '#about' },
+                  { label: 'Contact', href: '#contact' },
+                ],
+              },
             ],
           },
         },

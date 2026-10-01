@@ -24,8 +24,20 @@ const userSchema = new mongoose.Schema(
     },
     passwordHash: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [
+        function passwordRequired() {
+          return !this.googleId;
+        },
+        'Password is required',
+      ],
       select: false,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      default: undefined,
+      trim: true,
     },
     avatarUrl: {
       type: String,
@@ -66,6 +78,9 @@ const userSchema = new mongoose.Schema(
 userSchema.methods.comparePassword = async function comparePassword(
   plainPassword,
 ) {
+  if (!this.passwordHash) {
+    return false;
+  }
   return bcrypt.compare(plainPassword, this.passwordHash);
 };
 

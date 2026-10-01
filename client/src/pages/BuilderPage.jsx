@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AiAssistantPanel, {
@@ -13,6 +13,7 @@ import {
   UnsavedChangesGuard,
   useDirtyProjectState,
 } from '../hooks/useUnsavedChangesGuard.jsx';
+import { streamWebsiteGeneration } from '../services/aiService.js';
 import { getProject, updateProject } from '../services/projectService.js';
 import {
   createComponent,
@@ -26,6 +27,28 @@ const COMPACT_TABS = [
   { id: 'preview', label: 'Preview' },
   { id: 'editor', label: 'Editor' },
 ];
+
+function coerceComponentsFromStream(rawText) {
+  let text = String(rawText || '').trim();
+  text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  const parsed = JSON.parse(text);
+
+  if (Array.isArray(parsed)) {
+    return parsed;
+  }
+  if (parsed && typeof parsed === 'object') {
+    if (Array.isArray(parsed.components)) {
+      return parsed.components;
+    }
+    if (Array.isArray(parsed.data)) {
+      return parsed.data;
+    }
+    if (Array.isArray(parsed.sections)) {
+      return parsed.sections;
+    }
+  }
+  throw new Error('AI stream did not return a components array.');
+}
 
 export default function BuilderPage() {
   const { id } = useParams();
@@ -43,10 +66,27 @@ export default function BuilderPage() {
   const [loadError, setLoadError] = useState('');
   const [saveError, setSaveError] = useState('');
   const [saveMessage, setSaveMessage] = useState('');
+  const [streamingText, setStreamingText] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const terminalRef = useRef(null);
+  const streamAbortRef = useRef(null);
 
   const isDirty = useDirtyProjectState(projectName, websiteData, savedSnapshot);
   const showLeft = isLeftOpen && !isPreviewMode;
   const showRight = isRightOpen && !isPreviewMode;
+
+  useEffect(() => {
+    if (!isStreaming || !terminalRef.current) {
+      return;
+    }
+    terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+  }, [streamingText, isStreaming]);
+
+  useEffect(() => {
+    return () => {
+      streamAbortRef.current?.abort();
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -239,13 +279,68 @@ export default function BuilderPage() {
     setCompactTab('preview');
   }
 
+  async function handleStreamWebsiteGenerate(brief) {
+    const prompt = String(brief || '').trim();
+    if (!prompt || isStreaming) {
+      return;
+    }
+
+    streamAbortRef.current?.abort();
+    const controller = new AbortController();
+    streamAbortRef.current = controller;
+
+    setIsStreaming(true);
+    setStreamingText('');
+    setIsLeftOpen(true);
+    setCompactTab('preview');
+
+    try {
+      const finalText = await streamWebsiteGeneration({
+        name: projectName || websiteData?.title || 'My Website',
+        description: prompt,
+        prompt,
+        signal: controller.signal,
+        onChunk(chunk) {
+          setStreamingText((current) => current + chunk);
+        },
+      });
+
+      const components = coerceComponentsFromStream(finalText);
+      const next = normalizeWebsiteData({
+        ...(websiteData || createDefaultWebsiteData()),
+        title: projectName || websiteData?.title || 'My Website',
+        components,
+      });
+
+      setWebsiteData(next);
+      setSelectedBlockId(next.components[0]?.id || '');
+      setIsStreaming(false);
+      toast.success('Website generated — preview updated.', { duration: 3000 });
+    } catch (error) {
+      if (error?.name === 'AbortError') {
+        setIsStreaming(false);
+        return;
+      }
+      setIsStreaming(false);
+      toast.error(
+        error?.message ||
+          'AI stream failed. Check that the API and Ollama are running.',
+        { duration: 4500 },
+      );
+    } finally {
+      if (streamAbortRef.current === controller) {
+        streamAbortRef.current = null;
+      }
+    }
+  }
+
   async function handleSaveProject() {
     const trimmedName = projectName.trim();
     if (!trimmedName) {
       setSaveError('Project name is required.');
       setSaveMessage('');
       toast.error('Project name is required.');
-      return;
+      throw new Error('Project name is required.');
     }
 
     setSaving(true);
@@ -283,6 +378,7 @@ export default function BuilderPage() {
         id: saveToast,
         duration: 4000,
       });
+      throw error;
     } finally {
       setSaving(false);
     }
@@ -398,6 +494,8 @@ export default function BuilderPage() {
                 null
               }
               onApplyGeneratedText={handleApplyAiCopy}
+              onGenerateFullWebsite={handleStreamWebsiteGenerate}
+              isStreamingWebsite={isStreaming}
               onClose={() => setIsLeftOpen(false)}
             />
           ) : null}
@@ -479,6 +577,30 @@ export default function BuilderPage() {
               setCompactTab('editor');
             }}
           />
+
+          {isStreaming ? (
+            <div
+              ref={terminalRef}
+              className="absolute inset-0 z-30 bg-gray-900 text-emerald-400 font-mono p-8 overflow-y-auto whitespace-pre-wrap"
+              aria-live="polite"
+              aria-label="AI generation stream"
+            >
+              <div className="mb-4 flex items-center justify-between gap-3 text-emerald-300/80 text-xs uppercase tracking-widest">
+                <span>WebStructura · Ollama stream</span>
+                <button
+                  type="button"
+                  className="rounded border border-emerald-700/60 px-2 py-1 text-emerald-300 hover:bg-emerald-950"
+                  onClick={() => streamAbortRef.current?.abort()}
+                >
+                  Cancel
+                </button>
+              </div>
+              <pre className="m-0 whitespace-pre-wrap break-words text-sm leading-relaxed">
+                {streamingText || 'Connecting to local AI…'}
+                <span className="inline-block w-2 h-4 ml-0.5 bg-emerald-400 align-middle animate-pulse" />
+              </pre>
+            </div>
+          ) : null}
 
           {isPreviewMode ? (
             <button

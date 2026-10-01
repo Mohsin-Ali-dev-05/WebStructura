@@ -9,6 +9,17 @@
  * be composed:  hsl(var(--color-primary) / 0.12)
  */
 
+@font-face {
+  font-family: 'Magnolia Script';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Magnolia Script'),
+    url('/fonts/Magnolia_Script.woff') format('woff'),
+    url('https://fonts.cdnfonts.com/s/14601/Magnolia_Script.woff') format('woff');
+}
+
 :root {
   /* —— Color channels (HSL: H S% L%) —— */
   --color-primary: 175 72% 26%;
@@ -77,6 +88,7 @@
 
   /* —— Fluid typography —— */
   --font-display: 'Syne', system-ui, sans-serif;
+  --font-brand: 'Magnolia Script', 'Segoe Script', 'Apple Chancery', cursive;
   --font-body: 'Instrument Sans', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 

@@ -73,6 +73,7 @@ export default function ExportModal({
   open,
   onClose,
   onSelectOption,
+  exporting = false,
 }) {
   useEffect(() => {
     if (!open) {
@@ -80,7 +81,7 @@ export default function ExportModal({
     }
 
     function handleKeyDown(event) {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && !exporting) {
         onClose();
       }
     }
@@ -93,7 +94,7 @@ export default function ExportModal({
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [open, onClose]);
+  }, [open, onClose, exporting]);
 
   if (!open) {
     return null;
@@ -105,7 +106,11 @@ export default function ExportModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="export-modal-title"
-      onClick={onClose}
+      onClick={() => {
+        if (!exporting) {
+          onClose();
+        }
+      }}
     >
       <div
         className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl"
@@ -120,13 +125,16 @@ export default function ExportModal({
               Export Source Code
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              Choose how you want to take this site with you.
+              {exporting
+                ? 'Building your React + Vite + Tailwind ZIP…'
+                : 'Choose how you want to take this site with you.'}
             </p>
           </div>
           <button
             type="button"
-            className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-full transition-all"
+            className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-full transition-all disabled:opacity-50"
             onClick={onClose}
+            disabled={exporting}
             aria-label="Close export modal"
           >
             <svg
@@ -142,32 +150,38 @@ export default function ExportModal({
         </div>
 
         <div className="flex flex-col gap-3">
-          {EXPORT_OPTIONS.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              className="w-full text-left flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-emerald-200 hover:shadow-sm transition-all"
-              onClick={() => onSelectOption?.(option.id)}
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                {option.icon}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold text-gray-900">
-                  {option.title}
-                </span>
-                <span className="block text-sm text-gray-500 mt-0.5 leading-snug">
-                  {option.description}
-                </span>
-              </span>
-              <span
-                className="text-gray-300 self-center shrink-0"
-                aria-hidden="true"
+          {EXPORT_OPTIONS.map((option) => {
+            const isZip = option.id === 'react-zip';
+            const busy = exporting && isZip;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                className="w-full text-left flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-emerald-200 hover:shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                onClick={() => onSelectOption?.(option.id)}
+                disabled={exporting}
+                aria-busy={busy}
               >
-                →
-              </span>
-            </button>
-          ))}
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                  {option.icon}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold text-gray-900">
+                    {busy ? 'Exporting…' : option.title}
+                  </span>
+                  <span className="block text-sm text-gray-500 mt-0.5 leading-snug">
+                    {option.description}
+                  </span>
+                </span>
+                <span
+                  className="text-gray-300 self-center shrink-0"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

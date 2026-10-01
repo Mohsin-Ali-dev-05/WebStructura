@@ -54,7 +54,8 @@ export function validateCreateProject(req, res, next) {
   try {
     requireBody(req);
     const errors = [];
-    const { name, description, status, websiteData } = req.body;
+    const { name, description, status, websiteData, templateType, thumbnailUrl } =
+      req.body;
 
     if (!isNonEmptyString(name) || name.trim().length < 2) {
       errors.push('Project name must be at least 2 characters.');
@@ -74,6 +75,22 @@ export function validateCreateProject(req, res, next) {
       errors.push('Status must be draft or published.');
     }
 
+    if (templateType !== undefined && templateType !== null) {
+      if (typeof templateType !== 'string') {
+        errors.push('templateType must be a string.');
+      } else if (templateType.length > 80) {
+        errors.push('templateType must be at most 80 characters.');
+      }
+    }
+
+    if (thumbnailUrl !== undefined && thumbnailUrl !== null) {
+      if (typeof thumbnailUrl !== 'string') {
+        errors.push('thumbnailUrl must be a string.');
+      } else if (thumbnailUrl.length > 2048) {
+        errors.push('thumbnailUrl is too long.');
+      }
+    }
+
     validateWebsiteDataShape(websiteData, errors);
 
     if (errors.length > 0) {
@@ -86,6 +103,12 @@ export function validateCreateProject(req, res, next) {
     if (status !== undefined) {
       req.body.status = status;
     }
+    if (typeof templateType === 'string') {
+      req.body.templateType = templateType.trim() || 'Custom';
+    }
+    if (typeof thumbnailUrl === 'string') {
+      req.body.thumbnailUrl = thumbnailUrl.trim();
+    }
     next();
   } catch (error) {
     next(error);
@@ -96,7 +119,8 @@ export function validateUpdateProject(req, res, next) {
   try {
     requireBody(req);
     const errors = [];
-    const { name, description, status, websiteData } = req.body;
+    const { name, description, status, websiteData, templateType, thumbnailUrl } =
+      req.body;
 
     if (name !== undefined) {
       if (!isNonEmptyString(name) || name.trim().length < 2) {
@@ -118,13 +142,31 @@ export function validateUpdateProject(req, res, next) {
       errors.push('Status must be draft or published.');
     }
 
+    if (templateType !== undefined && templateType !== null) {
+      if (typeof templateType !== 'string') {
+        errors.push('templateType must be a string.');
+      } else if (templateType.length > 80) {
+        errors.push('templateType must be at most 80 characters.');
+      }
+    }
+
+    if (thumbnailUrl !== undefined && thumbnailUrl !== null) {
+      if (typeof thumbnailUrl !== 'string') {
+        errors.push('thumbnailUrl must be a string.');
+      } else if (thumbnailUrl.length > 2048) {
+        errors.push('thumbnailUrl is too long.');
+      }
+    }
+
     validateWebsiteDataShape(websiteData, errors);
 
     if (
       name === undefined &&
       description === undefined &&
       status === undefined &&
-      websiteData === undefined
+      websiteData === undefined &&
+      templateType === undefined &&
+      thumbnailUrl === undefined
     ) {
       errors.push('Provide at least one field to update.');
     }
@@ -138,6 +180,12 @@ export function validateUpdateProject(req, res, next) {
     }
     if (typeof description === 'string') {
       req.body.description = description.trim();
+    }
+    if (typeof templateType === 'string') {
+      req.body.templateType = templateType.trim() || 'Custom';
+    }
+    if (typeof thumbnailUrl === 'string') {
+      req.body.thumbnailUrl = thumbnailUrl.trim();
     }
     next();
   } catch (error) {

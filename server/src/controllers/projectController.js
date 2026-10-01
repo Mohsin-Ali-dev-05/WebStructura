@@ -11,8 +11,10 @@ function formatProject(project) {
     userId: project.userId,
     name: project.name,
     description: project.description,
+    templateType: project.templateType || 'Custom',
     status: project.status,
     websiteData: project.websiteData,
+    thumbnailUrl: project.thumbnailUrl || '',
     createdAt: project.createdAt,
     updatedAt: project.updatedAt,
   };
@@ -57,7 +59,8 @@ function hasClientComponents(websiteData) {
  */
 export const createProject = asyncHandler(async (req, res) => {
   requireBody(req);
-  const { name, description, status, websiteData } = req.body;
+  const { name, description, status, websiteData, templateType, thumbnailUrl } =
+    req.body;
 
   if (!name || typeof name !== 'string' || name.trim().length < 2) {
     throw new AppError('Project name must be at least 2 characters.', 400);
@@ -91,8 +94,16 @@ export const createProject = asyncHandler(async (req, res) => {
     userId: req.user._id,
     name,
     description: description || '',
+    templateType:
+      typeof templateType === 'string' && templateType.trim()
+        ? templateType.trim()
+        : hasClientComponents(websiteData)
+          ? 'Template'
+          : 'Custom',
     status: status || 'draft',
     websiteData: resolvedWebsiteData,
+    thumbnailUrl:
+      typeof thumbnailUrl === 'string' ? thumbnailUrl.trim() : '',
   });
 
   res.status(201).json({
@@ -155,7 +166,8 @@ export const updateProject = asyncHandler(async (req, res) => {
   requireBody(req);
   const project = await findOwnedProject(req.params.id, req.user._id);
 
-  const { name, description, status, websiteData } = req.body;
+  const { name, description, status, websiteData, templateType, thumbnailUrl } =
+    req.body;
 
   if (name !== undefined) {
     project.name = name;
@@ -168,6 +180,16 @@ export const updateProject = asyncHandler(async (req, res) => {
   }
   if (websiteData !== undefined) {
     project.websiteData = websiteData;
+  }
+  if (templateType !== undefined) {
+    project.templateType =
+      typeof templateType === 'string' && templateType.trim()
+        ? templateType.trim()
+        : 'Custom';
+  }
+  if (thumbnailUrl !== undefined) {
+    project.thumbnailUrl =
+      typeof thumbnailUrl === 'string' ? thumbnailUrl.trim() : '';
   }
 
   await project.save();
@@ -189,4 +211,33 @@ export const deleteProject = asyncHandler(async (req, res) => {
     message: 'Project deleted',
     data: { id: project._id },
   });
+});
+
+/**
+ * GET /api/projects/:id/export — download a Vite + React + Tailwind ZIP.
+ */
+export const exportProject = asyncHandler(async (req, res) => {
+  const project = await findOwnedProject(req.params.id, req.user._id);
+  const { generateExportZipBuffer } = await import(
+    '../utils/exportGenerator.js'
+  );
+
+  const buffer = await generateExportZipBuffer(project.websiteData, {
+    projectName: project.name,
+  });
+
+  const safeName =
+    String(project.name || 'webstructura-export')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 60) || 'webstructura-export';
+
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${safeName}-export.zip"`,
+  );
+  res.setHeader('Content-Length', buffer.length);
+  res.status(200).send(buffer);
 });

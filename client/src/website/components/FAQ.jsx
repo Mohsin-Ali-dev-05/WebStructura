@@ -14,7 +14,7 @@ export default function FAQ({
 
   return (
     <SectionWrapper id="faq" className="ws-section ws-faq" aria-label="FAQ">
-      <header className="mb-6 md:mb-8">
+      <header className="mb-4 md:mb-6 max-w-2xl">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>
@@ -22,7 +22,7 @@ export default function FAQ({
       {safeItems.length === 0 ? (
         <p className="text-gray-500 text-lg">No questions yet.</p>
       ) : (
-        <div className="flex flex-col gap-4 max-w-3xl">
+        <div className="flex flex-col gap-3 max-w-2xl">
           {safeItems.map((item, index) => (
             <details
               key={listItemKey(item, index, 'faq')}

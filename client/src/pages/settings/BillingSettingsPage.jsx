@@ -7,72 +7,81 @@ const PLAN_FEATURES = [
 
 export default function BillingSettingsPage() {
   return (
-    <>
-      <h2 className="text-xl font-bold text-gray-900 m-0 mb-1">Billing</h2>
-      <p className="text-sm text-gray-500 mt-0 mb-6 leading-relaxed">
-        Review your plan and payment details. Billing is a placeholder until
-        payments are connected.
-      </p>
+    <div className="space-y-8 max-w-3xl">
+      <header>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight m-0">
+          Billing
+        </h2>
+        <p className="text-base text-gray-500 mt-2 mb-0 leading-relaxed">
+          Review your plan and payment details. Billing is a placeholder until
+          payments are connected.
+        </p>
+      </header>
 
-      <div className="rounded-xl border border-gray-100 bg-gray-50 p-5 mb-5 max-w-lg">
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 m-0">
+      <section className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm relative">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-xs font-bold uppercase tracking-wider text-gray-500 m-0">
             Current plan
           </p>
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/60 shadow-sm">
             Free
           </span>
         </div>
-        <p className="text-2xl font-extrabold text-gray-900 m-0 tracking-normal">
+
+        <p className="text-4xl font-extrabold text-gray-900 tracking-tight mt-4 mb-0">
           $0
-          <span className="text-sm font-medium text-gray-500"> / month</span>
+          <span className="text-lg font-medium text-gray-400"> / month</span>
         </p>
-        <p className="text-sm text-gray-500 mt-2 mb-4 leading-relaxed">
+        <p className="text-base text-gray-500 mt-2 mb-0 leading-relaxed">
           Everything you need to design and publish starter sites.
         </p>
-        <ul className="m-0 p-0 list-none space-y-2">
+
+        <ul className="m-0 p-0 list-none space-y-3 mt-6 pt-6 border-t border-gray-100">
           {PLAN_FEATURES.map((feature) => (
-            <li key={feature} className="text-sm text-gray-700 flex gap-2">
-              <span className="text-emerald-600 font-bold" aria-hidden="true">
+            <li key={feature} className="flex items-center text-gray-700 font-medium">
+              <span
+                className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 text-[10px] font-black mr-3 shrink-0"
+                aria-hidden="true"
+              >
                 ✓
               </span>
               <span>{feature}</span>
             </li>
           ))}
         </ul>
-      </div>
+      </section>
 
-      <dl className="settings-account-meta space-y-4 m-0 mb-5 max-w-lg">
+      <dl className="settings-account-meta m-0 bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-12">
         <div>
-          <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500 m-0">
+          <dt className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 m-0">
             Payment method
           </dt>
-          <dd className="text-gray-900 font-medium mt-1 m-0">
+          <dd className="text-lg font-semibold text-gray-900 m-0">
             No card on file
           </dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500 m-0">
+          <dt className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 m-0">
             Next invoice
           </dt>
-          <dd className="text-gray-900 font-medium mt-1 m-0">—</dd>
+          <dd className="text-lg font-semibold text-gray-900 m-0">—</dd>
         </div>
       </dl>
 
-      <div className="border-t border-gray-100 pt-6 flex flex-wrap gap-3">
+      <div className="pt-4 flex flex-col sm:flex-row gap-4">
         <button
           type="button"
-          className="inline-flex items-center justify-center py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-sm transition-all"
+          className="inline-flex items-center justify-center py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-600/20 transition-all duration-200 hover:-translate-y-0.5"
         >
           Upgrade plan
         </button>
         <button
           type="button"
-          className="inline-flex items-center justify-center py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center justify-center py-3 px-6 rounded-xl border border-gray-300 bg-white text-gray-700 font-semibold shadow-sm hover:bg-gray-50 transition-all duration-200"
         >
-          Manage payment method
+          Manage payment
         </button>
       </div>
-    </>
+    </div>
   );
 }
