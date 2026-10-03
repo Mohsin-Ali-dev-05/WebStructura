@@ -1,4 +1,10 @@
 import { useState } from 'react';
+import {
+  Card,
+  Select,
+  SettingsPageShell,
+  Toggle,
+} from '../../components/ui/index.js';
 
 const THEME_OPTIONS = [
   { id: 'system', label: 'System', description: 'Match your device setting' },
@@ -17,18 +23,11 @@ export default function AppearanceSettingsPage() {
   const [reduceMotion, setReduceMotion] = useState(false);
 
   return (
-    <div className="space-y-8 max-w-3xl">
-      <header>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight m-0">
-          Appearance
-        </h2>
-        <p className="text-base text-gray-500 mt-2 mb-0 leading-relaxed">
-          Customize how WebStructura looks in the builder and dashboard. Preview
-          only — preferences are not saved yet.
-        </p>
-      </header>
-
-      <section className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm">
+    <SettingsPageShell
+      title="Appearance"
+      description="Customize how WebStructura looks in the builder and dashboard. Preview only — preferences are not saved yet."
+    >
+      <Card as="section">
         <h3 className="text-lg font-bold text-gray-900 m-0 mb-4">Theme</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {THEME_OPTIONS.map((option) => {
@@ -56,9 +55,13 @@ export default function AppearanceSettingsPage() {
             );
           })}
         </div>
-      </section>
+      </Card>
 
-      <section className="bg-white border border-gray-200 rounded-3xl shadow-sm flex flex-col overflow-hidden">
+      <Card
+        as="section"
+        padding="none"
+        className="flex flex-col overflow-hidden"
+      >
         <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="min-w-0">
             <h3 className="text-lg font-bold text-gray-900 m-0">
@@ -68,8 +71,7 @@ export default function AppearanceSettingsPage() {
               Control spacing across builder panels and lists.
             </p>
           </div>
-          <select
-            className="w-full md:w-48 py-2.5 px-4 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all shadow-sm"
+          <Select
             value={density}
             onChange={(event) => setDensity(event.target.value)}
             aria-label="Interface density"
@@ -79,7 +81,7 @@ export default function AppearanceSettingsPage() {
                 {option.label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="p-6 md:p-8 border-t border-gray-100 flex items-center justify-between gap-6">
@@ -91,27 +93,12 @@ export default function AppearanceSettingsPage() {
               Limit animations and transitions across the app shell.
             </p>
           </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={reduceMotion}
-            className={[
-              'settings-toggle shrink-0 relative inline-flex h-7 w-12 items-center rounded-full border transition-colors duration-200',
-              reduceMotion
-                ? 'bg-emerald-600 border-emerald-600'
-                : 'bg-gray-200 border-gray-200',
-            ].join(' ')}
-            onClick={() => setReduceMotion((value) => !value)}
-          >
-            <span
-              className={[
-                'inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200',
-                reduceMotion ? 'translate-x-6' : 'translate-x-1',
-              ].join(' ')}
-            />
-          </button>
+          <Toggle
+            checked={reduceMotion}
+            onChange={() => setReduceMotion((value) => !value)}
+          />
         </div>
-      </section>
-    </div>
+      </Card>
+    </SettingsPageShell>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import FieldError from '../../components/FieldError.jsx';
+import { Button, Card, Input, SettingsPageShell } from '../../components/ui/index.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import {
   deleteAvatar,
@@ -7,13 +7,9 @@ import {
   uploadAvatar,
 } from '../../services/authService.js';
 import {
-  fieldClass,
   getApiErrorMessage,
   validateSettingsFields,
 } from '../../utils/formValidation.js';
-
-const baseFieldClass =
-  'w-full py-2.5 px-4 rounded-xl border border-gray-300 bg-gray-50/50 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all shadow-sm';
 
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 const ALLOWED_AVATAR_TYPES = new Set([
@@ -164,16 +160,10 @@ export default function ProfileSettingsPage() {
   const avatarUrl = user?.avatarUrl || '';
 
   return (
-    <div className="space-y-8 max-w-3xl">
-      <header>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight m-0">
-          Profile
-        </h2>
-        <p className="text-base text-gray-500 mt-2 mb-0 leading-relaxed">
-          Update the name, email, and photo shown across WebStructura.
-        </p>
-      </header>
-
+    <SettingsPageShell
+      title="Profile"
+      description="Update the name, email, and photo shown across WebStructura."
+    >
       {success ? (
         <p
           className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm p-4 rounded-xl m-0"
@@ -189,7 +179,7 @@ export default function ProfileSettingsPage() {
         </p>
       ) : null}
 
-      <div className="settings-photo-section bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col sm:flex-row sm:items-center gap-6">
+      <Card className="settings-photo-section flex flex-col sm:flex-row sm:items-center gap-6">
         <div
           className="settings-avatar w-24 h-24 rounded-full bg-emerald-50 border-4 border-white shadow-md flex items-center justify-center text-3xl font-bold text-emerald-700 overflow-hidden shrink-0 ring-1 ring-gray-100"
           aria-hidden={avatarUrl ? undefined : true}
@@ -214,68 +204,56 @@ export default function ProfileSettingsPage() {
             onChange={handlePhotoChange}
             disabled={avatarBusy}
           />
-          <button
-            type="button"
-            className="inline-flex items-center justify-center py-2 px-4 rounded-xl border border-gray-300 bg-white text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={handlePhotoButtonClick}
             disabled={avatarBusy}
           >
             {avatarBusy ? 'Uploading…' : 'Change photo'}
-          </button>
-          <button
-            type="button"
-            className="text-sm font-medium text-gray-500 hover:text-rose-600 transition-colors disabled:opacity-40"
+          </Button>
+          <Button
+            variant="ghost"
             onClick={handleRemovePhoto}
             disabled={avatarBusy || !avatarUrl}
           >
             Remove
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
 
-      <form
-        className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
+      <Card
+        as="form"
+        className="space-y-6"
         onSubmit={handleProfileSubmit}
         noValidate
       >
-        <label className="block space-y-2">
-          <span className="text-sm font-bold text-gray-700">Display name</span>
-          <input
-            className={fieldClass(baseFieldClass, Boolean(fieldErrors.name))}
-            name="name"
-            type="text"
-            autoComplete="name"
-            value={form.name}
-            onChange={handleChange}
-            disabled={submitting || avatarBusy}
-            aria-invalid={fieldErrors.name ? true : undefined}
-          />
-          <FieldError message={fieldErrors.name} />
-        </label>
-
-        <label className="block space-y-2">
-          <span className="text-sm font-bold text-gray-700">Email</span>
-          <input
-            className={fieldClass(baseFieldClass, Boolean(fieldErrors.email))}
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={form.email}
-            onChange={handleChange}
-            disabled={submitting || avatarBusy}
-            aria-invalid={fieldErrors.email ? true : undefined}
-          />
-          <FieldError message={fieldErrors.email} />
-        </label>
-
-        <button
-          type="submit"
-          className="inline-flex items-center justify-center py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-600/20 transition-all duration-200 hover:-translate-y-0.5 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+        <Input
+          label="Display name"
+          name="name"
+          type="text"
+          autoComplete="name"
+          value={form.name}
+          onChange={handleChange}
           disabled={submitting || avatarBusy}
-        >
+          error={fieldErrors.name || ''}
+        />
+
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          value={form.email}
+          onChange={handleChange}
+          disabled={submitting || avatarBusy}
+          error={fieldErrors.email || ''}
+        />
+
+        <Button type="submit" className="mt-2" disabled={submitting || avatarBusy}>
           {submitting ? 'Saving…' : 'Save changes'}
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Card>
+    </SettingsPageShell>
   );
 }
