@@ -1,6 +1,6 @@
 /* App styles consume design tokens from theme.css.
  * Colors/spacing/type live in CSS variables and can be overridden
- * at runtime with applyTheme(json) / useTheme(json).
+ * at runtime with applyTheme(json).
  */
 
 * {

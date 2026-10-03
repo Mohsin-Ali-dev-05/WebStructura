@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, ScrollRestoration, useLocation, useNavigate } from "react-router-dom";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import AuthLink from "../components/AuthLink.jsx";
 import DocumentTitle from "../components/DocumentTitle.jsx";
@@ -354,6 +354,10 @@ export default function MainLayout() {
   return (
     <div className={shellClass}>
       <DocumentTitle />
+      <ScrollRestoration />
+      <a href="#main-content" className="skip-to-content">
+        Skip to content
+      </a>
       {!isBuilder && !isAuth && (
         <header
           className={[
@@ -436,9 +440,12 @@ export default function MainLayout() {
       )}
 
       {isProjectForm ? (
-        <Outlet />
+        <main id="main-content" className="site-main site-main--project-form">
+          <Outlet />
+        </main>
       ) : (
         <main
+          id="main-content"
           className={
             isBuilder
               ? "site-main site-main--builder"

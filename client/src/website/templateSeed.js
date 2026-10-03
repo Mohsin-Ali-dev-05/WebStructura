@@ -1371,9 +1371,3 @@ export const TEMPLATE_SEED = [
     },
   },
 ];
-
-export function getSeedTemplateById(id) {
-  return TEMPLATE_SEED.find((template) => template.id === id) || null;
-}
-
-export default TEMPLATE_SEED;

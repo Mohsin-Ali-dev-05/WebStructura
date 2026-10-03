@@ -2,7 +2,7 @@
  * WebStructura Design System — Design Tokens
  * --------------------------------------
  * All values use CSS custom properties so React can override them at runtime
- * via applyTheme(json) / useTheme(json) by setting the same variable names
+ * via applyTheme(json) by setting the same variable names
  * on :root or any scoped element.
  *
  * Color channels are stored as HSL components (without hsl()) so alpha can

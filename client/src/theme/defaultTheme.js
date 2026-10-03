@@ -1,6 +1,6 @@
 /**
  * Default theme JSON — mirrors theme.css tokens.
- * Pass a partial object to applyTheme() / useTheme() to override.
+ * Pass a partial object to applyTheme() to override.
  *
  * Color values may be:
  * - HSL channels: "175 72% 26%"

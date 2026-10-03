@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import AuthLink from '../components/AuthLink.jsx';
 
 export default function NotFoundPage() {
   return (
@@ -22,10 +23,22 @@ export default function NotFoundPage() {
       <Link
         to="/"
         className="mt-10 inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-600/20 transition-all duration-200 hover:-translate-y-0.5"
+        title="Return to the WebStructura home page"
       >
         <ArrowLeft className="h-4 w-4" aria-hidden="true" />
         Back to home
       </Link>
+
+      <p className="mt-6 text-sm text-gray-400">
+        Looking for your projects?{' '}
+        <AuthLink
+          to="/dashboard"
+          className="text-emerald-600 hover:text-emerald-700 font-medium"
+          title="Open your dashboard (sign in required)"
+        >
+          Go to dashboard
+        </AuthLink>
+      </p>
     </div>
   );
 }

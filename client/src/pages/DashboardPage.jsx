@@ -6,7 +6,6 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { deleteProject, listProjects } from '../services/projectService.js';
 import { formatDate } from '../utils/formatDate.js';
 import { getApiErrorMessage } from '../utils/formValidation.js';
-import workspaceVisual from '../assets/workspace.jpg';
 
 function PlusIcon({ className = 'w-4 h-4' }) {
   return (
@@ -135,7 +134,7 @@ export default function DashboardPage() {
       {!loading && (!projects || projects.length === 0) && (
         <div className="dashboard-empty-stack flex flex-col items-center justify-center gap-6 mt-4 mb-8">
           <img
-            src={workspaceVisual}
+            src="/images/hero-dashboard.jpg"
             alt="WebStructura AI Workspace"
             className="dashboard-workspace-visual w-full max-w-2xl mx-auto h-auto object-contain rounded-2xl shadow-sm border border-gray-100"
           />

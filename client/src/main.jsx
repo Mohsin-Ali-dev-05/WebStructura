@@ -14,6 +14,7 @@ import './styles/theme.css';
 import './styles/index.css';
 import './styles/ui-preferences.css';
 import './styles/auth-gate.css';
+import './styles/a11y.css';
 
 applyTheme(DEFAULT_THEME);
 applyUiPreferences(loadUiPreferences());
