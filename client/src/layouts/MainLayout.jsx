@@ -152,7 +152,9 @@ function NavDropdown({ label, items, mobile = false, onNavigate }) {
         aria-controls={menuId}
         onFocus={() => setOpen(true)}
         onBlur={(event) => {
-          if (!event.currentTarget.parentElement?.contains(event.relatedTarget)) {
+          if (
+            !event.currentTarget.parentElement?.contains(event.relatedTarget)
+          ) {
             setOpen(false);
           }
         }}
@@ -296,11 +298,7 @@ export default function MainLayout() {
 
   const publicLinksMobile = (
     <>
-      <Link
-        to="/"
-        className={navLinkClass}
-        onClick={() => setMenuOpen(false)}
-      >
+      <Link to="/" className={navLinkClass} onClick={() => setMenuOpen(false)}>
         Home
       </Link>
       <NavDropdown
@@ -457,7 +455,7 @@ export default function MainLayout() {
                 alt="WebStructura"
                 className="h-8 w-auto object-contain"
               />
-              <span className="brand-wordmark text-gray-900 group-hover:text-emerald-700 transition-colors">
+              <span className="brand-wordmark group-hover:text-emerald-700 transition-colors">
                 WebStructura
               </span>
             </Link>
@@ -731,7 +729,6 @@ export default function MainLayout() {
           </div>
         </footer>
       )}
-
 
       <ConfirmDialog
         open={logoutOpen}
