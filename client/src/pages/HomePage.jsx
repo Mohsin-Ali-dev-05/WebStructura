@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import SystemStatus from '../components/SystemStatus.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -115,6 +116,23 @@ function StepMedia({ image, alt }) {
 
 export default function HomePage() {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.hash) {
+      return undefined;
+    }
+
+    const id = location.hash.slice(1);
+    const timer = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 50);
+
+    return () => window.clearTimeout(timer);
+  }, [location.hash, location.pathname]);
 
   return (
     <div className="landing landing-saas bg-brand-canvas">
@@ -183,7 +201,10 @@ export default function HomePage() {
         </ul>
       </section>
 
-      <section className="landing-section landing-bento pt-8 pb-10 lg:pt-12 lg:pb-16">
+      <section
+        id="features"
+        className="landing-section landing-bento pt-8 pb-10 lg:pt-12 lg:pb-16"
+      >
         <h2 className="tracking-tight text-3xl md:text-4xl font-extrabold text-brand-text mb-2">
           Built for serious builders
         </h2>

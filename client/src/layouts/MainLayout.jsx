@@ -82,114 +82,6 @@ function ChevronIcon({ className = "w-4 h-4 opacity-80" }) {
   );
 }
 
-const FEATURES_LINKS = [
-  { label: "How it works", to: "/#how-it-works" },
-  { label: "Templates", to: "/templates" },
-  { label: "Live preview", to: "/about" },
-];
-
-const RESOURCES_LINKS = [
-  { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
-  { label: "Privacy Policy", to: "/privacy" },
-  { label: "Terms of Service", to: "/terms" },
-];
-
-function NavDropdown({ label, items, mobile = false, onNavigate }) {
-  const [open, setOpen] = useState(false);
-  const menuId = useId();
-
-  if (mobile) {
-    return (
-      <div className="nav-dropdown nav-dropdown--mobile w-full">
-        <button
-          type="button"
-          className="nav-dropdown-trigger flex w-full items-center justify-between gap-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors py-2"
-          aria-expanded={open}
-          aria-controls={menuId}
-          onClick={() => setOpen((value) => !value)}
-        >
-          <span>{label}</span>
-          <ChevronIcon
-            className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          />
-        </button>
-        <div
-          id={menuId}
-          className={`nav-dropdown-panel-mobile overflow-hidden transition-all duration-200 ${
-            open ? "max-h-64 opacity-100 mt-1" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="flex flex-col gap-1 pl-3 border-l border-gray-200">
-            {items.map((item) => (
-              <Link
-                key={item.to + item.label}
-                to={item.to}
-                className="block py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors"
-                onClick={() => {
-                  setOpen(false);
-                  if (typeof onNavigate === "function") {
-                    onNavigate();
-                  }
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="nav-dropdown group relative">
-      <button
-        type="button"
-        className="nav-dropdown-trigger inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors"
-        aria-expanded={open}
-        aria-haspopup="menu"
-        aria-controls={menuId}
-        onFocus={() => setOpen(true)}
-        onBlur={(event) => {
-          if (
-            !event.currentTarget.parentElement?.contains(event.relatedTarget)
-          ) {
-            setOpen(false);
-          }
-        }}
-        onClick={() => setOpen((value) => !value)}
-      >
-        <span>{label}</span>
-        <ChevronIcon className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" />
-      </button>
-      <div
-        id={menuId}
-        role="menu"
-        className={`nav-dropdown-panel absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-100 py-1 z-50 transition-all duration-200 origin-top ${
-          open
-            ? "opacity-100 visible translate-y-0 pointer-events-auto"
-            : "opacity-0 invisible -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto"
-        }`}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-      >
-        {items.map((item) => (
-          <Link
-            key={item.to + item.label}
-            to={item.to}
-            role="menuitem"
-            className="nav-dropdown-item block px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-            onClick={() => setOpen(false)}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function MainLayout() {
   const { isAuthenticated, user, logout, loading } = useAuth();
   const location = useLocation();
@@ -285,8 +177,18 @@ export default function MainLayout() {
       <Link to="/" className={navLinkClass}>
         Home
       </Link>
-      <NavDropdown label="Features" items={FEATURES_LINKS} />
-      <NavDropdown label="Resources" items={RESOURCES_LINKS} />
+      <Link to="/#features" className={navLinkClass}>
+        Features
+      </Link>
+      <Link to="/#how-it-works" className={navLinkClass}>
+        How it works
+      </Link>
+      <Link to="/#faq" className={navLinkClass}>
+        FAQ
+      </Link>
+      <Link to="/templates" className={navLinkClass}>
+        Templates
+      </Link>
       <Link to="/about" className={navLinkClass}>
         About
       </Link>
@@ -301,18 +203,34 @@ export default function MainLayout() {
       <Link to="/" className={navLinkClass} onClick={() => setMenuOpen(false)}>
         Home
       </Link>
-      <NavDropdown
-        label="Features"
-        items={FEATURES_LINKS}
-        mobile
-        onNavigate={() => setMenuOpen(false)}
-      />
-      <NavDropdown
-        label="Resources"
-        items={RESOURCES_LINKS}
-        mobile
-        onNavigate={() => setMenuOpen(false)}
-      />
+      <Link
+        to="/#features"
+        className={navLinkClass}
+        onClick={() => setMenuOpen(false)}
+      >
+        Features
+      </Link>
+      <Link
+        to="/#how-it-works"
+        className={navLinkClass}
+        onClick={() => setMenuOpen(false)}
+      >
+        How it works
+      </Link>
+      <Link
+        to="/#faq"
+        className={navLinkClass}
+        onClick={() => setMenuOpen(false)}
+      >
+        FAQ
+      </Link>
+      <Link
+        to="/templates"
+        className={navLinkClass}
+        onClick={() => setMenuOpen(false)}
+      >
+        Templates
+      </Link>
       <Link
         to="/about"
         className={navLinkClass}
@@ -334,9 +252,6 @@ export default function MainLayout() {
     <>
       <Link to="/dashboard" className={navLinkClass}>
         Dashboard
-      </Link>
-      <Link to="/templates" className={navLinkClass}>
-        Templates
       </Link>
       <Link to="/settings" className={`${navLinkClass} md:hidden`}>
         Settings
