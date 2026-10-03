@@ -967,6 +967,49 @@ p {
 }
 
 @media (max-width: 767px) {
+  .site-header-bar.h-20 {
+    height: 3.5rem;
+  }
+
+  .site-header-bar.px-6 {
+    padding-inline: 1rem;
+  }
+
+  .site-header .brand-wordmark {
+    font-size: 1.35rem;
+  }
+
+  .site-header .gap-3 {
+    gap: 0.5rem;
+  }
+
+  .site-nav--mobile {
+    padding-top: 0.5rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .site-nav--mobile.px-6,
+  .site-header .site-nav--mobile {
+    padding-inline: 1rem;
+  }
+
+  .site-nav--mobile a,
+  .site-nav--mobile button {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* Avatar-only account control in the compact top bar */
+  .site-header-mobile-actions .account-menu-name,
+  .site-header-mobile-actions .account-menu-chevron {
+    display: none;
+  }
+
+  .site-header-mobile-actions .account-menu-trigger {
+    gap: 0;
+    padding: 0.15rem;
+  }
+
   .site-header .md\:hidden {
     display: inline-flex;
   }
@@ -999,6 +1042,14 @@ p {
 
   .site-header .site-nav--mobile {
     display: none !important;
+  }
+
+  .account-menu-name {
+    display: inline;
+  }
+
+  .account-menu-chevron {
+    display: inline-flex;
   }
 }
 

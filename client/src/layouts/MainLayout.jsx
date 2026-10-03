@@ -386,10 +386,12 @@ export default function MainLayout() {
         onClick={() => setAccountMenuOpen((open) => !open)}
       >
         <AccountAvatar avatarUrl={avatarUrl} initials={initials} />
-        <span className="text-sm font-medium text-gray-900 hidden sm:inline">
+        <span className="account-menu-name text-sm font-medium text-gray-900">
           {displayName}
         </span>
-        <ChevronIcon />
+        <span className="account-menu-chevron" aria-hidden="true">
+          <ChevronIcon />
+        </span>
       </button>
 
       {accountMenuOpen ? (
@@ -423,19 +425,6 @@ export default function MainLayout() {
     </div>
   );
 
-  const logoutButton = (
-    <button
-      type="button"
-      className="text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-all"
-      onClick={() => {
-        setMenuOpen(false);
-        setLogoutOpen(true);
-      }}
-    >
-      Log out
-    </button>
-  );
-
   return (
     <div className={shellClass}>
       {!isBuilder && !isAuth && (
@@ -460,16 +449,19 @@ export default function MainLayout() {
               </span>
             </Link>
 
-            <button
-              type="button"
-              className="site-nav-toggle md:hidden ml-auto shrink-0"
-              aria-expanded={menuOpen}
-              aria-controls="primary-menu"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              onClick={() => setMenuOpen((open) => !open)}
-            >
-              <MenuIcon open={menuOpen} />
-            </button>
+            <div className="site-header-mobile-actions md:hidden ml-auto flex items-center gap-1.5 shrink-0">
+              {!loading && isAuthenticated ? accountDropdown : null}
+              <button
+                type="button"
+                className="site-nav-toggle"
+                aria-expanded={menuOpen}
+                aria-controls="primary-menu"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                onClick={() => setMenuOpen((open) => !open)}
+              >
+                <MenuIcon open={menuOpen} />
+              </button>
+            </div>
 
             <nav
               className="site-nav site-nav--desktop hidden md:flex items-center gap-6 lg:gap-8 flex-1 min-w-0 justify-end"
@@ -509,16 +501,7 @@ export default function MainLayout() {
           >
             {publicLinksMobile}
 
-            {!loading && isAuthenticated ? (
-              <>
-                <div className="flex items-center gap-3 py-1 text-sm font-medium text-gray-900">
-                  <AccountAvatar avatarUrl={avatarUrl} initials={initials} />
-                  <span>{displayName}</span>
-                </div>
-                {authLinks}
-                {logoutButton}
-              </>
-            ) : null}
+            {!loading && isAuthenticated ? authLinks : null}
 
             {!loading && !isAuthenticated ? guestLinksMobile : null}
           </nav>
