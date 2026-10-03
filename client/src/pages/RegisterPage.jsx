@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import {
   fieldClass,
@@ -7,6 +7,7 @@ import {
   validateRegisterFields,
 } from '../utils/formValidation.js';
 import { startGoogleOAuth } from '../services/api.js';
+import { getAuthGateLabel } from '../utils/authGate.js';
 
 function GoogleIcon({ className = 'w-5 h-5' }) {
   return (
@@ -102,6 +103,7 @@ const passwordToggleBase =
 export default function RegisterPage() {
   const { register, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -114,8 +116,19 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const redirectTo =
+    (typeof location.state?.from === 'string' && location.state.from) ||
+    '/dashboard';
+  const authMessage =
+    typeof location.state?.authMessage === 'string'
+      ? location.state.authMessage
+      : '';
+  const authFeatureLabel = getAuthGateLabel(
+    typeof location.state?.from === 'string' ? location.state.from : '',
+  );
+
   if (!loading && isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to={redirectTo} replace />;
   }
 
   function handleChange(event) {
@@ -152,7 +165,7 @@ export default function RegisterPage() {
         email: form.email,
         password: form.password,
       });
-      navigate('/dashboard', { replace: true });
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       setError(getApiErrorMessage(err, 'Registration failed.'));
     } finally {
@@ -192,15 +205,37 @@ export default function RegisterPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center tracking-tight mb-2">
           Seconds to sign up!
         </h1>
-        <p className="text-sm text-gray-600 text-center mb-8">
+        <p className="text-sm text-gray-600 text-center mb-6">
           Already have an account?{' '}
           <Link
             to="/login"
+            state={
+              location.state?.from
+                ? {
+                    from: location.state.from,
+                    authMessage: location.state.authMessage,
+                  }
+                : undefined
+            }
             className="text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+            title="Sign in to your account"
           >
             Sign in
           </Link>
         </p>
+
+        {authMessage ? (
+          <div
+            className="auth-required-banner mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 leading-relaxed"
+            role="status"
+          >
+            <strong className="block font-semibold mb-0.5">
+              Create an account to continue
+            </strong>
+            {authMessage} After you join, we&apos;ll take you to{' '}
+            <span className="font-semibold">{authFeatureLabel}</span>.
+          </div>
+        ) : null}
 
         <button
           type="button"

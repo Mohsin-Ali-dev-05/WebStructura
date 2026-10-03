@@ -1,0 +1,8 @@
+/* Auth-required notice on Sign in / Register */
+.auth-required-banner {
+  text-align: left;
+}
+
+.auth-standalone .auth-required-banner strong {
+  color: #065f46;
+}

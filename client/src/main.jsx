@@ -13,6 +13,7 @@ import { router } from './router.jsx';
 import './styles/theme.css';
 import './styles/index.css';
 import './styles/ui-preferences.css';
+import './styles/auth-gate.css';
 
 applyTheme(DEFAULT_THEME);
 applyUiPreferences(loadUiPreferences());

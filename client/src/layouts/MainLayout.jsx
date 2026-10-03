@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
+import AuthLink from "../components/AuthLink.jsx";
+import DocumentTitle from "../components/DocumentTitle.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function getUserInitials(name) {
@@ -174,25 +176,33 @@ export default function MainLayout() {
 
   const publicLinksDesktop = (
     <>
-      <Link to="/" className={navLinkClass}>
+      <Link to="/" className={navLinkClass} title="WebStructura home">
         Home
       </Link>
-      <Link to="/#features" className={navLinkClass}>
+      <Link to="/#features" className={navLinkClass} title="Product features">
         Features
       </Link>
-      <Link to="/#how-it-works" className={navLinkClass}>
+      <Link
+        to="/#how-it-works"
+        className={navLinkClass}
+        title="How WebStructura works"
+      >
         How it works
       </Link>
-      <Link to="/#faq" className={navLinkClass}>
+      <Link to="/#faq" className={navLinkClass} title="Frequently asked questions">
         FAQ
       </Link>
-      <Link to="/templates" className={navLinkClass}>
+      <AuthLink
+        to="/templates"
+        className={navLinkClass}
+        title="Browse website templates (sign in required)"
+      >
         Templates
-      </Link>
-      <Link to="/about" className={navLinkClass}>
+      </AuthLink>
+      <Link to="/about" className={navLinkClass} title="About WebStructura">
         About
       </Link>
-      <Link to="/contact" className={navLinkClass}>
+      <Link to="/contact" className={navLinkClass} title="Contact the team">
         Contact
       </Link>
     </>
@@ -224,13 +234,14 @@ export default function MainLayout() {
       >
         FAQ
       </Link>
-      <Link
+      <AuthLink
         to="/templates"
         className={navLinkClass}
+        title="Browse website templates (sign in required)"
         onClick={() => setMenuOpen(false)}
       >
         Templates
-      </Link>
+      </AuthLink>
       <Link
         to="/about"
         className={navLinkClass}
@@ -342,6 +353,7 @@ export default function MainLayout() {
 
   return (
     <div className={shellClass}>
+      <DocumentTitle />
       {!isBuilder && !isAuth && (
         <header
           className={[
@@ -460,20 +472,22 @@ export default function MainLayout() {
                     </Link>
                   </li>
                   <li>
-                    <Link
+                    <AuthLink
                       to="/templates"
                       className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      title="Browse website templates (sign in required)"
                     >
                       Templates
-                    </Link>
+                    </AuthLink>
                   </li>
                   <li>
-                    <Link
+                    <AuthLink
                       to="/dashboard"
                       className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      title="Open your dashboard (sign in required)"
                     >
                       Dashboard
-                    </Link>
+                    </AuthLink>
                   </li>
                 </ul>
               </div>
@@ -500,12 +514,13 @@ export default function MainLayout() {
                     </Link>
                   </li>
                   <li>
-                    <Link
+                    <AuthLink
                       to="/projects/new"
                       className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      title="Create a project (sign in required)"
                     >
                       Create project
-                    </Link>
+                    </AuthLink>
                   </li>
                 </ul>
               </div>
@@ -532,12 +547,13 @@ export default function MainLayout() {
                     </Link>
                   </li>
                   <li>
-                    <Link
+                    <AuthLink
                       to="/settings"
                       className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      title="Account settings (sign in required)"
                     >
                       Settings
-                    </Link>
+                    </AuthLink>
                   </li>
                 </ul>
               </div>

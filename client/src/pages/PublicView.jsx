@@ -16,6 +16,12 @@ export default function PublicView() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    document.title = name
+      ? `${name} · WebStructura`
+      : 'Shared site · WebStructura';
+  }, [name]);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function load() {

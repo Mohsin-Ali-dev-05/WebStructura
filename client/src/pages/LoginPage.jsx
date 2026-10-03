@@ -7,6 +7,7 @@ import {
   validateLoginFields,
 } from '../utils/formValidation.js';
 import { startGoogleOAuth } from '../services/api.js';
+import { getAuthGateLabel } from '../utils/authGate.js';
 
 function GoogleIcon({ className = 'w-5 h-5' }) {
   return (
@@ -117,6 +118,13 @@ export default function LoginPage() {
   const redirectTo =
     (typeof location.state?.from === 'string' && location.state.from) ||
     '/dashboard';
+  const authMessage =
+    typeof location.state?.authMessage === 'string'
+      ? location.state.authMessage
+      : '';
+  const authFeatureLabel = getAuthGateLabel(
+    typeof location.state?.from === 'string' ? location.state.from : '',
+  );
 
   if (!loading && isAuthenticated) {
     return <Navigate to={redirectTo} replace />;
@@ -192,21 +200,45 @@ export default function LoginPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center tracking-tight mb-2">
           Welcome back
         </h1>
-        <p className="text-sm text-gray-600 text-center mb-8">
+        <p className="text-sm text-gray-600 text-center mb-6">
           Don&apos;t have an account?{' '}
           <Link
             to="/register"
+            state={
+              location.state?.from
+                ? {
+                    from: location.state.from,
+                    authMessage: location.state.authMessage,
+                  }
+                : undefined
+            }
             className="text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+            title="Create a free WebStructura account"
           >
             Sign up
           </Link>
         </p>
+
+        {authMessage ? (
+          <div
+            className="auth-required-banner mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 leading-relaxed"
+            role="status"
+          >
+            <strong className="block font-semibold mb-0.5">
+              Sign in required
+            </strong>
+            {authMessage}{' '}
+            After you sign in, we&apos;ll take you to{' '}
+            <span className="font-semibold">{authFeatureLabel}</span>.
+          </div>
+        ) : null}
 
         <button
           type="button"
           className="w-full border border-gray-300 rounded-md py-2.5 flex items-center justify-center gap-2 hover:bg-gray-50 text-gray-700 font-medium transition-colors bg-white cursor-pointer disabled:opacity-60"
           onClick={() => startGoogleOAuth()}
           disabled={submitting}
+          title="Continue with your Google account"
         >
           <GoogleIcon />
           <span>Continue with Google</span>
