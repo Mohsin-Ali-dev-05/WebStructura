@@ -9140,54 +9140,187 @@ html:has(.app-shell--builder) body {
 
 .preview-site-shell--in-bezel {
   max-height: none;
+  width: 100% !important;
+  max-width: none !important;
   height: 100% !important;
-  border-radius: 1.75rem;
+  border-radius: 0;
   box-shadow: none;
   border: none;
   margin: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  background: #fff;
 }
 
 .preview-phone-bezel {
-  width: 399px;
+  width: min(375px, 100%);
   max-width: 100%;
+  height: auto;
   max-height: 100%;
-  height: 100%;
-  border: 12px solid #111827;
+  aspect-ratio: 375 / 812;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  background: #fff;
+  border: 8px solid #0f172a;
   border-radius: 2.5rem;
-  background: #111827;
   box-shadow:
-    0 10px 15px -3px rgba(15, 23, 42, 0.12),
-    0 4px 6px -4px rgba(15, 23, 42, 0.08);
+    0 25px 50px -12px rgb(15 23 42 / 0.1),
+    0 0 0 1px rgb(15 23 42 / 0.05);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 0;
-  margin-bottom: 0;
+  flex-shrink: 1;
+  box-sizing: border-box;
 }
 
-.preview-phone-notch {
+.preview-phone-bezel.w-\[375px\] {
+  width: min(375px, 100%);
+}
+
+.preview-phone-bezel.max-w-full {
+  max-width: 100%;
+}
+
+.preview-phone-bezel.h-\[812px\] {
+  height: auto;
+  max-height: 100%;
+  aspect-ratio: 375 / 812;
+}
+
+.preview-phone-bezel.rounded-\[2\.5rem\] {
+  border-radius: 2.5rem;
+}
+
+.preview-phone-bezel.border-\[8px\] {
+  border-width: 8px;
+}
+
+.preview-phone-bezel.border-slate-900 {
+  border-color: #0f172a;
+}
+
+.preview-phone-bezel.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgb(15 23 42 / 0.1);
+}
+
+.preview-phone-bezel.shadow-slate-900\/10 {
+  box-shadow:
+    0 25px 50px -12px rgb(15 23 42 / 0.1),
+    0 0 0 1px rgb(15 23 42 / 0.05);
+}
+
+.preview-phone-bezel.ring-1 {
+  box-shadow:
+    0 25px 50px -12px rgb(15 23 42 / 0.1),
+    0 0 0 1px rgb(15 23 42 / 0.05);
+}
+
+.preview-phone-bezel.ring-slate-900\/5 {
+  /* combined with shadow above */
+}
+
+.preview-phone-bezel .absolute.top-0 {
   position: absolute;
-  top: 0.55rem;
+  top: 0;
   left: 50%;
-  z-index: 3;
-  width: 28%;
-  max-width: 5.5rem;
-  height: 0.55rem;
+  z-index: 50;
+  width: 8rem;
+  height: 1.5rem;
   transform: translateX(-50%);
-  border-radius: 999px;
-  background: #0a0a0a;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background: #0f172a;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
   pointer-events: none;
+}
+
+.preview-phone-bezel .w-32 {
+  width: 8rem;
+}
+
+.preview-phone-bezel .h-6 {
+  height: 1.5rem;
+}
+
+.preview-phone-bezel .-translate-x-1\/2 {
+  transform: translateX(-50%);
+}
+
+.preview-phone-bezel .left-1\/2 {
+  left: 50%;
+}
+
+.preview-phone-bezel .rounded-b-2xl {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.preview-phone-bezel .z-50 {
+  z-index: 50;
+}
+
+.preview-phone-bezel .bg-slate-900 {
+  background: #0f172a;
 }
 
 .preview-phone-bezel .preview-site-shell {
   width: 100% !important;
-  max-width: none;
+  max-width: none !important;
   flex: 1;
   min-height: 0;
+  min-width: 0;
+}
+
+.preview-site-shell.max-w-6xl,
+.preview-canvas-frame.max-w-6xl {
+  max-width: 72rem;
+}
+
+.preview-site-shell.shadow-xl,
+.preview-canvas-frame.shadow-xl {
+  box-shadow:
+    0 20px 25px -5px rgb(15 23 42 / 0.05),
+    0 8px 10px -6px rgb(15 23 42 / 0.05);
+}
+
+.preview-site-shell.shadow-slate-900\/5,
+.preview-canvas-frame.shadow-slate-900\/5 {
+  box-shadow:
+    0 20px 25px -5px rgb(15 23 42 / 0.05),
+    0 8px 10px -6px rgb(15 23 42 / 0.05),
+    0 0 0 1px rgb(0 0 0 / 0.02);
+}
+
+.preview-site-shell.ring-1,
+.preview-canvas-frame.ring-1 {
+  /* ring combined via box-shadow when paired with ring-black */
+}
+
+.preview-site-shell.ring-black\/\[0\.02\],
+.preview-canvas-frame.ring-black\/\[0\.02\] {
+  box-shadow:
+    0 20px 25px -5px rgb(15 23 42 / 0.05),
+    0 8px 10px -6px rgb(15 23 42 / 0.05),
+    0 0 0 1px rgb(0 0 0 / 0.02);
+}
+
+.preview-site-shell.border-slate-200,
+.preview-canvas-frame.border-slate-200 {
+  border-color: #e2e8f0;
+}
+
+.preview-site-shell.transition-all,
+.preview-canvas-frame.transition-all {
+  transition-property: width, max-width, border-radius, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease;
+}
+
+.preview-viewport .w-\[768px\] {
+  width: 768px;
+  max-width: 100%;
 }
 
 .preview-isolation {
@@ -9196,6 +9329,7 @@ html:has(.app-shell--builder) body {
   background: #fff;
   min-height: 100%;
   width: 100%;
+  min-width: 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -9203,6 +9337,11 @@ html:has(.app-shell--builder) body {
 .preview-isolation .ws-site {
   min-height: 100%;
   width: 100%;
+  min-width: 0;
+}
+
+.preview-isolation.min-w-0 {
+  min-width: 0;
 }
 
 .preview-viewport .mx-auto {
@@ -9234,7 +9373,12 @@ html:has(.app-shell--builder) body {
 }
 
 .preview-viewport .w-\[375px\] {
-  width: 375px;
+  width: min(375px, 100%);
+  max-width: 100%;
+}
+
+.preview-viewport .preview-phone-bezel.w-\[375px\] {
+  width: min(375px, 100%);
 }
 
 .preview-viewport .w-\[768px\] {
