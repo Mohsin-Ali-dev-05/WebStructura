@@ -1,10 +1,16 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import {
+  Button,
   Card,
   Select,
   SettingsPageShell,
   Toggle,
 } from '../../components/ui/index.js';
+import {
+  loadUiPreferences,
+  saveUiPreferences,
+} from '../../preferences/uiPreferences.js';
 
 const NOTIFICATION_ITEMS = [
   {
@@ -30,22 +36,35 @@ const NOTIFICATION_ITEMS = [
 ];
 
 export default function NotificationsSettingsPage() {
+  const initial = loadUiPreferences().notifications;
   const [prefs, setPrefs] = useState({
-    product: true,
-    project: true,
-    security: true,
-    marketing: false,
+    product: Boolean(initial.product),
+    project: Boolean(initial.project),
+    security: Boolean(initial.security),
+    marketing: Boolean(initial.marketing),
   });
-  const [digest, setDigest] = useState('weekly');
+  const [digest, setDigest] = useState(initial.digest || 'weekly');
 
   function togglePref(id) {
     setPrefs((current) => ({ ...current, [id]: !current[id] }));
   }
 
+  function handleSave() {
+    const current = loadUiPreferences();
+    saveUiPreferences({
+      ...current,
+      notifications: {
+        ...prefs,
+        digest,
+      },
+    });
+    toast.success('Notification preferences saved on this device.');
+  }
+
   return (
     <SettingsPageShell
       title="Notifications"
-      description="Choose what WebStructura can email you. These controls are demo-only for now."
+      description="Choose what you want to hear about. Preferences are stored on this device (no email service is required)."
     >
       <Card
         as="section"
@@ -84,7 +103,8 @@ export default function NotificationsSettingsPage() {
         <div className="min-w-0">
           <h3 className="text-base font-bold text-gray-900 m-0">Email digest</h3>
           <p className="text-sm text-gray-500 mt-1 mb-0 leading-relaxed">
-            Digests summarize project activity when you are not signed in.
+            Digests summarize project activity when you are away. Delivery needs
+            mail setup later; your choice is still saved here.
           </p>
         </div>
         <Select
@@ -98,6 +118,12 @@ export default function NotificationsSettingsPage() {
           <option value="off">Off</option>
         </Select>
       </Card>
+
+      <div className="pt-1">
+        <Button type="button" onClick={handleSave}>
+          Save notification preferences
+        </Button>
+      </div>
     </SettingsPageShell>
   );
 }

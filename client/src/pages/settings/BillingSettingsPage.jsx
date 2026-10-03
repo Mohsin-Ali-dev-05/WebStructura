@@ -11,7 +11,7 @@ export default function BillingSettingsPage() {
   return (
     <SettingsPageShell
       title="Billing"
-      description="Review your plan and payment details. Billing is a placeholder until payments are connected."
+      description="WebStructura runs on the Free local plan. Paid upgrades need a payment provider and are not connected yet."
     >
       <Card as="section" className="relative">
         <div className="flex items-center justify-between gap-3">
@@ -28,7 +28,8 @@ export default function BillingSettingsPage() {
           <span className="text-lg font-medium text-gray-400"> / month</span>
         </p>
         <p className="text-base text-gray-500 mt-2 mb-0 leading-relaxed">
-          Everything you need to design and publish starter sites.
+          Everything you need to design and publish starter sites on this
+          machine.
         </p>
 
         <ul className="m-0 p-0 list-none space-y-3 mt-6 pt-6 border-t border-gray-100">
@@ -55,7 +56,7 @@ export default function BillingSettingsPage() {
             Payment method
           </dt>
           <dd className="text-lg font-semibold text-gray-900 m-0">
-            No card on file
+            Not required
           </dd>
         </div>
         <div>
@@ -67,9 +68,22 @@ export default function BillingSettingsPage() {
       </Card>
 
       <div className="pt-4 flex flex-col sm:flex-row gap-4">
-        <Button>Upgrade plan</Button>
-        <Button variant="secondary">Manage payment</Button>
+        <Button type="button" disabled title="Requires a payment provider">
+          Upgrade plan
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          disabled
+          title="Requires a payment provider"
+        >
+          Manage payment
+        </Button>
       </div>
+      <p className="text-sm text-gray-500 m-0 leading-relaxed">
+        Upgrade and payment management stay disabled until a billing provider is
+        connected. The Free plan already covers local building and export.
+      </p>
     </SettingsPageShell>
   );
 }

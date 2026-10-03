@@ -108,6 +108,34 @@ export function validateResetPasswordFields({ password, confirmPassword }) {
   return errors;
 }
 
+export function validateChangePasswordFields({
+  currentPassword,
+  newPassword,
+  confirmPassword,
+}) {
+  const errors = {};
+
+  if (!currentPassword) {
+    errors.currentPassword = 'Current password is required.';
+  }
+
+  if (!newPassword) {
+    errors.newPassword = 'New password is required.';
+  } else if (newPassword.length < MIN_PASSWORD_LENGTH) {
+    errors.newPassword = `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
+  } else if (currentPassword && newPassword === currentPassword) {
+    errors.newPassword = 'New password must be different from your current password.';
+  }
+
+  if (!confirmPassword) {
+    errors.confirmPassword = 'Please confirm your new password.';
+  } else if (newPassword !== confirmPassword) {
+    errors.confirmPassword = 'Passwords do not match.';
+  }
+
+  return errors;
+}
+
 export function validateSettingsFields({ name, email }) {
   const errors = {};
 

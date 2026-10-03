@@ -3,12 +3,20 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext.jsx';
+import {
+  applyUiPreferences,
+  bindSystemThemeListener,
+  loadUiPreferences,
+} from './preferences/uiPreferences.js';
 import { applyTheme, DEFAULT_THEME } from './theme/index.js';
 import { router } from './router.jsx';
 import './styles/theme.css';
 import './styles/index.css';
+import './styles/ui-preferences.css';
 
 applyTheme(DEFAULT_THEME);
+applyUiPreferences(loadUiPreferences());
+bindSystemThemeListener();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

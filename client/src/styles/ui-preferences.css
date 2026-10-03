@@ -1,0 +1,125 @@
+/* UI preferences applied from Settings → Appearance / Notifications */
+
+.settings-unavailable-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.settings-page button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+html[data-ws-reduce-motion='true'] *,
+html[data-ws-reduce-motion='true'] *::before,
+html[data-ws-reduce-motion='true'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-ws-density='compact'] .settings-page {
+  font-size: 0.935rem;
+}
+
+html[data-ws-density='compact'] .settings-panel {
+  padding: 0.85rem 1rem !important;
+}
+
+html[data-ws-density='compact'] .builder-toolbar {
+  padding-block: 0.45rem;
+}
+
+html[data-ws-density='compact'] .dashboard-page .project-item {
+  padding: 1rem 1.15rem;
+}
+
+html[data-ws-theme='dark'] body {
+  color: #e2e8f0;
+  background-color: #0b1220;
+}
+
+html[data-ws-theme='dark'] .app-shell,
+html[data-ws-theme='dark'] .min-h-screen.flex.flex-col.bg-gray-50 {
+  background-color: #0b1220;
+  color: #e2e8f0;
+}
+
+html[data-ws-theme='dark'] .site-header {
+  background: rgb(15 23 42 / 0.9);
+  border-bottom-color: #1e293b;
+  color: #e2e8f0;
+}
+
+html[data-ws-theme='dark'] .brand-wordmark {
+  color: #6ee7b7;
+}
+
+html[data-ws-theme='dark'] .site-nav a,
+html[data-ws-theme='dark'] .site-header .text-gray-600,
+html[data-ws-theme='dark'] .site-header .text-gray-900 {
+  color: #cbd5e1;
+}
+
+html[data-ws-theme='dark'] .settings-panel,
+html[data-ws-theme='dark'] .bg-white,
+html[data-ws-theme='dark'] .dashboard-page .project-item,
+html[data-ws-theme='dark'] .project-form-card,
+html[data-ws-theme='dark'] .builder-toolbar {
+  background: #111827 !important;
+  border-color: #1f2937 !important;
+  color: #e2e8f0;
+}
+
+html[data-ws-theme='dark'] .text-gray-900,
+html[data-ws-theme='dark'] .settings-page .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+html[data-ws-theme='dark'] .text-gray-700,
+html[data-ws-theme='dark'] .text-gray-600,
+html[data-ws-theme='dark'] .text-gray-500,
+html[data-ws-theme='dark'] .settings-page .text-gray-500,
+html[data-ws-theme='dark'] .settings-page .text-gray-600,
+html[data-ws-theme='dark'] .settings-page .text-gray-700 {
+  color: #94a3b8 !important;
+}
+
+html[data-ws-theme='dark'] .border-gray-100,
+html[data-ws-theme='dark'] .border-gray-200,
+html[data-ws-theme='dark'] .settings-page .border-gray-100 {
+  border-color: #1f2937 !important;
+}
+
+html[data-ws-theme='dark'] .bg-gray-50,
+html[data-ws-theme='dark'] .settings-page input,
+html[data-ws-theme='dark'] .settings-page textarea,
+html[data-ws-theme='dark'] .settings-page select {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+html[data-ws-theme='dark'] .site-footer {
+  background: #0f172a;
+  border-top-color: #1e293b;
+  color: #94a3b8;
+}
+
+html[data-ws-theme='dark'] .project-form-page {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16, 185, 129, 0.14), transparent 55%),
+    linear-gradient(180deg, #0b1220 0%, #111827 100%);
+}

@@ -7,6 +7,7 @@ import { AppError } from '../utils/AppError.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { formatUser } from '../utils/formatUser.js';
 import {
+  assertPasswordStrength,
   isValidEmail,
   normalizeEmail,
   requireBody,
@@ -69,6 +70,58 @@ export const updateCurrentUser = asyncHandler(async (req, res) => {
     data: {
       user: formatUser(user),
     },
+  });
+});
+
+/**
+ * PUT /api/users/me/password
+ * Protected — change password for local accounts (no cloud dependency).
+ */
+export const changeCurrentUserPassword = asyncHandler(async (req, res) => {
+  if (!req.user?._id) {
+    throw new AppError('Authentication required.', 401);
+  }
+
+  const body = requireBody(req);
+  const { currentPassword, newPassword } = body;
+
+  if (!currentPassword || typeof currentPassword !== 'string') {
+    throw new AppError('Current password is required.', 400);
+  }
+
+  assertPasswordStrength(newPassword, 'New password');
+
+  if (currentPassword === newPassword) {
+    throw new AppError(
+      'New password must be different from your current password.',
+      400,
+    );
+  }
+
+  const user = await User.findById(req.user._id).select('+passwordHash');
+
+  if (!user) {
+    throw new AppError('User not found.', 404);
+  }
+
+  if (!user.passwordHash) {
+    throw new AppError(
+      'This account signs in with Google and has no password to change.',
+      400,
+    );
+  }
+
+  const matches = await user.comparePassword(currentPassword);
+  if (!matches) {
+    throw new AppError('Current password is incorrect.', 401);
+  }
+
+  user.passwordHash = await User.hashPassword(newPassword);
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Password updated successfully.',
   });
 });
 

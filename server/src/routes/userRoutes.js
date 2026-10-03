@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  changeCurrentUserPassword,
   deleteCurrentUserAvatar,
   updateCurrentUser,
   uploadCurrentUserAvatar,
@@ -13,6 +14,7 @@ import {
 const router = Router();
 
 router.put('/me', protect, updateCurrentUser);
+router.put('/me/password', protect, changeCurrentUserPassword);
 
 router.post(
   '/me/avatar',

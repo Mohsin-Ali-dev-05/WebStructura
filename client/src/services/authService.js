@@ -45,6 +45,13 @@ export function deleteAvatar() {
   });
 }
 
+export function changePassword({ currentPassword, newPassword }) {
+  return apiRequest('/api/users/me/password', {
+    method: 'PUT',
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+}
+
 export function forgotPassword({ email }) {
   return apiRequest('/api/auth/forgotpassword', {
     method: 'POST',
