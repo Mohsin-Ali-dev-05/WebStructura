@@ -239,16 +239,7 @@ export default function AiAssistantPanel({
             <h2 className="text-xl font-bold tracking-tight text-gray-900 m-0">
               Copywriting Copilot
             </h2>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span
-                className="relative flex h-1.5 w-1.5"
-                aria-hidden="true"
-              >
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              </span>
-              Local AI
-            </span>
+            
           </div>
           {typeof onClose === 'function' ? (
             <button
@@ -326,7 +317,7 @@ export default function AiAssistantPanel({
             </div>
             <textarea
               id="ai-prompt"
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm text-gray-900 placeholder-gray-400 resize-none h-28 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner transition-all resize-none min-h-[100px] disabled:cursor-not-allowed disabled:opacity-70"
               value={prompt}
               onChange={(event) => setPrompt(event.target.value)}
               placeholder="Describe the tone and message you want…"
@@ -338,7 +329,7 @@ export default function AiAssistantPanel({
         <button
           type="submit"
           disabled={busy || !prompt.trim()}
-          className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-xl px-4 py-3 text-sm font-semibold shadow-sm shadow-emerald-600/20 hover:shadow-md hover:-translate-y-0.5 transition-all active:scale-[0.98] active:translate-y-0 flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <SparklesIcon className="w-4 h-4" />
           {isLoading ? 'Generating…' : 'Generate section copy'}

@@ -7758,6 +7758,67 @@ html:has(.app-shell--builder) body {
   background-color: #059669;
 }
 
+.ai-assistant-panel .bg-emerald-50 {
+  background-color: #ecfdf5;
+}
+
+.ai-assistant-panel .text-emerald-600 {
+  color: #059669;
+}
+
+.ai-assistant-panel .text-emerald-700 {
+  color: #047857;
+}
+
+.ai-assistant-panel .ring-1 {
+  box-shadow: 0 0 0 1px rgb(16 185 129 / 0.2);
+}
+
+.ai-assistant-panel .ring-emerald-500\/20 {
+  --tw-ring-color: rgb(16 185 129 / 0.2);
+}
+
+.ai-assistant-panel .px-2\.5 {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.ai-assistant-panel .py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.ai-assistant-panel .text-\[10px\] {
+  font-size: 10px;
+  line-height: 1rem;
+}
+
+.ai-assistant-panel .tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.ai-assistant-panel .uppercase {
+  text-transform: uppercase;
+}
+
+.ai-assistant-panel .inline-flex {
+  display: inline-flex;
+}
+
+.ai-assistant-panel .animate-pulse {
+  animation: ai-soft-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes ai-soft-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
 .ai-assistant-panel .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -8034,14 +8095,14 @@ html:has(.app-shell--builder) body {
   appearance: none;
   box-sizing: border-box;
   width: 100%;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   font-size: 0.875rem;
   line-height: 1.4;
-  color: #111827;
-  box-shadow: none;
+  color: #334155;
+  box-shadow: inset 0 1px 2px 0 rgb(15 23 42 / 0.05);
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -8050,7 +8111,32 @@ html:has(.app-shell--builder) body {
 
 .ai-assistant-panel textarea {
   resize: none;
-  min-height: 7rem;
+  min-height: 100px;
+}
+
+.ai-assistant-panel textarea.bg-slate-50 {
+  background-color: #f8fafc;
+}
+
+.ai-assistant-panel textarea.border-slate-200 {
+  border-color: #e2e8f0;
+}
+
+.ai-assistant-panel textarea.text-slate-700 {
+  color: #334155;
+}
+
+.ai-assistant-panel textarea.placeholder-slate-400::placeholder,
+.ai-assistant-panel .placeholder-slate-400::placeholder {
+  color: #94a3b8;
+}
+
+.ai-assistant-panel textarea.shadow-inner {
+  box-shadow: inset 0 1px 2px 0 rgb(15 23 42 / 0.05);
+}
+
+.ai-assistant-panel textarea.min-h-\[100px\] {
+  min-height: 100px;
 }
 
 .ai-assistant-panel select:focus,
@@ -8063,25 +8149,25 @@ html:has(.app-shell--builder) body {
   outline: none;
 }
 
-.ai-assistant-panel .focus\:ring-2:focus {
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.45);
-}
-
-.ai-assistant-panel .focus\:ring-emerald-500:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.45);
-}
-
+.ai-assistant-panel textarea:focus,
 .ai-assistant-panel .focus\:bg-white:focus {
   background-color: #fff;
 }
 
-.ai-assistant-panel .focus\:border-transparent:focus {
-  border-color: transparent;
+.ai-assistant-panel textarea:focus,
+.ai-assistant-panel .focus\:ring-2:focus {
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
-.ai-assistant-panel .focus\:ring-offset-2:focus {
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #10b981;
+.ai-assistant-panel .focus\:ring-emerald-500\/20:focus,
+.ai-assistant-panel textarea.focus\:ring-emerald-500\/20:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.ai-assistant-panel .focus\:border-emerald-500:focus,
+.ai-assistant-panel textarea.focus\:border-emerald-500:focus {
+  border-color: #10b981;
 }
 
 .ai-assistant-panel .transition-all {
@@ -8165,6 +8251,49 @@ html:has(.app-shell--builder) body {
 
 .ai-assistant-panel .space-y-5 > * + * {
   margin-top: 1.25rem;
+}
+
+.ai-assistant-panel button.rounded-xl.bg-gradient-to-b,
+.ai-assistant-panel button.bg-gradient-to-b.from-emerald-500 {
+  border: none;
+  width: 100%;
+  background-image: linear-gradient(to bottom, #10b981, #059669);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow:
+    0 1px 2px 0 rgb(15 23 42 / 0.05),
+    0 4px 10px -2px rgb(5 150 105 / 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition:
+    background-image 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.ai-assistant-panel button.bg-gradient-to-b.from-emerald-500:hover:not(:disabled),
+.ai-assistant-panel button.hover\:from-emerald-400:hover:not(:disabled) {
+  background-image: linear-gradient(to bottom, #34d399, #10b981);
+  box-shadow:
+    0 4px 6px -1px rgb(15 23 42 / 0.1),
+    0 2px 4px -2px rgb(5 150 105 / 0.25);
+  transform: translateY(-0.125rem);
+}
+
+.ai-assistant-panel button.active\:scale-\[0\.98\]:active:not(:disabled) {
+  transform: scale(0.98) translateY(0);
+}
+
+.ai-assistant-panel button.shadow-emerald-600\/20 {
+  box-shadow:
+    0 1px 2px 0 rgb(15 23 42 / 0.05),
+    0 4px 10px -2px rgb(5 150 105 / 0.2);
 }
 
 .ai-assistant-panel button.rounded-xl.bg-emerald-600 {
