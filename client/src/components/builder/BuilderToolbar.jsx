@@ -141,8 +141,8 @@ export default function BuilderToolbar({
       <header
         className={
           isPreviewMode
-            ? 'builder-toolbar builder-toolbar--zen'
-            : 'builder-toolbar'
+            ? 'builder-toolbar builder-toolbar--zen bg-gradient-to-r from-emerald-950 to-emerald-900 border-b border-emerald-800/50 shadow-sm'
+            : 'builder-toolbar bg-gradient-to-r from-emerald-950 to-emerald-900 border-b border-emerald-800/50 shadow-sm'
         }
       >
         <div className="builder-toolbar-left">
@@ -205,7 +205,7 @@ export default function BuilderToolbar({
               </Link>
               <button
                 type="button"
-                className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="bg-white text-emerald-900 hover:bg-slate-50 px-4 py-1.5 rounded-md font-medium text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 onClick={() => setIsExportModalOpen(true)}
                 disabled={exporting}
                 aria-busy={exporting}
@@ -237,13 +237,22 @@ export default function BuilderToolbar({
             </button>
           ) : (
             <span
-              className="builder-save-status inline-flex items-center gap-2 bg-white/10 text-white/90 rounded-full px-3 py-1.5 text-sm font-medium"
+              className="builder-save-status bg-emerald-900/50 text-emerald-400 border border-emerald-700/50 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
               aria-live="polite"
             >
-              <span
-                className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-3.5 h-3.5 shrink-0"
                 aria-hidden="true"
-              />
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                  clipRule="evenodd"
+                />
+              </svg>
               {saving ? 'Saving…' : 'Saved'}
             </span>
           )}

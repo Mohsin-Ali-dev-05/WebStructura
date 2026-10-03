@@ -14,8 +14,8 @@ export default function LivePreviewPanel({
     <section
       className={
         zenMode
-          ? 'live-preview-panel live-preview-panel--zen'
-          : 'live-preview-panel'
+          ? 'live-preview-panel live-preview-panel--zen flex flex-col w-full h-full min-h-0'
+          : 'live-preview-panel flex flex-col w-full h-full min-h-0 gap-0'
       }
       aria-label="Live website preview"
     >

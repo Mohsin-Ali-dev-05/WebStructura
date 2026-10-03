@@ -416,8 +416,8 @@ export default function BuilderPage() {
     <div
       className={
         isPreviewMode
-          ? 'builder-workspace builder-workspace--zen h-screen w-screen overflow-hidden flex flex-col'
-          : 'builder-workspace h-screen w-screen overflow-hidden flex flex-col'
+          ? 'builder-workspace builder-workspace--zen h-screen w-screen overflow-hidden flex flex-col bg-slate-50'
+          : 'builder-workspace h-screen w-screen overflow-hidden flex flex-col bg-slate-50'
       }
     >
       <UnsavedChangesGuard isDirty={isDirty} />
@@ -507,7 +507,7 @@ export default function BuilderPage() {
             compactTab === 'preview' ? 'is-compact-active' : '',
             isPreviewMode
               ? 'builder-pane--preview-zen bg-white'
-              : 'bg-gray-100',
+              : 'bg-slate-100 inset-shadow-sm flex items-center justify-center p-8',
           ]
             .filter(Boolean)
             .join(' ')}
