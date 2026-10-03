@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Clock, Mail, MapPin } from 'lucide-react';
+import { useId, useState } from 'react';
+import { Link } from 'react-router-dom';
 import FieldError from '../components/FieldError.jsx';
 import { submitContact } from '../services/contactService.js';
 import {
@@ -8,10 +8,17 @@ import {
   validateContactFields,
 } from '../utils/formValidation.js';
 
-const baseFieldClass =
-  'w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm text-gray-900';
+const baseFieldClass = 'contact-field';
+
+const TOPICS = [
+  'Product or builder questions',
+  'Account access and billing',
+  'Bug reports and export issues',
+  'Partnerships or press',
+];
 
 export default function ContactPage() {
+  const formId = useId();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -65,92 +72,95 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="contact-page min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50/50 py-16 px-6 lg:px-12 max-w-7xl mx-auto">
-      <header className="contact-header mb-10 max-w-2xl">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 mb-6 shadow-sm">
-          💬 Get in Touch
-        </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
-          Talk with the WebStructura team
-        </h1>
-        <p className="text-lg text-gray-600 mt-3 leading-relaxed max-w-2xl">
-          Questions about your workspace, billing, or a project? Send a note —
-          we typically reply within one business day.
+    <div className="contact-page">
+      <header className="contact-header">
+        <p className="contact-kicker">Contact</p>
+        <h1>Talk with the WebStructura team</h1>
+        <p className="contact-lead">
+          Questions about your workspace, a stuck export, billing, or getting
+          started? Send a short note — we usually reply within one business day.
         </p>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-w-0 max-w-5xl">
-        <aside className="contact-aside w-full lg:w-72 shrink-0 space-y-4">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/50 p-6 space-y-3">
-            <div className="flex items-center gap-2.5">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                <Mail className="h-4 w-4" aria-hidden="true" />
-              </span>
-              <h2 className="text-lg font-bold text-gray-900 m-0 tracking-tight">
-                Support email
-              </h2>
-            </div>
-            <a
-              className="text-emerald-700 font-medium hover:text-emerald-800 transition-colors"
-              href="mailto:support@webstructura.app"
-            >
-              support@webstructura.app
-            </a>
-            <p className="text-sm text-gray-500 m-0 leading-relaxed">
-              Product help, account access, and general inquiries.
-            </p>
-          </div>
-
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/50 p-6 space-y-3">
-            <div className="flex items-center gap-2.5">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                <MapPin className="h-4 w-4" aria-hidden="true" />
-              </span>
-              <h2 className="text-lg font-bold text-gray-900 m-0 tracking-tight">
-                Location
-              </h2>
-            </div>
-            <p className="text-emerald-700 font-medium m-0 leading-relaxed">
-              Remote-first · Serving teams worldwide
-            </p>
-            <div className="flex items-start gap-2 text-sm text-gray-500 leading-relaxed">
-              <Clock
-                className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600"
-                aria-hidden="true"
-              />
-              <p className="m-0">Hours: Mon–Fri, 9:00–17:00 UTC</p>
-            </div>
-          </div>
-        </aside>
-
-        <section className="contact-form-panel flex-1 min-w-0 w-full max-w-xl bg-white/90 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-2xl shadow-gray-100/50 p-8 md:p-10">
-          <h2 className="text-xl font-bold text-gray-900 m-0 mb-6 tracking-tight">
-            Send a message
+      <div className="contact-layout">
+        <aside className="contact-aside" aria-labelledby="contact-details-heading">
+          <h2 id="contact-details-heading" className="contact-aside-title">
+            Direct details
           </h2>
 
+          <dl className="contact-details">
+            <div>
+              <dt>Email</dt>
+              <dd>
+                <a href="mailto:support@webstructura.app">
+                  support@webstructura.app
+                </a>
+              </dd>
+              <dd className="contact-detail-note">
+                Best for product help, account access, and general questions.
+              </dd>
+            </div>
+            <div>
+              <dt>Hours</dt>
+              <dd>Monday–Friday, 9:00–17:00 UTC</dd>
+              <dd className="contact-detail-note">
+                Remote-first team. Weekend messages are answered on the next
+                business day.
+              </dd>
+            </div>
+            <div>
+              <dt>What to include</dt>
+              <dd className="contact-detail-note">
+                A clear subject in your first sentence, your account email if
+                relevant, and steps to reproduce if you hit a bug.
+              </dd>
+            </div>
+          </dl>
+
+          <div className="contact-topics">
+            <h3>Common topics</h3>
+            <ul>
+              {TOPICS.map((topic) => (
+                <li key={topic}>{topic}</li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="contact-privacy-note">
+            Need the legal side? Read our{' '}
+            <Link to="/privacy">Privacy Policy</Link> and{' '}
+            <Link to="/terms">Terms of Service</Link>.
+          </p>
+        </aside>
+
+        <section
+          className="contact-form-panel"
+          aria-labelledby="contact-form-heading"
+        >
+          <h2 id="contact-form-heading">Send a message</h2>
+          <p className="contact-form-lead">
+            Fill this in and we will get back to the email you provide.
+          </p>
+
           {success ? (
-            <p
-              className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm p-4 rounded-xl mb-4"
-              role="status"
-            >
-              Thanks — your message was sent. We&apos;ll get back to you soon.
+            <p className="contact-success" role="status">
+              Thanks — your message was sent. We&apos;ll reply to your email
+              soon.
             </p>
           ) : null}
 
           {error ? (
-            <p className="error text-sm mb-4" role="alert">
+            <p className="contact-error" role="alert">
               {error}
             </p>
           ) : null}
 
-          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-gray-900">Name</span>
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
+            <div className="contact-field-group">
+              <label htmlFor={`${formId}-name`}>Name</label>
               <input
-                className={fieldClass(
-                  baseFieldClass,
-                  Boolean(fieldErrors.name),
-                )}
+                id={`${formId}-name`}
+                className={fieldClass(baseFieldClass, Boolean(fieldErrors.name))}
                 name="name"
                 type="text"
                 autoComplete="name"
@@ -158,13 +168,17 @@ export default function ContactPage() {
                 onChange={handleChange}
                 disabled={submitting}
                 aria-invalid={fieldErrors.name ? true : undefined}
+                aria-describedby={
+                  fieldErrors.name ? `${formId}-name-error` : undefined
+                }
               />
-              <FieldError message={fieldErrors.name} />
-            </label>
+              <FieldError id={`${formId}-name-error`} message={fieldErrors.name} />
+            </div>
 
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-gray-900">Email</span>
+            <div className="contact-field-group">
+              <label htmlFor={`${formId}-email`}>Email</label>
               <input
+                id={`${formId}-email`}
                 className={fieldClass(
                   baseFieldClass,
                   Boolean(fieldErrors.email),
@@ -176,31 +190,44 @@ export default function ContactPage() {
                 onChange={handleChange}
                 disabled={submitting}
                 aria-invalid={fieldErrors.email ? true : undefined}
+                aria-describedby={
+                  fieldErrors.email ? `${formId}-email-error` : undefined
+                }
               />
-              <FieldError message={fieldErrors.email} />
-            </label>
+              <FieldError
+                id={`${formId}-email-error`}
+                message={fieldErrors.email}
+              />
+            </div>
 
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-gray-900">
-                Message
-              </span>
+            <div className="contact-field-group">
+              <label htmlFor={`${formId}-message`}>Message</label>
               <textarea
+                id={`${formId}-message`}
                 className={`${fieldClass(
                   baseFieldClass,
                   Boolean(fieldErrors.message),
-                )} min-h-[140px] resize-y`}
+                )} contact-textarea`}
                 name="message"
+                rows={6}
                 value={form.message}
                 onChange={handleChange}
                 disabled={submitting}
                 aria-invalid={fieldErrors.message ? true : undefined}
+                aria-describedby={
+                  fieldErrors.message ? `${formId}-message-error` : undefined
+                }
+                placeholder="What do you need help with?"
               />
-              <FieldError message={fieldErrors.message} />
-            </label>
+              <FieldError
+                id={`${formId}-message-error`}
+                message={fieldErrors.message}
+              />
+            </div>
 
             <button
               type="submit"
-              className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-600/20 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="contact-submit"
               disabled={submitting}
             >
               {submitting ? 'Sending…' : 'Send message'}

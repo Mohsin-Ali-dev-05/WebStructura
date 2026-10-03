@@ -1,98 +1,170 @@
 import { Link } from 'react-router-dom';
+import AuthLink from '../components/AuthLink.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
-const VALUES = [
+const AUDIENCES = [
   {
-    title: 'Clarity first',
-    body: 'Every project starts with structured content so teams ship sites that stay editable and understandable.',
+    title: 'Founders and small teams',
+    body: 'Ship a polished marketing site without waiting on a full design sprint or wrestling with a blank Figma file.',
   },
   {
-    title: 'Crafted defaults',
-    body: 'Premium layouts and design tokens out of the box — less fiddling, more shipping polished pages.',
+    title: 'Freelancers and agencies',
+    body: 'Start from a solid layout, customize copy and sections with clients, then export real React instead of a locked template.',
   },
   {
-    title: 'Builder freedom',
-    body: 'Compose sections, preview live, and iterate without fighting a rigid page builder.',
+    title: 'Developers who want speed',
+    body: 'Keep structure in JSON, preview across devices, and leave with code you can actually maintain.',
   },
 ];
 
-function ValueAccentIcon({ index }) {
-  const paths = [
-    'M12 3l2.4 4.86L20 9.27l-4 3.9.94 5.5L12 16.9 7.06 18.67 8 13.17l-4-3.9 5.6-1.41L12 3z',
-    'M4 7a3 3 0 013-3h10a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7zm5 2v6m6-6v6M9 9h6',
-    'M12 4v2m0 12v2M4 12H2m20 0h-2m-2.34-6.34l1.42-1.42M6.34 17.66l-1.42 1.42m0-14.14l1.42 1.42m12.9 12.9l1.42 1.42M8 12a4 4 0 108 0 4 4 0 00-8 0z',
-  ];
+const STEPS = [
+  {
+    num: '01',
+    title: 'Start from a template or a blank canvas',
+    body: 'Pick an industry layout or begin empty. Name the project, set a short description, and open the builder.',
+  },
+  {
+    num: '02',
+    title: 'Compose sections and preview live',
+    body: 'Add Navbar, Hero, About, Pricing, and the rest. Edit props in place and check desktop, tablet, and mobile as you go.',
+  },
+  {
+    num: '03',
+    title: 'Draft with local AI when you need a head start',
+    body: 'Optional Ollama assistance stays on your machine. Use it for first-pass copy or structure, then refine by hand.',
+  },
+  {
+    num: '04',
+    title: 'Export React you can deploy',
+    body: 'Download a clean project bundle ready for Vercel, Netlify, or your own host — not a proprietary page dump.',
+  },
+];
 
-  return (
-    <div
-      className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/20"
-      aria-hidden="true"
-    >
-      <svg
-        className="h-6 w-6"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d={paths[index % paths.length]} />
-      </svg>
-    </div>
-  );
-}
+const PRINCIPLES = [
+  {
+    title: 'Readable structure',
+    body: 'Sites are composed from clear sections and props, so teammates can edit without reverse-engineering the layout.',
+  },
+  {
+    title: 'Honest defaults',
+    body: 'Templates and design tokens are meant to look finished first, then get customized — not the other way around.',
+  },
+  {
+    title: 'Local-first assistance',
+    body: 'When AI helps, it should respect privacy. Drafts can run locally so prompts and project content stay with you.',
+  },
+];
 
 export default function AboutPage() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="about-page min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50/50 py-16 px-6 lg:px-12 max-w-7xl mx-auto">
-      <section className="about-hero max-w-4xl">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 mb-6 shadow-sm">
-          ✨ About WebStructura
-        </div>
-        <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
-          We help teams turn structured content into finished websites
+    <div className="about-page">
+      <section className="about-hero" aria-labelledby="about-heading">
+        <p className="about-kicker">About</p>
+        <h1 id="about-heading" className="about-brand">
+          WebStructura
         </h1>
-        <p className="about-lead text-xl text-gray-600 mt-4 leading-relaxed max-w-3xl">
-          WebStructura is a MERN website builder built for clarity: manage
-          projects, compose sections, and preview live — with room for local AI
-          drafting when you need a head start.
+        <p className="about-tagline">
+          A practical website builder for people who need a real site — not another
+          demo that falls apart after export.
         </p>
+        <p className="about-lead">
+          We built WebStructura so founders, freelancers, and small teams can go from
+          idea to editable React pages without fighting boilerplate, opaque builders,
+          or cloud AI lock-in. Create a project, compose sections, preview live, and
+          leave with code you own.
+        </p>
+        <figure className="about-hero-media">
+          <img
+            src="/images/hero-dashboard.jpg"
+            alt="WebStructura workspace showing projects and a live site preview"
+            width={1600}
+            height={900}
+            loading="eager"
+            decoding="async"
+          />
+          <figcaption>
+            Project workspace and live preview — the same flow you use after signup.
+          </figcaption>
+        </figure>
       </section>
 
-      <section
-        className="about-section mt-16"
-        aria-labelledby="about-values-heading"
-      >
-        <h2
-          id="about-values-heading"
-          className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight"
-        >
-          What we value
-        </h2>
-        <p className="text-gray-600 mt-2 mb-8 max-w-2xl leading-relaxed">
-          Principles that shape every product decision we ship.
-        </p>
+      <section className="about-section" aria-labelledby="about-story-heading">
+        <h2 id="about-story-heading">Why we exist</h2>
+        <div className="about-prose">
+          <p>
+            Most website builders optimize for speed at the cost of control. You get a
+            pretty canvas, then hit a wall when you need clean code, offline AI, or a
+            layout that still makes sense six months later.
+          </p>
+          <p>
+            WebStructura takes the opposite path. Your site is structured content —
+            sections with clear props — rendered by responsive React components. That
+            means the editor stays understandable, previews stay honest, and exports
+            stay usable.
+          </p>
+          <p>
+            We are not trying to replace professional design systems for every company
+            on earth. We are trying to make the first serious version of a site faster
+            to ship, easier to edit, and safer to own.
+          </p>
+        </div>
+      </section>
 
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 list-none m-0 p-0">
-          {VALUES.map((value, index) => (
-            <li
-              key={value.title}
-              className="group bg-white/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-100 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:border-emerald-100 transition-all duration-300"
-            >
-              <ValueAccentIcon index={index} />
-              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors">
-                {value.title}
-              </h3>
-              <p className="m-0 text-gray-600 leading-relaxed">{value.body}</p>
+      <section className="about-section" aria-labelledby="about-audience-heading">
+        <h2 id="about-audience-heading">Who it is for</h2>
+        <p className="about-section-lead">
+          If you need a credible web presence and prefer software that stays
+          inspectable, you are in the right place.
+        </p>
+        <ul className="about-audience-list">
+          {AUDIENCES.map((item) => (
+            <li key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="about-cta relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-950 to-gray-900 text-white p-8 md:p-12 shadow-2xl mt-16 max-w-5xl">
+      <section className="about-section" aria-labelledby="about-steps-heading">
+        <h2 id="about-steps-heading">How a project actually moves</h2>
+        <p className="about-section-lead">
+          No mystery workflow — four steps from empty workspace to deployable React.
+        </p>
+        <ol className="about-steps">
+          {STEPS.map((step) => (
+            <li key={step.num}>
+              <span className="about-step-num" aria-hidden="true">
+                {step.num}
+              </span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="about-section" aria-labelledby="about-principles-heading">
+        <h2 id="about-principles-heading">What we care about</h2>
+        <p className="about-section-lead">
+          Product decisions follow a few simple rules. If something fights them, we
+          usually leave it out.
+        </p>
+        <ul className="about-principles">
+          {PRINCIPLES.map((item) => (
+            <li key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="about-cta" aria-labelledby="about-cta-heading">
         <div
           className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl"
           aria-hidden="true"
@@ -102,34 +174,28 @@ export default function AboutPage() {
           aria-hidden="true"
         />
         <div className="relative z-10">
-          <h2 className="text-2xl text-white md:text-3xl font-bold m-0 tracking-tight">
-            Ready to build your next site?
+          <h2 id="about-cta-heading" className="text-2xl text-white md:text-3xl font-bold m-0 tracking-tight">
+            Ready to start a real project?
           </h2>
           <p className="text-emerald-100 mt-3 mb-8 max-w-xl leading-relaxed">
-            Create a workspace, start a project, and preview a polished layout in
-            minutes.
+            Open a workspace, choose a template or blank canvas, and preview a
+            finished layout the same day.
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="about-cta-actions">
             {isAuthenticated ? (
-              <Link
-                className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-emerald-950 shadow-lg hover:shadow-emerald-500/25 hover:bg-emerald-50 transition-all duration-200"
+              <AuthLink
+                className="about-cta-primary"
                 to="/dashboard"
               >
                 Open dashboard
-              </Link>
+              </AuthLink>
             ) : (
               <>
-                <Link
-                  className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-emerald-950 shadow-lg hover:shadow-emerald-500/25 hover:bg-emerald-50 transition-all duration-200"
-                  to="/register"
-                >
-                  Start building
+                <Link className="about-cta-primary" to="/register">
+                  Create free account
                 </Link>
-                <Link
-                  className="inline-flex items-center justify-center rounded-xl border border-white/25 bg-white/5 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-emerald-500/25 hover:bg-white/10 transition-all duration-200"
-                  to="/contact"
-                >
-                  Contact us
+                <Link className="about-cta-secondary" to="/contact">
+                  Talk to us
                 </Link>
               </>
             )}

@@ -96,6 +96,38 @@ const FAQS = [
     q: 'Can I import my own components?',
     a: 'Currently, the system uses our curated library of premium components to guarantee responsive layouts, but custom component ingestion is on the roadmap.',
   },
+  {
+    q: 'Is the AI really local?',
+    a: 'Yes. When you use the AI assistant with Ollama, prompts and drafts stay on your machine. You can still build and edit projects without AI if you prefer a fully manual workflow.',
+  },
+  {
+    q: 'What happens if Ollama is not installed?',
+    a: 'The builder, templates, live preview, and export still work. AI drafting is optional — without Ollama you simply write and arrange sections yourself.',
+  },
+  {
+    q: 'Can I start from a template?',
+    a: 'Yes. The Template Gallery includes a blank canvas plus industry starters like SaaS, portfolio, cafe, storefront, real estate, and tech blog. You can rename the project and edit every section afterward.',
+  },
+  {
+    q: 'Will my site stay editable after I export?',
+    a: 'Exported projects are standard React. You can keep iterating in WebStructura or continue in your own editor — you are not locked into a proprietary runtime.',
+  },
+  {
+    q: 'Does WebStructura host my live website?',
+    a: 'WebStructura is focused on building and exporting. Deploy the exported React app to Vercel, Netlify, or your own server when you are ready to go live.',
+  },
+  {
+    q: 'Can I preview mobile and tablet layouts?',
+    a: 'Yes. The builder includes viewport previews so you can check desktop, tablet, and mobile before you export or share a project.',
+  },
+  {
+    q: 'Is there a free plan?',
+    a: 'You can create an account and start building without a paid subscription. Billing options may expand later; current workspace settings show where paid plans would appear.',
+  },
+  {
+    q: 'How do I get help if something breaks?',
+    a: 'Use the Contact page to reach support@webstructura.app. Include your account email and clear steps to reproduce — we typically reply within one business day.',
+  },
 ];
 
 function StepMedia({ image, alt }) {
