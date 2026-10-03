@@ -131,7 +131,7 @@
 
   /* —— Layout —— */
   --header-height: 4rem;
-  --container-max: 68.75rem; /* 1100px */
+  --container-max: 80rem;
 
   /* —— Legacy aliases (keep existing index.css working) —— */
   --ink: var(--text);

@@ -11,7 +11,7 @@ const SETTINGS_NAV = [
 
 export default function SettingsLayout() {
   return (
-    <div className="settings-page max-w-4xl mx-auto px-1 sm:px-0">
+    <div className="settings-page w-full">
       <header className="settings-header mb-4 md:mb-5">
         <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 m-0 tracking-normal">
           Settings
@@ -23,7 +23,7 @@ export default function SettingsLayout() {
 
       <div className="flex flex-col md:flex-row gap-3 md:gap-4 min-w-0 items-start">
         <nav
-          className="settings-nav flex flex-row md:flex-col gap-1 w-full md:w-40 shrink-0 overflow-x-auto pb-1 md:pb-0 -mx-1 px-1 md:mx-0 md:px-0"
+          className="settings-nav flex flex-row md:flex-col gap-1 w-full md:w-48 shrink-0 overflow-x-auto pb-1 md:pb-0 -mx-1 px-1 md:mx-0 md:px-0"
           aria-label="Settings sections"
         >
           {SETTINGS_NAV.map((item) => (
@@ -44,7 +44,7 @@ export default function SettingsLayout() {
           ))}
         </nav>
 
-        <section className="settings-panel flex-1 max-w-2xl w-full min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-4 md:p-5">
+        <section className="settings-panel flex-1 w-full min-w-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-4 md:p-5">
           <Outlet />
         </section>
       </div>

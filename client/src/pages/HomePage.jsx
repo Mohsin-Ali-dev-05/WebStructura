@@ -168,7 +168,7 @@ export default function HomePage() {
 
   return (
     <div className="landing landing-saas bg-brand-canvas">
-      <section className="landing-hero landing-hero--stacked relative overflow-hidden w-full rounded-b-[3rem] shadow-2xl flex flex-col items-center gap-8 pt-8 pb-10 px-4 md:px-6 lg:pt-12 lg:pb-12 lg:px-8">
+      <section className="landing-hero landing-hero--stacked relative overflow-hidden w-full rounded-b-[3rem] shadow-2xl flex flex-col items-center gap-8 pt-8 pb-10 px-6 lg:pt-12 lg:pb-12">
         <div className="landing-hero-copy w-full max-w-3xl min-w-0 px-4 md:px-0 box-border text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-6 backdrop-blur-md animate-fade-up">
             ✨ WebStructura 1.0 is Live
@@ -207,7 +207,7 @@ export default function HomePage() {
       </section>
 
       <section
-        className="landing-logo-cloud py-10 px-4 md:px-6"
+        className="landing-logo-cloud py-10 px-6"
         aria-label="Technology stack"
       >
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-gray-500 mb-6">
@@ -346,7 +346,7 @@ export default function HomePage() {
         <h2 className="tracking-tight text-3xl md:text-4xl font-extrabold text-brand-text mb-8">
           Frequently asked questions
         </h2>
-        <div className="faq-list flex flex-col gap-4 max-w-3xl">
+        <div className="faq-list flex flex-col gap-4 w-full">
           {FAQS.map((item) => (
             <details
               key={item.q}

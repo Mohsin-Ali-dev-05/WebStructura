@@ -463,7 +463,7 @@ export default function MainLayout() {
           className="site-footer site-footer--fat py-10 md:py-12 pb-32 md:pb-10 border-t border-gray-200 bg-gray-50"
           aria-label="Site footer"
         >
-          <div className="site-footer-inner site-footer-inner--fat w-full max-w-6xl mx-auto px-4 md:px-6">
+          <div className="site-footer-inner site-footer-inner--fat w-full max-w-7xl mx-auto px-4 md:px-6">
             <div className="site-footer-grid grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
               <div className="min-w-0">
                 <h3 className="text-sm font-semibold text-gray-900 tracking-wide mb-3">

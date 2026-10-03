@@ -59,7 +59,7 @@ export default function TemplateGallery() {
   }
 
   return (
-    <section className="template-gallery-page min-h-screen bg-gray-50/50 py-10 px-6 lg:px-8 max-w-[1600px] mx-auto">
+    <section className="template-gallery-page">
       <div className="page-header mb-12 pb-8 border-b border-gray-200 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="min-w-0">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 m-0">

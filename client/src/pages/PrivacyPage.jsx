@@ -4,7 +4,7 @@ export default function PrivacyPage() {
   const lastUpdated = 'October 1, 2026';
 
   return (
-    <div className="privacy-page min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50/50 py-16 px-6 flex flex-col items-center">
+    <div className="privacy-page">
       <header className="privacy-header max-w-3xl flex flex-col items-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200/60 mb-6 shadow-sm">
           🔒 Privacy &amp; Data
@@ -17,7 +17,7 @@ export default function PrivacyPage() {
         </p>
       </header>
 
-      <article className="privacy-document w-full max-w-4xl mt-12 bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/50 p-8 md:p-12 lg:p-16">
+      <article className="privacy-document w-full mt-12 bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/50 p-8 md:p-12 lg:p-16">
         <div className="space-y-8 text-gray-600 leading-relaxed">
           <p>
             This Privacy Policy explains how WebStructura collects, uses, and

@@ -4,7 +4,7 @@ import AuthLink from '../components/AuthLink.jsx';
 
 export default function NotFoundPage() {
   return (
-    <div className="not-found-page min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-50 via-white to-gray-50/50 px-6 text-center">
+    <div className="not-found-page min-h-screen flex flex-col items-center justify-center text-center">
       <div
         className="text-8xl md:text-[150px] font-black text-transparent bg-clip-text bg-gradient-to-br from-gray-200 to-gray-300 select-none drop-shadow-sm leading-none mb-6"
         aria-hidden="true"
