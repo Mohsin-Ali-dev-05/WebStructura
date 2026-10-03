@@ -29,7 +29,7 @@ export default function PreviewViewport({
   const desktopShellClass = [
     "preview-site-shell",
     "preview-canvas-frame",
-    "w-full max-w-6xl h-full bg-white rounded-xl shadow-xl shadow-slate-900/5 border border-slate-200 overflow-hidden ring-1 ring-black/[0.02] transition-all",
+    "w-full max-w-6xl h-full min-w-0 bg-white rounded-xl shadow-xl shadow-slate-900/5 border border-slate-200 overflow-hidden ring-1 ring-black/[0.02] transition-all",
     previewMode === "tablet" ? "w-[768px] max-w-full" : "",
   ]
     .filter(Boolean)

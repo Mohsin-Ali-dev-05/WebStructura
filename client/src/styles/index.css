@@ -9318,8 +9318,9 @@ html:has(.app-shell--builder) body {
   transition-timing-function: ease;
 }
 
-.preview-viewport .w-\[768px\] {
-  width: 768px;
+.preview-viewport .w-\[768px\],
+.preview-site-shell[data-device='tablet'].w-\[768px\] {
+  width: min(768px, 100%);
   max-width: 100%;
 }
 
@@ -9382,7 +9383,8 @@ html:has(.app-shell--builder) body {
 }
 
 .preview-viewport .w-\[768px\] {
-  width: 768px;
+  width: min(768px, 100%);
+  max-width: 100%;
 }
 
 .preview-page-shell {
