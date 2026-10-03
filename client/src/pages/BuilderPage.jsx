@@ -442,6 +442,20 @@ export default function BuilderPage() {
       ) : null}
 
       {!isPreviewMode ? (
+        <nav className="builder-page-nav" aria-label="Builder breadcrumb">
+          <Link to="/dashboard" className="builder-page-nav-link">
+            Dashboard
+          </Link>
+          <span className="builder-page-nav-sep" aria-hidden="true">
+            /
+          </span>
+          <span className="builder-page-nav-current">
+            {projectName.trim() || 'Untitled project'}
+          </span>
+        </nav>
+      ) : null}
+
+      {!isPreviewMode ? (
         <div
           className="builder-compact-tabs"
           role="tablist"

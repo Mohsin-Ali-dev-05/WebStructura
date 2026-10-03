@@ -141,29 +141,35 @@ export default function BuilderToolbar({
       <header
         className={
           isPreviewMode
-            ? 'builder-toolbar builder-toolbar--zen bg-gradient-to-r from-emerald-950 to-emerald-900 border-b border-emerald-800/50 shadow-sm'
-            : 'builder-toolbar bg-gradient-to-r from-emerald-950 to-emerald-900 border-b border-emerald-800/50 shadow-sm'
+            ? 'builder-toolbar builder-toolbar--zen'
+            : 'builder-toolbar'
         }
       >
         <div className="builder-toolbar-left">
-          <Link to="/" className="builder-brand" aria-label="WebStructura home">
-            <span className="brand-mark">W</span>
-            <span className="brand-text">WebStructura</span>
+          <Link
+            to="/"
+            className="builder-brand group shrink-0"
+            aria-label="WebStructura home"
+          >
+            <img
+              src="/images/logo.png"
+              alt=""
+              className="brand-logo h-8 w-auto object-contain"
+            />
+            <span className="brand-wordmark">WebStructura</span>
           </Link>
-          <span className="builder-toolbar-divider" aria-hidden="true" />
-          <Link to="/dashboard" className="builder-back-link">
-            ← Dashboard
-          </Link>
+        </div>
+
+        <div className="builder-toolbar-center">
           <label className="builder-name-field">
-            <span className="visually-hidden">Project name</span>
+            <span className="builder-name-label">Project title</span>
             <input
               type="text"
-              className="bg-transparent border-0 outline-none shadow-none rounded-md px-2 py-1.5 text-white font-semibold hover:bg-white/10 focus:bg-white/20 focus:outline-none transition-colors duration-200"
               value={projectName}
               onChange={(event) => onProjectNameChange(event.target.value)}
               placeholder="Untitled project"
               maxLength={100}
-              aria-label="Project name"
+              aria-label="Project title"
             />
           </label>
         </div>
@@ -177,35 +183,35 @@ export default function BuilderToolbar({
           ) : null}
 
           {!isPreviewMode ? (
-            <>
+            <div className="builder-toolbar-actions" role="group" aria-label="Project actions">
               <Link
-                className="builder-toolbar-link text-white/75 hover:text-white transition-colors duration-200"
+                className="builder-toolbar-btn builder-toolbar-btn--ghost"
                 to={`/view/${projectId}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                Share URL
+                Share
               </Link>
               <button
                 type="button"
-                className="builder-toolbar-link builder-toolbar-link--button text-white/75 hover:text-white transition-colors duration-200"
+                className="builder-toolbar-btn builder-toolbar-btn--ghost"
                 onClick={() => {
                   if (typeof onTogglePreview === 'function') {
                     onTogglePreview();
                   }
                 }}
               >
-                Full preview
+                Preview
               </button>
               <Link
-                className="builder-toolbar-link text-white/75 hover:text-white transition-colors duration-200"
+                className="builder-toolbar-btn builder-toolbar-btn--ghost"
                 to={`/projects/${projectId}/edit`}
               >
                 Settings
               </Link>
               <button
                 type="button"
-                className="bg-white text-emerald-900 hover:bg-slate-50 px-4 py-1.5 rounded-md font-medium text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="builder-toolbar-btn builder-toolbar-btn--secondary"
                 onClick={() => setIsExportModalOpen(true)}
                 disabled={exporting}
                 aria-busy={exporting}
@@ -214,7 +220,7 @@ export default function BuilderToolbar({
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className="w-4 h-4"
+                  className="builder-toolbar-btn-icon"
                   aria-hidden="true"
                 >
                   <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
@@ -222,40 +228,39 @@ export default function BuilderToolbar({
                 </svg>
                 {exporting ? 'Exporting…' : 'Export'}
               </button>
-            </>
+              {isDirty ? (
+                <button
+                  type="button"
+                  className="builder-toolbar-btn builder-toolbar-btn--primary"
+                  onClick={onSave}
+                  disabled={!canSave}
+                  aria-busy={saving}
+                >
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+              ) : (
+                <span
+                  className="builder-toolbar-btn builder-toolbar-btn--status"
+                  aria-live="polite"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="builder-toolbar-btn-icon"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {saving ? 'Saving…' : 'Saved'}
+                </span>
+              )}
+            </div>
           ) : null}
-
-          {isDirty ? (
-            <button
-              type="button"
-              className="builder-save-btn builder-save-btn--dirty"
-              onClick={onSave}
-              disabled={!canSave}
-              aria-busy={saving}
-            >
-              {saving ? 'Saving…' : 'Save project'}
-            </button>
-          ) : (
-            <span
-              className="builder-save-status bg-emerald-900/50 text-emerald-400 border border-emerald-700/50 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
-              aria-live="polite"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-3.5 h-3.5 shrink-0"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {saving ? 'Saving…' : 'Saved'}
-            </span>
-          )}
         </div>
       </header>
 
