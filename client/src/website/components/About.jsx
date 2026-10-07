@@ -18,7 +18,7 @@ export default function About({
   layout = 'split',
 }) {
   const safeImage = sanitizeImageSrc(
-    resolveMediaSrc({ image, imageKeyword }),
+    resolveMediaSrc({ image, imageKeyword, salt: 2 }),
   );
   const split = layout === 'split' || layout === 'split-reverse' || Boolean(safeImage);
   const reverse = layout === 'split-reverse';
@@ -56,6 +56,18 @@ export default function About({
               alt={imageAlt || heading}
               className={WS_IMG}
               loading="lazy"
+              decoding="async"
+              onError={(event) => {
+                const fallback = resolveMediaSrc({
+                  imageKeyword: imageKeyword || 'business',
+                  salt: 98,
+                });
+                if (fallback && event.currentTarget.src !== fallback) {
+                  event.currentTarget.src = fallback;
+                  return;
+                }
+                event.currentTarget.style.display = 'none';
+              }}
             />
           </div>
         ) : null}

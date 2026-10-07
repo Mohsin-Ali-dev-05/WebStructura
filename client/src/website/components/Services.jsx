@@ -34,6 +34,7 @@ export default function Services({
               resolveMediaSrc({
                 image: item.image,
                 imageKeyword: item.imageKeyword,
+                salt: index + 3,
               }),
             );
 
@@ -43,12 +44,24 @@ export default function Services({
                 className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100 flex flex-col gap-3 text-left min-w-0 w-full"
               >
                 {photo ? (
-                  <div className={`${WS_ASPECT_4_3} rounded-xl`}>
+                  <div className={`${WS_ASPECT_4_3} rounded-xl overflow-hidden`}>
                     <img
                       src={photo}
                       alt={item.imageAlt || item.title || 'Feature'}
                       className={WS_IMG}
                       loading="lazy"
+                      decoding="async"
+                      onError={(event) => {
+                        const fallback = resolveMediaSrc({
+                          imageKeyword: item.imageKeyword || 'business',
+                          salt: index + 50,
+                        });
+                        if (fallback && event.currentTarget.src !== fallback) {
+                          event.currentTarget.src = fallback;
+                          return;
+                        }
+                        event.currentTarget.style.display = 'none';
+                      }}
                     />
                   </div>
                 ) : null}

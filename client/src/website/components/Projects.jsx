@@ -1,8 +1,8 @@
 import SectionWrapper from './SectionWrapper.jsx';
 import { WS_ASPECT_4_3, WS_GRID, WS_H2, WS_IMG, WS_SUB } from './designSystem.js';
+import { resolveMediaSrc } from '../imageFromKeyword.js';
 import { listItemKey } from '../listKey.js';
-import { sanitizeHref } from '../safeUrl.js';
-import { sanitizeImageSrc } from '../safeUrl.js';
+import { sanitizeHref, sanitizeImageSrc } from '../safeUrl.js';
 
 export default function Projects({
   heading = 'Projects',
@@ -28,7 +28,13 @@ export default function Projects({
         <div className={WS_GRID}>
           {safeItems.map((item, index) => {
             const href = sanitizeHref(item.link, '');
-            const image = sanitizeImageSrc(item.image || '');
+            const image = sanitizeImageSrc(
+              resolveMediaSrc({
+                image: item.image,
+                imageKeyword: item.imageKeyword,
+                salt: index + 10,
+              }),
+            );
 
             return (
               <article
@@ -42,6 +48,18 @@ export default function Projects({
                       alt={item.title || 'Product'}
                       className={WS_IMG}
                       loading="lazy"
+                      decoding="async"
+                      onError={(event) => {
+                        const fallback = resolveMediaSrc({
+                          imageKeyword: item.imageKeyword || 'business',
+                          salt: index + 60,
+                        });
+                        if (fallback && event.currentTarget.src !== fallback) {
+                          event.currentTarget.src = fallback;
+                          return;
+                        }
+                        event.currentTarget.style.display = 'none';
+                      }}
                     />
                   </div>
                 ) : (

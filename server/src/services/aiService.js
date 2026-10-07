@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/AppError.js';
+import {
+  buildTopicImageUrl,
+  isUnreliableImageUrl,
+} from './topicImages.js';
 
-const OLLAMA_TIMEOUT_MS = 90_000;
+const OLLAMA_TIMEOUT_MS = 150_000;
 
 /** Matches builder component types (server-side allowlist). */
 export const AI_SECTION_TYPES = [
@@ -23,15 +27,15 @@ export const AI_SECTION_TYPES = [
 
 /**
  * Prop shapes the React renderer expects.
- * imageKeyword is resolved server-side into a loremflickr.com URL.
+ * imageKeyword is resolved server-side into a stable Unsplash photo for that niche.
  */
 const COMPONENT_PROP_HINTS = {
   Navbar:
     '{ "brand": string, "links": [{ "label": string, "href": string }] }',
   Hero:
-    '{ "title": string, "subtitle": string, "ctaLabel": string, "ctaHref": string, "secondaryLabel": string, "secondaryHref": string, "imageKeyword": string, "imageAlt": string }',
+    '{ "title": string, "subtitle": string, "ctaLabel": string, "ctaHref": string, "secondaryLabel": string, "secondaryHref": string, "layout": "split", "imageKeyword": string, "imageAlt": string }',
   About:
-    '{ "heading": string, "body": string, "imageKeyword": string, "imageAlt": string }',
+    '{ "heading": string, "body": string, "layout": "split", "imageKeyword": string, "imageAlt": string }',
   Skills: '{ "heading": string, "items": [{ "name": string, "level": string }] }',
   Services:
     '{ "heading": string, "subheading": string, "items": [{ "title": string, "description": string, "imageKeyword": string }] }',
@@ -96,22 +100,29 @@ export function buildInitialWebsiteSystemPrompt(name, description) {
     `- Example: if the topic is "Cafeteria Management System", write about food inventory, POS checkout, meal plans, kitchen operations, and staff scheduling — NOT "Tell your story" or "Welcome to our website".\n` +
     `- Ban ALL generic filler: "Tell your story", "Lorem ipsum", "Core offering", "Get started today" without context, "We help businesses grow", placeholder labels.\n` +
     `- Every headline, subtitle, feature title, and feature description must mention concrete benefits for THIS industry.\n\n` +
-    `REQUIRED STRUCTURE (use exactly these types in this order unless the niche clearly needs Pricing or Gallery inserted before Footer):\n` +
-    `1) Navbar — brand = "${safeName}", 3–5 relevant anchor links (e.g. Features, Solutions, Pricing, Contact).\n` +
-    `2) Hero — compelling industry headline, benefit-driven subheadline, primary + secondary CTAs, and imageKeyword (1–3 lowercase photo tags, e.g. "cafeteria,food" or "restaurant,kitchen").\n` +
-    `3) Services — treat as FEATURES: heading like "Features" or "What you get", plus 3–4 items. Each item needs title, description (2–3 sentences of real product copy), and imageKeyword.\n` +
-    `4) Optional middle sections from the catalog (About, Testimonials, Pricing, FAQ, CTA, Contact) ONLY if they fit the niche — still industry-specific copy.\n` +
-    `5) Footer — copyright text plus a multi-column link grid: props.columns is an array of exactly 3 objects with titles "Product", "Visit", and "Company". Each has "links": [{ "label", "href" }] (2–4 niche-relevant links per column). Never include a "Home" link (navbar covers that). Do NOT use a flat links array.\n\n` +
+    `REQUIRED STRUCTURE (use these types in order — this is a real marketing site, not a stub):\n` +
+    `1) Navbar — brand = "${safeName}", 4–5 niche anchor links (Features, About, FAQ, Contact, etc.).\n` +
+    `2) Hero — industry headline, benefit-driven subtitle (2 sentences), primary + secondary CTAs, layout: "split", imageKeyword matching the niche (e.g. "cafeteria,food", "realestate,house", "saas,office").\n` +
+    `3) Services — FEATURES: heading + subheading + exactly 3 items. Each item: title, description (2–3 real sentences), imageKeyword related to that feature.\n` +
+    `4) About — heading, body (3–4 sentences about this business), layout: "split", imageKeyword, imageAlt.\n` +
+    `5) Testimonials — heading + 3 items with quote, author, role (sound like real customers in this niche).\n` +
+    `6) FAQ — heading + 4 niche questions/answers (pricing, onboarding, support, security/ops — tailored).\n` +
+    `7) CTA — strong closing offer + primary CTA to #contact.\n` +
+    `8) Contact — heading, realistic email/phone/address for this brand, short message.\n` +
+    `9) Footer — copyright + columns: exactly 3 objects titled "Product", "Visit", "Company" with niche links (no "Home" link).\n\n` +
     `AVAILABLE REACT COMPONENTS (use ONLY these type names):\n` +
     `${availableComponents}\n\n` +
-    `IMAGE KEYWORDS:\n` +
-    `- For Hero, About, each Services item, Projects items, and Gallery images, include "imageKeyword": a short lowercase tag string (comma-separated OK).\n` +
-    `- Keywords must match the business (food, cafeteria, inventory, saas, dashboard, etc.). Never leave them blank for Hero/Services.\n` +
-    `- Do NOT invent full image URLs — only imageKeyword strings. The server will turn them into photos.\n\n` +
+    `IMAGE KEYWORDS (critical — photos must match the business):\n` +
+    `- Always set imageKeyword on Hero, About, each Services item, Projects items, and Gallery images.\n` +
+    `- Use short lowercase niche tags only (examples: "cafeteria,food", "restaurant,kitchen", "realestate,house", "saas,dashboard", "fitness,gym", "hotel,travel").\n` +
+    `- Never invent image URLs. Never use placeholder/lorem/gray box URLs. The server maps keywords to real stock photos.\n\n` +
+    `RESPONSIVE LAYOUT HINTS:\n` +
+    `- Hero and About must include "layout": "split" so mobile stacks and desktop splits cleanly.\n` +
+    `- Keep CTA labels short. Prefer #services, #about, #faq, #contact hrefs that match section ids.\n\n` +
     `OUTPUT FORMAT:\n` +
     `- Reply with ONLY a minified JSON array of { "type": "<ComponentName>", "props": { ... } }.\n` +
     `- No markdown fences, no greetings, no explanations.\n` +
-    `- Prefer 6–9 components total. Always include Navbar, Hero, Services (features), and Footer.`
+    `- Prefer 8–10 components. Always include Navbar, Hero, Services, About, Testimonials, FAQ, CTA, Contact, Footer.`
   );
 }
 
@@ -122,25 +133,15 @@ function escapePromptValue(value, fallback) {
 }
 
 /**
- * Build a LoremFlickr URL from a keyword/tag string.
+ * Build a stable Unsplash URL from a keyword/tag string.
  * @param {string} keyword
  * @param {number} [width]
- * @param {number} [height]
+ * @param {number} [height] unused — kept for call-site compatibility
+ * @param {number} [salt]
  */
-export function buildLoremFlickrUrl(keyword, width = 800, height = 600) {
-  const cleaned = String(keyword || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9,\s-]/g, ' ')
-    .trim()
-    .replace(/[\s-]+/g, ',')
-    .replace(/,+/g, ',')
-    .replace(/^,|,$/g, '')
-    .slice(0, 80);
-
-  const tags = cleaned || 'business';
-  const w = Number.isFinite(width) ? Math.max(200, Math.min(1600, width)) : 800;
-  const h = Number.isFinite(height) ? Math.max(200, Math.min(1200, height)) : 600;
-  return `https://loremflickr.com/${w}/${h}/${tags}`;
+export function buildLoremFlickrUrl(keyword, width = 1200, height = 800, salt = 0) {
+  void height;
+  return buildTopicImageUrl(keyword, width, salt);
 }
 
 function inferImageKeyword(name, description) {
@@ -180,6 +181,7 @@ export function getBlankWebsiteComponents(name = 'My Website', description = '')
     `Professional tools and services for ${brand}.`;
   const keyword = inferImageKeyword(brand, desc);
   const featureKeyword = keyword.split(',')[0] || 'business';
+  const slug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 18) || 'hello';
 
   return [
     {
@@ -189,6 +191,7 @@ export function getBlankWebsiteComponents(name = 'My Website', description = '')
         links: [
           { label: 'Features', href: '#services' },
           { label: 'About', href: '#about' },
+          { label: 'FAQ', href: '#faq' },
           { label: 'Contact', href: '#contact' },
         ],
       },
@@ -202,6 +205,7 @@ export function getBlankWebsiteComponents(name = 'My Website', description = '')
         ctaHref: '#contact',
         secondaryLabel: 'See features',
         secondaryHref: '#services',
+        layout: 'split',
         imageKeyword: keyword,
         imageAlt: `${brand} product preview`,
       },
@@ -214,7 +218,7 @@ export function getBlankWebsiteComponents(name = 'My Website', description = '')
         items: [
           {
             title: 'Operations dashboard',
-            description: `Monitor the metrics that matter for ${brand} in one clear view so teams stay aligned.`,
+            description: `Monitor the metrics that matter for ${brand} in one clear view so teams stay aligned day to day.`,
             imageKeyword: featureKeyword,
           },
           {
@@ -236,9 +240,84 @@ export function getBlankWebsiteComponents(name = 'My Website', description = '')
       type: 'About',
       props: {
         heading: `Why teams choose ${brand}`,
-        body: desc,
+        body: `${desc} We focus on clear workflows, reliable reporting, and support that speaks your industry's language — so you can ship results without fighting the tools.`,
+        layout: 'split',
         imageKeyword: keyword,
         imageAlt: brand,
+      },
+    },
+    {
+      type: 'Testimonials',
+      props: {
+        heading: 'Trusted by teams like yours',
+        items: [
+          {
+            quote: `${brand} replaced three spreadsheets and a week of status chasing. We finally see what is happening in real time.`,
+            author: 'Jordan Lee',
+            role: 'Operations Lead',
+          },
+          {
+            quote:
+              'Setup was straightforward and the defaults already matched how we work. Support answered niche questions without a script.',
+            author: 'Sam Rivera',
+            role: 'General Manager',
+          },
+          {
+            quote:
+              'Our weekly reviews went from guesswork to clear numbers. That alone paid for the switch.',
+            author: 'Avery Chen',
+            role: 'Founder',
+          },
+        ],
+      },
+    },
+    {
+      type: 'FAQ',
+      props: {
+        heading: 'Frequently asked questions',
+        items: [
+          {
+            question: `How long does it take to get ${brand} running?`,
+            answer:
+              'Most teams complete setup in a day or two. Start with the essentials, invite your staff, and expand features as you go.',
+          },
+          {
+            question: 'Do you offer onboarding help?',
+            answer:
+              'Yes. We share a practical checklist and can walk through your first workflows so the team is productive quickly.',
+          },
+          {
+            question: 'Can we export our data?',
+            answer:
+              'You can export reports and core records whenever you need them. Your operational data stays under your control.',
+          },
+          {
+            question: 'What support channels do you provide?',
+            answer:
+              'Email and in-product support during business hours, with clear SLAs for paid plans. Urgent issues get priority routing.',
+          },
+        ],
+      },
+    },
+    {
+      type: 'CTA',
+      props: {
+        heading: `Ready to see ${brand} in action?`,
+        body: 'Tell us about your workflow and we will show a tailored walkthrough — no generic demo deck.',
+        ctaLabel: 'Book a walkthrough',
+        ctaHref: '#contact',
+        secondaryLabel: 'Browse features',
+        secondaryHref: '#services',
+      },
+    },
+    {
+      type: 'Contact',
+      props: {
+        heading: 'Talk with our team',
+        email: `hello@${slug}.com`,
+        phone: '+1 (555) 010-2200',
+        address: 'Remote-first · Serving teams worldwide',
+        message: 'Share your goals and timeline — we typically reply within one business day.',
       },
     },
     {
@@ -250,21 +329,21 @@ export function getBlankWebsiteComponents(name = 'My Website', description = '')
             title: 'Product',
             links: [
               { label: 'Features', href: '#services' },
-              { label: 'Pricing', href: '#pricing' },
+              { label: 'FAQ', href: '#faq' },
             ],
           },
           {
             title: 'Visit',
             links: [
               { label: 'About', href: '#about' },
-              { label: 'FAQ', href: '#faq' },
+              { label: 'Contact', href: '#contact' },
             ],
           },
           {
             title: 'Company',
             links: [
-              { label: 'Contact', href: '#contact' },
               { label: 'Support', href: '#contact' },
+              { label: 'Request demo', href: '#contact' },
             ],
           },
         ],
@@ -292,7 +371,7 @@ export async function generateInitialWebsiteComponents(name, description) {
         prompt:
           `Generate a COMPLETE tailored website JSON array for this business. ` +
           `Write industry-specific sales copy (no generic placeholders). ` +
-          `MUST include Navbar, Hero (with imageKeyword), Services/features (3–4 items each with imageKeyword), and Footer. ` +
+          `MUST include Navbar, Hero (layout split + imageKeyword), Services (3 items with imageKeyword), About (layout split + imageKeyword), Testimonials (3), FAQ (4), CTA, Contact, and Footer. ` +
           `Business description: ${safeDescription}`,
         system,
         stream: false,
@@ -408,7 +487,7 @@ function createComponentId() {
   return `cmp_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function applyImageFromKeyword(target, keyword, width, height, altFallback) {
+function applyImageFromKeyword(target, keyword, width, height, altFallback, salt = 0) {
   if (!target || typeof target !== 'object') {
     return;
   }
@@ -421,16 +500,12 @@ function applyImageFromKeyword(target, keyword, width, height, altFallback) {
         : '';
 
   const existingImage = typeof target.image === 'string' ? target.image.trim() : '';
-  const looksLikePlaceholder =
-    !existingImage ||
-    /placehold|via\.placeholder|example\.com|gray|placeholder/i.test(
-      existingImage,
-    );
+  const needsReplace = isUnreliableImageUrl(existingImage);
 
   if (key) {
     target.imageKeyword = key;
-    if (looksLikePlaceholder) {
-      target.image = buildLoremFlickrUrl(key, width, height);
+    if (needsReplace) {
+      target.image = buildTopicImageUrl(key, width || 1200, salt);
     }
     if (!target.imageAlt && altFallback) {
       target.imageAlt = altFallback;
@@ -438,9 +513,9 @@ function applyImageFromKeyword(target, keyword, width, height, altFallback) {
     return;
   }
 
-  if (looksLikePlaceholder && altFallback) {
+  if (needsReplace && altFallback) {
     target.imageKeyword = inferImageKeyword(altFallback, '');
-    target.image = buildLoremFlickrUrl(target.imageKeyword, width, height);
+    target.image = buildTopicImageUrl(target.imageKeyword, width || 1200, salt);
     if (!target.imageAlt) {
       target.imageAlt = altFallback;
     }
@@ -449,7 +524,7 @@ function applyImageFromKeyword(target, keyword, width, height, altFallback) {
 
 /**
  * Whitelist type, ensure props object, map AI fields onto renderer schema,
- * and resolve imageKeyword → loremflickr URLs.
+ * and resolve imageKeyword → stable Unsplash topic photos.
  */
 function normalizeGeneratedComponent(item) {
   if (!item || typeof item !== 'object' || typeof item.type !== 'string') {
@@ -491,12 +566,16 @@ function normalizeGeneratedComponent(item) {
     if (!rawProps.secondaryHref) {
       rawProps.secondaryHref = '#services';
     }
+    if (!rawProps.layout) {
+      rawProps.layout = 'split';
+    }
     applyImageFromKeyword(
       rawProps,
       rawProps.imageKeyword,
+      1200,
       800,
-      600,
       rawProps.title || 'Hero',
+      1,
     );
   }
 
@@ -507,13 +586,17 @@ function normalizeGeneratedComponent(item) {
     if (!rawProps.heading) {
       rawProps.heading = 'About';
     }
+    if (!rawProps.layout) {
+      rawProps.layout = 'split';
+    }
     delete rawProps.content;
     applyImageFromKeyword(
       rawProps,
       rawProps.imageKeyword,
+      1200,
       800,
-      600,
       rawProps.heading,
+      2,
     );
   }
 
@@ -530,7 +613,7 @@ function normalizeGeneratedComponent(item) {
     }
 
     if (Array.isArray(rawProps.items)) {
-      rawProps.items = rawProps.items.slice(0, 4).map((entry) => {
+      rawProps.items = rawProps.items.slice(0, 4).map((entry, index) => {
         const item =
           entry && typeof entry === 'object'
             ? { ...entry }
@@ -538,14 +621,11 @@ function normalizeGeneratedComponent(item) {
         applyImageFromKeyword(
           item,
           item.imageKeyword,
-          800,
-          600,
+          1000,
+          750,
           item.title || 'Feature',
+          index + 3,
         );
-        // Services cards read `image`
-        if (item.image && !item.url) {
-          /* keep image */
-        }
         return item;
       });
     }
@@ -554,7 +634,7 @@ function normalizeGeneratedComponent(item) {
   }
 
   if (type === 'Projects' && Array.isArray(rawProps.items)) {
-    rawProps.items = rawProps.items.map((entry) => {
+    rawProps.items = rawProps.items.map((entry, index) => {
       const item =
         entry && typeof entry === 'object'
           ? { ...entry }
@@ -562,23 +642,24 @@ function normalizeGeneratedComponent(item) {
       applyImageFromKeyword(
         item,
         item.imageKeyword,
-        800,
-        600,
+        1000,
+        750,
         item.title || 'Project',
+        index + 10,
       );
       return item;
     });
   }
 
   if (type === 'Gallery' && Array.isArray(rawProps.images)) {
-    rawProps.images = rawProps.images.map((entry) => {
+    rawProps.images = rawProps.images.map((entry, index) => {
       const image =
         entry && typeof entry === 'object'
           ? { ...entry }
           : { alt: 'Gallery image' };
-      const key = image.imageKeyword || image.keyword;
-      if (key && !image.url) {
-        image.url = buildLoremFlickrUrl(key, 1200, 800);
+      const key = image.imageKeyword || image.keyword || 'business';
+      if (key && isUnreliableImageUrl(image.url)) {
+        image.url = buildTopicImageUrl(key, 1200, index + 20);
         image.imageKeyword = key;
       }
       if (!image.alt) {
@@ -850,7 +931,7 @@ export async function streamWebsiteGeneration(
       ? prompt.trim()
       : `Generate a COMPLETE tailored website JSON array for this business. ` +
         `Write industry-specific sales copy (no generic placeholders). ` +
-        `MUST include Navbar, Hero (with imageKeyword), Services/features (3–4 items each with imageKeyword), and Footer. ` +
+        `MUST include Navbar, Hero (layout split + imageKeyword), Services (3 items with imageKeyword), About (layout split + imageKeyword), Testimonials (3), FAQ (4), CTA, Contact, and Footer. ` +
         `Business description: ${safeDescription}`;
 
   const controller = new AbortController();

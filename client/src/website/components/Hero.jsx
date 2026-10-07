@@ -11,7 +11,7 @@ import { sanitizeHref, sanitizeImageSrc } from '../safeUrl.js';
 
 /**
  * Mobile-first Hero — stacks on phones, splits on md+.
- * Prefers AI imageKeyword → loremflickr when no direct image URL is set.
+ * Prefers AI imageKeyword → topic-matched Unsplash photos.
  */
 export default function Hero({
   title = 'Welcome',
@@ -27,7 +27,7 @@ export default function Hero({
 }) {
   const reverse = layout === 'split-reverse';
   const safeImage = sanitizeImageSrc(
-    resolveMediaSrc({ image, imageKeyword }),
+    resolveMediaSrc({ image, imageKeyword, salt: 1 }),
   );
 
   return (
@@ -76,12 +76,24 @@ export default function Hero({
 
         <div className="flex w-full min-w-0 items-center justify-center md:w-1/2 px-1 md:px-0">
           {safeImage ? (
-            <div className={`${WS_ASPECT_4_3} rounded-2xl`}>
+            <div className={`${WS_ASPECT_4_3} rounded-2xl overflow-hidden`}>
               <img
                 src={safeImage}
                 alt={imageAlt || title}
                 className={WS_IMG}
-                loading="lazy"
+                loading="eager"
+                decoding="async"
+                onError={(event) => {
+                  const fallback = resolveMediaSrc({
+                    imageKeyword: imageKeyword || 'business',
+                    salt: 99,
+                  });
+                  if (fallback && event.currentTarget.src !== fallback) {
+                    event.currentTarget.src = fallback;
+                    return;
+                  }
+                  event.currentTarget.style.display = 'none';
+                }}
               />
             </div>
           ) : (

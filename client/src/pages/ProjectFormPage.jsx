@@ -20,7 +20,7 @@ const emptyForm = {
 };
 
 /** Server AI generate + save can take ~20s; abort after 2 minutes. */
-const AI_CREATE_TIMEOUT_MS = 120_000;
+const AI_CREATE_TIMEOUT_MS = 180_000;
 
 const NAME_MAX = 100;
 const DESCRIPTION_MAX = 500;
@@ -220,7 +220,7 @@ export default function ProjectFormPage() {
     if (willUseAi) {
       setIsGenerating(true);
       loadingToastId = toast.loading(
-        'AI is building your website… This can take about 20 seconds.',
+        'AI is building your website… This can take 1–2 minutes.',
         { duration: Infinity },
       );
     } else {
@@ -301,7 +301,7 @@ export default function ProjectFormPage() {
     ? 'Update the name, description, or status of this website project.'
     : selectedTemplate
       ? `Starting from “${selectedTemplate.title}”. Confirm the details below to open the builder.`
-      : 'Name your site, then let local AI draft the first layout — usually about 20 seconds.';
+      : 'Name your site, then let local AI draft the first layout — usually 1–2 minutes.';
 
   return (
     <main className="project-form-page form-page">
@@ -388,8 +388,8 @@ export default function ProjectFormPage() {
               <div className="min-w-0">
                 <strong>AI is drafting your site</strong>
                 <p>
-                  Keep this tab open. You&apos;ll land in the builder when generation
-                  finishes.
+                  Keep this tab open — generation usually takes 1–2 minutes. You&apos;ll
+                  land in the builder when it finishes.
                 </p>
               </div>
             </div>

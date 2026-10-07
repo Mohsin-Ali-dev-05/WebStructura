@@ -6,6 +6,7 @@ import {
   WS_IMG,
   WS_SUB,
 } from './designSystem.js';
+import { resolveMediaSrc } from '../imageFromKeyword.js';
 import { listItemKey } from '../listKey.js';
 import { sanitizeImageSrc } from '../safeUrl.js';
 
@@ -20,24 +21,34 @@ export default function Gallery({
   const safeImages = (Array.isArray(images) ? images : [])
     .map((item, index) => {
       if (typeof item === 'string') {
-        const url = sanitizeImageSrc(item);
+        const url = sanitizeImageSrc(
+          resolveMediaSrc({ image: item, salt: index + 20 }),
+        );
         if (!url) {
           return null;
         }
         return {
           url,
           alt: `Gallery image ${index + 1}`,
+          imageKeyword: '',
           _editorId: undefined,
         };
       }
-      if (item && typeof item === 'object' && item.url) {
-        const url = sanitizeImageSrc(item.url);
+      if (item && typeof item === 'object') {
+        const url = sanitizeImageSrc(
+          resolveMediaSrc({
+            image: item.url || item.image,
+            imageKeyword: item.imageKeyword || item.keyword,
+            salt: index + 20,
+          }),
+        );
         if (!url) {
           return null;
         }
         return {
           url,
           alt: item.alt || `Gallery image ${index + 1}`,
+          imageKeyword: item.imageKeyword || item.keyword || '',
           _editorId: item._editorId,
         };
       }
@@ -63,13 +74,25 @@ export default function Gallery({
           {safeImages.map((image, index) => (
             <figure
               key={listItemKey(image, index, 'gallery')}
-              className={`${WS_ASPECT_4_3} min-w-0 w-full`}
+              className={`${WS_ASPECT_4_3} min-w-0 w-full overflow-hidden rounded-xl`}
             >
               <img
                 src={image.url}
                 alt={image.alt}
                 className={WS_IMG}
                 loading="lazy"
+                decoding="async"
+                onError={(event) => {
+                  const fallback = resolveMediaSrc({
+                    imageKeyword: image.imageKeyword || 'business',
+                    salt: index + 70,
+                  });
+                  if (fallback && event.currentTarget.src !== fallback) {
+                    event.currentTarget.src = fallback;
+                    return;
+                  }
+                  event.currentTarget.style.display = 'none';
+                }}
               />
             </figure>
           ))}
