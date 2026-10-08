@@ -1,46 +1,51 @@
 # WebStructura — AI-Powered Website Builder
 
-A university Web Engineering project: a MERN app that lets signed-in users create, edit, preview, publish, and export simple websites. Local **Ollama** powers optional AI drafts with live SSE streaming in the builder.
+A university Web Engineering project: a MERN app that lets signed-in users create, edit, preview, publish, and export simple websites. Local **Ollama** powers optional AI drafts — both when creating a blank project and inside the builder (SSE streaming).
 
 **Live demo:** [webstructura.netlify.app](https://webstructura.netlify.app)
 
 ## Features
 
-- **Auth** — Email/password (JWT + bcrypt), Google OAuth (Passport), forgot/reset password via SMTP
+- **Auth** — Email/password (JWT + bcrypt), Google OAuth (Passport), forgot/reset password via SMTP; protected routes prompt guests to sign in
 - **Dashboard** — Create, list, edit, and delete projects
+- **Blank AI create** — From **New project** (no template), Ollama drafts a full niche site (Hero, Features, About, Testimonials, FAQ, CTA, Contact, Footer). Expect **1–2 minutes**; keep the tab open
+- **Templates** — Industry starters (SaaS, portfolio, cafeteria, storefront, real estate, tech blog, blank canvas) that open in the builder
 - **Schema-driven builder** — Edit structured `websiteData` (theme + components); no `eval()`
-- **AI assistant** — Generate site JSON from a prompt via Ollama (`/api/ai/generate-stream`) with a live terminal overlay
-- **Templates** — Starter gallery to bootstrap projects
-- **Preview** — Desktop / tablet / mobile frames; full preview route
+- **AI assistant** — Refine or regenerate sections via Ollama (`/api/ai/generate-stream`) with a live terminal overlay
+- **Topic images** — AI `imageKeyword` tags map to stable Unsplash photos for that niche (food, real estate, SaaS, etc.) so previews are not blank or broken
+- **Responsive site blocks** — Shared design tokens for Navbar → Footer; mobile/tablet/desktop preview frames
 - **Public share** — Published sites at `/view/:id` (no app chrome)
 - **Export** — Download a React + Tailwind ZIP (`GET /api/projects/:id/export`)
-- **Settings** — Profile (avatar), account, security, appearance, notifications, billing (UI)
-- **Marketing site** — Home, About, Contact, Terms, Privacy with a premium SaaS look
+- **Settings** — Profile (avatar), account, security, appearance (local UI preferences), notifications, billing (placeholder UI)
+- **Marketing site** — Home, About, Contact, Terms, Privacy, FAQ anchors
 
 ## Tech stack
 
 | Layer | Stack |
 |---|---|
-| Frontend | React 18, Vite, React Router, Framer Motion, Lucide |
+| Frontend | React 18, Vite, React Router, Framer Motion, Lucide, react-hot-toast |
 | Backend | Node.js (ESM), Express, Mongoose |
 | Database | MongoDB |
 | Auth | JWT, Passport Google OAuth 2.0, express-session |
 | AI | Local Ollama HTTP API |
-| Media | Cloudinary (avatars) or local `server/uploads/` in dev |
+| Media | Cloudinary (avatars) or local `server/uploads/` in dev; site photos via Unsplash CDN |
 | Email | Nodemailer (SMTP / Gmail App Password) |
 
 ## Project structure
 
 ```text
 client/                 React frontend (Vite)
+  src/
+    pages/              Marketing, auth, dashboard, builder, settings
+    website/            Renderer, templates, topic image helpers, section components
+    preferences/        Local UI preferences (appearance)
 server/                 Express API
   src/
     config/             env, passport, db
     controllers/        route handlers
     models/             User, Project
     routes/             auth, projects, ai, users, contact, oauth
-    services/           Ollama, avatars, mail
-    utils/              export ZIP, formatters
+    services/           Ollama AI, topicImages, avatars, mail, export
 ```
 
 ## Prerequisites
@@ -105,7 +110,7 @@ ollama pull qwen2.5:3b
 ollama serve
 ```
 
-Without Ollama, the rest of the app still works; AI generate endpoints will fail until the model is reachable.
+Without Ollama, templates, editing, preview, and export still work. Blank-project AI create and builder AI endpoints need a reachable model (first run can take **1–2 minutes**).
 
 ## Health check
 
@@ -124,7 +129,7 @@ Expect `database.state: "connected"`. If MongoDB is down, the server exits on st
 | `/forgot-password`, `/reset-password/:token` | Public | Password recovery |
 | `/dashboard` | Auth | Project list |
 | `/templates` | Auth | Template gallery |
-| `/projects/new`, `/projects/:id/edit` | Auth | Project metadata |
+| `/projects/new`, `/projects/:id/edit` | Auth | Create (template or AI blank) / edit metadata |
 | `/projects/:id/builder` | Auth | AI + preview + editor |
 | `/projects/:id/preview` | Auth | Full-page preview |
 | `/view/:id` | Public | Shared published site |
@@ -134,8 +139,8 @@ Expect `database.state: "connected"`. If MongoDB is down, the server exits on st
 ### Builder layout
 
 - **Left:** AI assistant (prompt → streamed JSON)
-- **Center:** Live website preview
-- **Right:** Component / theme editor  
+- **Center:** Live website preview (desktop / tablet / mobile)
+- **Right:** Component / theme editor
 
 On narrow screens: AI / Preview / Editor tabs.
 
@@ -158,14 +163,19 @@ Projects store structured JSON in `websiteData` (not executable code):
       "type": "Hero",
       "props": {
         "title": "Fresh every morning",
-        "subtitle": "Neighborhood bakery"
+        "subtitle": "Neighborhood bakery",
+        "layout": "split",
+        "imageKeyword": "bakery,food",
+        "imageAlt": "Fresh bread on a counter"
       }
     }
   ]
 }
 ```
 
-`ComponentRenderer` maps `components[]` to whitelisted React sections (Hero, Services, Pricing, FAQ, Gallery, CTA, Footer, …). Unknown types are skipped.
+`ComponentRenderer` maps `components[]` to whitelisted React sections (Navbar, Hero, About, Services, Projects, Testimonials, Pricing, FAQ, Gallery, CTA, Contact, Footer, …). Unknown types are skipped.
+
+`imageKeyword` values are resolved server-side (and in the client renderer) to niche-matched Unsplash URLs via `topicImages` — do not invent placeholder image hosts.
 
 ## API overview
 
@@ -190,7 +200,7 @@ All owner routes require a Bearer JWT. Users only access their own projects.
 
 | Method | Path | Purpose |
 |---|---|---|
-| POST | `/api/projects` | Create |
+| POST | `/api/projects` | Create (optional AI draft when no template `websiteData`) |
 | GET | `/api/projects` | List mine |
 | GET | `/api/projects/:id` | Get one |
 | PUT | `/api/projects/:id` | Update |
@@ -223,8 +233,8 @@ All owner routes require a Bearer JWT. Users only access their own projects.
 ## Intentionally limited / demo
 
 - Billing, teams, custom domains, and hosted deployment pipelines
-- Notifications and some security controls are UI demos only
-- AI quality depends on the local Ollama model you run
+- Notifications and some security controls are UI demos only; appearance prefs persist locally
+- AI quality and speed depend on the local Ollama model and machine
 
 ## License
 
