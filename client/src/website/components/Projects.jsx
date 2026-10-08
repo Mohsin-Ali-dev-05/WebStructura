@@ -1,5 +1,12 @@
 import SectionWrapper from './SectionWrapper.jsx';
-import { WS_ASPECT_4_3, WS_GRID, WS_H2, WS_IMG, WS_SUB } from './designSystem.js';
+import {
+  WS_GRID,
+  WS_H2,
+  WS_IMG,
+  WS_MEDIA_CARD,
+  WS_SUB,
+  WS_BTN,
+} from './designSystem.js';
 import { resolveMediaSrc } from '../imageFromKeyword.js';
 import { listItemKey } from '../listKey.js';
 import { sanitizeHref, sanitizeImageSrc } from '../safeUrl.js';
@@ -17,13 +24,13 @@ export default function Projects({
       className="ws-section"
       aria-label="Projects"
     >
-      <header className="mb-4 md:mb-6">
+      <header className="mb-5 md:mb-7">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>
 
       {safeItems.length === 0 ? (
-        <p className="text-gray-500 text-lg">No projects yet.</p>
+        <p className="text-gray-500 text-sm">No projects yet.</p>
       ) : (
         <div className={WS_GRID}>
           {safeItems.map((item, index) => {
@@ -39,10 +46,10 @@ export default function Projects({
             return (
               <article
                 key={listItemKey(item, index, 'project')}
-                className="flex flex-col h-full min-w-0 w-full bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                className="flex flex-col h-full min-w-0 w-full bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
               >
                 {image ? (
-                  <div className={`${WS_ASPECT_4_3} overflow-hidden`}>
+                  <div className={WS_MEDIA_CARD}>
                     <img
                       src={image}
                       alt={item.title || 'Product'}
@@ -64,25 +71,23 @@ export default function Projects({
                   </div>
                 ) : (
                   <div
-                    className={`${WS_ASPECT_4_3} bg-gray-50 rounded-2xl`}
+                    className={`${WS_MEDIA_CARD} bg-gray-50`}
                     aria-hidden="true"
                   />
                 )}
 
-                <div className="p-5 md:p-6 flex flex-col flex-grow min-w-0">
-                  <h3 className="text-lg font-bold tracking-tight text-gray-900">
+                <div className="p-4 md:p-5 flex flex-col flex-grow min-w-0 gap-2">
+                  <h3 className="text-base font-semibold tracking-tight text-gray-900">
                     {item.title}
                   </h3>
                   {item.description ? (
-                    <p className="line-clamp-2 text-gray-500 text-sm mt-2 mb-6">
+                    <p className="line-clamp-2 text-gray-500 text-sm leading-relaxed">
                       {item.description}
                     </p>
-                  ) : (
-                    <div className="mb-6" />
-                  )}
+                  ) : null}
                   {href ? (
                     <a
-                      className="inline-flex justify-center items-center px-6 py-3 rounded-xl font-medium transition-colors bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm w-full sm:w-auto mt-auto"
+                      className={`${WS_BTN} mt-auto self-start`}
                       href={href}
                       target="_blank"
                       rel="noreferrer"

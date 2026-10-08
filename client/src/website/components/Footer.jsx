@@ -82,20 +82,20 @@ export default function Footer({ text = '', columns = [], links = [] }) {
       aria-label="Footer"
     >
       {safeColumns.length > 0 ? (
-        <div className="ws-footer-columns grid grid-cols-2 md:grid-cols-4 gap-8 py-12 px-6 max-w-7xl mx-auto">
+        <div className="ws-footer-columns grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 py-8 md:py-10 px-4 sm:px-5 lg:px-6 max-w-6xl mx-auto w-full">
           {safeColumns.map((column, columnIndex) => (
             <div
               key={listItemKey(column, columnIndex, 'footer-col')}
               className="min-w-0"
             >
-              <h3 className="font-semibold text-gray-900 mb-4">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">
                 {column.title}
               </h3>
-              <ul className="space-y-2.5 text-sm text-gray-600 list-none m-0 p-0">
+              <ul className="space-y-2 text-sm text-gray-600 list-none m-0 p-0">
                 {column.links.map((link, linkIndex) => (
                   <li key={listItemKey(link, linkIndex, 'footer-link')}>
                     <a
-                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                      className="text-sm text-gray-600 hover:text-emerald-700 transition-colors"
                       href={sanitizeHref(link.href, '#')}
                     >
                       {link.label}
@@ -108,7 +108,7 @@ export default function Footer({ text = '', columns = [], links = [] }) {
         </div>
       ) : null}
 
-      <div className="max-w-7xl mx-auto px-6 border-t border-gray-200 pt-6 pb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="max-w-6xl mx-auto w-full px-4 sm:px-5 lg:px-6 border-t border-gray-200 pt-5 pb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p className="text-sm text-gray-500 m-0">
           {text || '© All rights reserved.'}
         </p>

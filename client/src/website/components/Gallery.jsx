@@ -1,9 +1,9 @@
 import SectionWrapper from './SectionWrapper.jsx';
 import {
-  WS_ASPECT_4_3,
   WS_GRID_4,
   WS_H2,
   WS_IMG,
+  WS_MEDIA_THUMB,
   WS_SUB,
 } from './designSystem.js';
 import { resolveMediaSrc } from '../imageFromKeyword.js';
@@ -11,7 +11,7 @@ import { listItemKey } from '../listKey.js';
 import { sanitizeImageSrc } from '../safeUrl.js';
 
 /**
- * Gallery — mobile-first image grid (1 → 2 → 4).
+ * Gallery — compact thumbnail grid.
  */
 export default function Gallery({
   heading = 'Gallery',
@@ -62,19 +62,19 @@ export default function Gallery({
       className="ws-section ws-gallery"
       aria-label="Gallery"
     >
-      <header className="mb-4 md:mb-6">
+      <header className="mb-5 md:mb-7">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>
 
       {safeImages.length === 0 ? (
-        <p className="text-gray-500 text-lg">No images yet.</p>
+        <p className="text-gray-500 text-sm">No images yet.</p>
       ) : (
         <div className={WS_GRID_4}>
           {safeImages.map((image, index) => (
             <figure
               key={listItemKey(image, index, 'gallery')}
-              className={`${WS_ASPECT_4_3} min-w-0 w-full overflow-hidden rounded-xl`}
+              className={WS_MEDIA_THUMB}
             >
               <img
                 src={image.url}

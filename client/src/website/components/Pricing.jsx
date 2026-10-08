@@ -21,7 +21,7 @@ export default function Pricing({
       className="ws-section ws-pricing"
       aria-label="Pricing"
     >
-      <header className="mb-4 md:mb-6 text-center md:text-left max-w-2xl mx-auto md:mx-0">
+      <header className="mb-5 md:mb-7 text-center md:text-left max-w-2xl mx-auto md:mx-0">
         <h2 className={`${WS_H2} mx-auto md:mx-0`}>{heading}</h2>
         {subheading ? (
           <p className={`${WS_SUB} mx-auto md:mx-0`}>{subheading}</p>
@@ -29,7 +29,7 @@ export default function Pricing({
       </header>
 
       {safeTiers.length === 0 ? (
-        <p className="text-gray-500 text-lg">No pricing tiers yet.</p>
+        <p className="text-gray-500 text-sm">No pricing tiers yet.</p>
       ) : (
         <div className={WS_GRID}>
           {safeTiers.map((tier, index) => {
@@ -43,22 +43,22 @@ export default function Pricing({
               <article
                 key={listItemKey(tier, index, 'tier')}
                 className={[
-                  'relative flex flex-col gap-4 rounded-2xl border p-5 md:p-6 bg-white shadow-sm min-w-0 w-full',
+                  'relative flex flex-col gap-3 rounded-xl border p-4 md:p-5 bg-white shadow-sm min-w-0 w-full',
                   isFeatured
-                    ? 'border-emerald-600 shadow-lg ring-1 ring-emerald-600'
+                    ? 'border-emerald-600 shadow-md ring-1 ring-emerald-600'
                     : 'border-gray-100',
                 ].join(' ')}
               >
                 {isFeatured ? (
-                  <span className="inline-flex self-start rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                  <span className="inline-flex self-start rounded-md bg-emerald-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
                     Most popular
                   </span>
                 ) : null}
-                <h3 className="text-xl font-bold tracking-tight text-gray-900">
+                <h3 className="text-base md:text-lg font-semibold tracking-tight text-gray-900">
                   {name}
                 </h3>
-                <p className="flex flex-wrap items-baseline gap-1">
-                  <span className="text-4xl font-extrabold tracking-tight text-gray-900">
+                <p className="flex flex-wrap items-baseline gap-1 m-0">
+                  <span className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
                     {tier.price || '$0'}
                   </span>
                   {tier.period ? (
@@ -66,7 +66,7 @@ export default function Pricing({
                   ) : null}
                 </p>
                 {tier.description ? (
-                  <p className="text-gray-500 text-base">{tier.description}</p>
+                  <p className="text-gray-500 text-sm leading-relaxed m-0">{tier.description}</p>
                 ) : null}
                 <ul className="ws-pricing-features flex flex-col gap-3 flex-1 list-none m-0 p-0">
                   {features.map((feature, featureIndex) => (

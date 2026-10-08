@@ -1,9 +1,9 @@
 import SectionWrapper from './SectionWrapper.jsx';
 import {
-  WS_ASPECT_4_3,
   WS_FLEX_STACK,
   WS_H2,
   WS_IMG,
+  WS_MEDIA_ABOUT,
   WS_SUB,
 } from './designSystem.js';
 import { resolveMediaSrc } from '../imageFromKeyword.js';
@@ -20,7 +20,8 @@ export default function About({
   const safeImage = sanitizeImageSrc(
     resolveMediaSrc({ image, imageKeyword, salt: 2 }),
   );
-  const split = layout === 'split' || layout === 'split-reverse' || Boolean(safeImage);
+  const split =
+    layout === 'split' || layout === 'split-reverse' || Boolean(safeImage);
   const reverse = layout === 'split-reverse';
 
   return (
@@ -28,47 +29,45 @@ export default function About({
       <div
         className={
           split
-            ? [
-                WS_FLEX_STACK,
-                'items-center',
-                reverse ? 'md:flex-row-reverse' : '',
-              ]
+            ? [WS_FLEX_STACK, reverse ? 'md:flex-row-reverse' : '']
                 .filter(Boolean)
                 .join(' ')
-            : 'flex flex-col gap-4 md:gap-6 w-full min-w-0'
+            : 'flex flex-col gap-4 w-full min-w-0'
         }
       >
-        <div className={split ? 'w-full min-w-0 md:w-1/2 px-1 md:px-0' : 'w-full min-w-0'}>
+        <div className={split ? 'w-full min-w-0 md:w-[55%]' : 'w-full min-w-0'}>
           <h2 className={WS_H2}>{heading}</h2>
-          {body ? <p className={WS_SUB}>{body}</p> : null}
+          {body ? <p className={`${WS_SUB} mt-3`}>{body}</p> : null}
         </div>
 
         {safeImage ? (
           <div
             className={
               split
-                ? `w-full min-w-0 md:w-1/2 ${WS_ASPECT_4_3} rounded-2xl px-1 md:px-0`
-                : `${WS_ASPECT_4_3} min-w-0 rounded-2xl`
+                ? `w-full min-w-0 md:w-[45%] flex md:justify-end`
+                : 'w-full min-w-0'
             }
           >
-            <img
-              src={safeImage}
-              alt={imageAlt || heading}
-              className={WS_IMG}
-              loading="lazy"
-              decoding="async"
-              onError={(event) => {
-                const fallback = resolveMediaSrc({
-                  imageKeyword: imageKeyword || 'business',
-                  salt: 98,
-                });
-                if (fallback && event.currentTarget.src !== fallback) {
-                  event.currentTarget.src = fallback;
-                  return;
-                }
-                event.currentTarget.style.display = 'none';
-              }}
-            />
+            <div className={WS_MEDIA_ABOUT}>
+              <img
+                src={safeImage}
+                alt={imageAlt || heading}
+                className={WS_IMG}
+                loading="lazy"
+                decoding="async"
+                onError={(event) => {
+                  const fallback = resolveMediaSrc({
+                    imageKeyword: imageKeyword || 'business',
+                    salt: 98,
+                  });
+                  if (fallback && event.currentTarget.src !== fallback) {
+                    event.currentTarget.src = fallback;
+                    return;
+                  }
+                  event.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
           </div>
         ) : null}
       </div>

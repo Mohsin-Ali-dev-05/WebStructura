@@ -157,7 +157,13 @@
 
 .ws-hero-graphic {
   width: 100%;
-  max-width: 28rem;
+  max-width: min(100%, 22rem);
+}
+
+@media (min-width: 768px) {
+  .ws-hero-graphic {
+    max-width: 100%;
+  }
 }
 
 .ws-hero-graphic-frame {
@@ -1565,38 +1571,298 @@ a.inline-flex.border.border-gray-300 {
   }
 }
 
-/* Hero spacing — tighter SaaS vertical rhythm */
-.ws-hero.py-12 {
-  padding-block: 3rem;
+/* Section rhythm — compact on mobile, airier on tablet/desktop */
+.ws-hero.py-10,
+.ws-section-pad.py-10 {
+  padding-block: 2.5rem;
 }
 
 @media (min-width: 768px) {
-  .ws-hero.md\:py-16 {
+  .ws-hero.md\:py-16,
+  .ws-section-pad.md\:py-16 {
     padding-block: 4rem;
   }
 }
 
+@media (min-width: 1024px) {
+  .ws-section-pad.lg\:py-20 {
+    padding-block: 5rem;
+  }
+}
+
+.ws-site h1.ws-h1,
+.ws-site h1.font-bold,
 .ws-site h1.font-extrabold,
+.ws-site h2.ws-h2,
+.ws-site h2.font-bold,
 .ws-site h2.font-extrabold {
   color: #111827;
-  letter-spacing: -0.025em;
-  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
-.ws-site h1.tracking-tighter {
-  letter-spacing: -0.05em;
+/* Explicit type scale so tablet/desktop aren't stuck on mobile sizes */
+.ws-site .ws-h1 {
+  font-size: clamp(1.75rem, 4vw + 1rem, 3.5rem);
+  line-height: 1.12;
 }
 
-.ws-site .ws-cta h2.font-extrabold {
+.ws-site .ws-h2 {
+  font-size: clamp(1.35rem, 2vw + 0.85rem, 2.25rem);
+  line-height: 1.25;
+}
+
+.ws-site .ws-sub {
+  font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1.125rem);
+  line-height: 1.65;
+}
+
+.ws-site .ws-cta h2 {
   color: #fff;
+  font-size: clamp(1.35rem, 2vw + 0.85rem, 2rem);
 }
 
+.ws-site img.ws-img,
 .ws-site img.object-cover {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 1rem;
+  object-position: center;
+  border-radius: inherit;
+}
+
+/*
+ * Media frames: keep aspect-ratio only (no max-height — that was flattening
+ * images on tablet/desktop and making them look stretched).
+ * Mobile: slightly narrower hero/about. Desktop: fill the column.
+ */
+.ws-site .ws-media {
+  position: relative;
+  overflow: hidden;
+  background: #f3f4f6;
+  width: 100%;
+}
+
+.ws-site .ws-media--hero {
+  aspect-ratio: 4 / 3;
+  max-width: min(100%, 22rem);
+  margin-inline: auto;
+  border-radius: 0.75rem;
+}
+
+.ws-site .ws-media--about {
+  aspect-ratio: 4 / 3;
+  max-width: min(100%, 20rem);
+  margin-inline: auto;
+  border-radius: 0.75rem;
+}
+
+.ws-site .ws-media--card {
+  aspect-ratio: 16 / 10;
+  border-radius: 0.5rem;
+}
+
+.ws-site .ws-media--thumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .ws-site .ws-media--hero {
+    aspect-ratio: 4 / 3;
+    max-width: none;
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .ws-site .ws-media--about {
+    aspect-ratio: 4 / 3;
+    max-width: none;
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .ws-site .ws-media--card {
+    aspect-ratio: 16 / 10;
+  }
+
+  .ws-site .ws-media--thumb {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ws-site .ws-media--hero,
+  .ws-site .ws-media--about {
+    aspect-ratio: 5 / 4;
+  }
+}
+
+.ws-site .ws-btn,
+.ws-site a.ws-btn,
+.ws-site .ws-btn-secondary,
+.ws-site a.ws-btn-secondary {
+  min-height: 2.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+  .ws-site .ws-btn,
+  .ws-site a.ws-btn,
+  .ws-site .ws-btn-secondary,
+  .ws-site a.ws-btn-secondary {
+    min-height: 2.75rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 1rem;
+  }
+}
+
+.ws-site .max-w-6xl {
+  max-width: 72rem;
+}
+
+.ws-site .max-w-2xl {
+  max-width: 42rem;
+}
+
+.ws-site .max-w-xl {
+  max-width: 36rem;
+}
+
+.ws-site .rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.ws-site .rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.ws-site .text-3xl {
+  font-size: 1.875rem;
+  line-height: 1.2;
+}
+
+.ws-site .text-2xl {
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.ws-site .text-base {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 640px) {
+  .ws-site .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 1.15;
+  }
+}
+
+@media (min-width: 768px) {
+  .ws-site .md\:text-5xl {
+    font-size: 3rem;
+    line-height: 1.1;
+  }
+
+  .ws-site .md\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 1.2;
+  }
+
+  .ws-site .md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+
+  .ws-site .md\:text-base {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .ws-site .md\:w-\[52\%\] {
+    width: 52%;
+  }
+
+  .ws-site .md\:w-\[48\%\] {
+    width: 48%;
+  }
+
+  .ws-site .md\:w-\[55\%\] {
+    width: 55%;
+  }
+
+  .ws-site .md\:w-\[45\%\] {
+    width: 45%;
+  }
+
+  .ws-site .md\:justify-end {
+    justify-content: flex-end;
+  }
+
+  .ws-site .md\:gap-10 {
+    gap: 2.5rem;
+  }
+
+  .ws-site .md\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .ws-site .md\:py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ws-site .lg\:text-6xl {
+    font-size: 3.5rem;
+    line-height: 1.08;
+  }
+
+  .ws-site .lg\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 1.15;
+  }
+
+  .ws-site .lg\:gap-12 {
+    gap: 3rem;
+  }
+
+  .ws-site .lg\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.ws-site .leading-tight {
+  line-height: 1.15;
+}
+
+.ws-site .leading-snug {
+  line-height: 1.3;
+}
+
+.ws-site .leading-relaxed {
+  line-height: 1.65;
+}
+
+.ws-site .py-2\.5 {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.ws-site .gap-2\.5 {
+  gap: 0.625rem;
+}
+
+.ws-site .backdrop-blur-sm {
+  backdrop-filter: blur(6px);
 }
 
 /* Projects / Featured Products card chrome */

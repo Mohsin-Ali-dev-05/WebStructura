@@ -15,21 +15,21 @@ export default function Testimonials({
       className="ws-section"
       aria-label="Testimonials"
     >
-      <header className="mb-4 md:mb-6">
+      <header className="mb-5 md:mb-7">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>
 
       {safeItems.length === 0 ? (
-        <p className="text-gray-500 text-lg">No testimonials yet.</p>
+        <p className="text-gray-500 text-sm">No testimonials yet.</p>
       ) : (
         <div className={WS_GRID}>
           {safeItems.map((item, index) => (
             <blockquote
               key={listItemKey(item, index, 'testimonial')}
-              className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 flex flex-col gap-4 min-w-0 w-full"
+              className="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-gray-100 flex flex-col gap-3 min-w-0 w-full"
             >
-              <p className="text-gray-700 text-lg leading-normal italic">
+              <p className="text-gray-700 text-sm md:text-base leading-relaxed italic m-0">
                 “{item.quote}”
               </p>
               <footer className="text-sm text-gray-500">

@@ -1,11 +1,17 @@
 import SectionWrapper from './SectionWrapper.jsx';
-import { WS_ASPECT_4_3, WS_GRID, WS_H2, WS_IMG, WS_SUB } from './designSystem.js';
+import {
+  WS_GRID,
+  WS_H2,
+  WS_IMG,
+  WS_MEDIA_CARD,
+  WS_SUB,
+} from './designSystem.js';
 import { resolveMediaSrc } from '../imageFromKeyword.js';
 import { listItemKey } from '../listKey.js';
 import { sanitizeImageSrc } from '../safeUrl.js';
 
 /**
- * Services / Features — mobile-first 1 → 2 → 3 card grid with optional photos.
+ * Services / Features — compact cards with small thumbs.
  */
 export default function Services({
   heading = 'Features',
@@ -20,15 +26,15 @@ export default function Services({
       className="ws-section ws-services"
       aria-label="Services"
     >
-      <header className="mb-4 md:mb-6 px-1 md:px-0">
+      <header className="mb-5 md:mb-7">
         <h2 className={WS_H2}>{heading}</h2>
         {subheading ? <p className={WS_SUB}>{subheading}</p> : null}
       </header>
 
       {safeItems.length === 0 ? (
-        <p className="text-gray-500 text-lg">No features added yet.</p>
+        <p className="text-gray-500 text-sm">No features added yet.</p>
       ) : (
-        <div className={`${WS_GRID} grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
+        <div className={WS_GRID}>
           {safeItems.map((item, index) => {
             const photo = sanitizeImageSrc(
               resolveMediaSrc({
@@ -41,10 +47,10 @@ export default function Services({
             return (
               <article
                 key={listItemKey(item, index, 'service')}
-                className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100 flex flex-col gap-3 text-left min-w-0 w-full"
+                className="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-gray-100 flex flex-col gap-2.5 text-left min-w-0 w-full"
               >
                 {photo ? (
-                  <div className={`${WS_ASPECT_4_3} rounded-xl overflow-hidden`}>
+                  <div className={WS_MEDIA_CARD}>
                     <img
                       src={photo}
                       alt={item.imageAlt || item.title || 'Feature'}
@@ -65,11 +71,11 @@ export default function Services({
                     />
                   </div>
                 ) : null}
-                <h3 className="text-xl md:text-2xl font-bold leading-normal tracking-tight text-gray-900">
+                <h3 className="text-lg md:text-xl font-semibold leading-snug tracking-tight text-gray-900">
                   {item.title || 'Feature'}
                 </h3>
                 {item.description ? (
-                  <p className="text-base text-gray-500 leading-normal">
+                  <p className="text-sm md:text-base text-gray-500 leading-relaxed">
                     {item.description}
                   </p>
                 ) : null}
